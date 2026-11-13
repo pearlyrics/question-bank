@@ -66,9 +66,14 @@ export async function fetchResponses(bankId) {
 
 export async function fetchPrefs() {
   const rows = await run(
-    supabase.from('user_prefs').select('current_bank_id, set_size, prefs').limit(1),
+    supabase.from('user_prefs').select('current_bank_id, prefs').limit(1),
   )
   return rows?.[0] ?? null
+}
+
+// Bank-wide results for every chapter, in one round trip.
+export async function fetchChapterProgress() {
+  return run(supabase.rpc('chapter_progress'))
 }
 
 export async function importQuestions(payload) {
@@ -102,7 +107,6 @@ export async function sendOp(op, userId) {
           {
             user_id: userId,
             current_bank_id: op.current_bank_id,
-            set_size: op.set_size,
             prefs: op.prefs,
             updated_at: new Date().toISOString(),
           },

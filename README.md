@@ -6,8 +6,9 @@ weekly bulk uploads. React + Vite + Tailwind v4 + Supabase.
 ## Setup
 
 **1. Create the schema.** Open your Supabase project → SQL Editor → New query,
-paste all of `supabase/migrations/0001_init.sql`, run it. This is the only step
-that can't be done from the app.
+paste all of `supabase/migrations/0001_init.sql`, run it, then do the same with
+`supabase/migrations/0002_chapter_progress.sql`. Run them in order. This is the
+only step that can't be done from the app.
 
 **2. Turn off email confirmation.** Authentication → Sign In / Providers →
 Email → turn **Confirm email** off. Accounts here are username-only, and the
@@ -43,15 +44,30 @@ npm run convert-legacy -- muscle-bank-2.html data/muscle-tissue-ii.json
 Then open **Import**, drop `data/muscle-tissue-ii.json` in, check the batch, and
 import it.
 
-## Switching chapters
+## Pages
 
-Each import with a new `slug` creates a separate chapter. Once there's more
-than one, a **Chapter** menu appears above the set buttons. Switching is
-instant and each chapter keeps its own score, mistakes, flags, set size and
-even which tab and sheet you were last on.
+| URL | Page |
+|---|---|
+| `/chapters` | Every chapter with your results for it — bank-wide |
+| `/<chapter-slug>` | The questions for that chapter, e.g. `/nerve-tissue-bank` |
+| `/import` | Bulk upload (admins only) |
+| `/` | Redirects to `/chapters` |
 
-A freshly imported chapter appears in that menu straight away and the app
-switches to it — no page reload needed.
+Chapter slugs are the URL, so a few words are reserved (`chapters`, `import`,
+`login`, `logout`, `api`, `assets`, `static`). The importer refuses them — a
+chapter at `/import` could never be opened.
+
+Each chapter keeps its own score, mistakes, flags, questions-per-set, and even
+which tab and sheet you were last on. A freshly imported chapter appears in the
+list straight away and the app opens it — no page reload needed.
+
+New chapters start at **100 questions per set**. Change it for one chapter and
+the others are untouched: muscle at 40 and nerve at 100 is a normal state.
+
+Because the app uses real URLs, a static host needs a rewrite so every path
+serves `index.html`. `public/_redirects` covers Netlify; on Vercel add a
+`vercel.json` rewrite of `/(.*)` to `/index.html`. The Vite dev server already
+does this.
 
 To remove a chapter entirely (questions and everyone's progress for it, via
 cascade), run in the SQL editor:
@@ -141,8 +157,8 @@ events; other devices refresh when the tab regains focus.
 
 ## Theme and screen sizes
 
-The **Auto / Light / Dark** control sits in the top bar (and on the login
-screen). Auto follows the device; Light and Dark pin it and are remembered per
+The **Auto / Light / Dark** control sits in the top bar, alongside the
+Chapters and Import links (and on the login screen). Auto follows the device; Light and Dark pin it and are remembered per
 browser. A small script in `index.html` applies a pinned theme before first
 paint, so there's no flash of the wrong one on load — it reads the same key as
 `src/lib/theme.js`, so keep those in sync.

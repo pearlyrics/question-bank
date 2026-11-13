@@ -36,23 +36,25 @@ export function StudyProvider({ children }) {
   const { session, profile } = useAuth()
   const userId = session?.user?.id ?? null
 
-  const [status, setStatus] = useState('loading')
+  // 'idle' until a chapter is opened by the URL.
+  const [status, setStatus] = useState('idle')
   const [error, setError] = useState(null)
   const [banks, setBanks] = useState([])
+  const [banksLoaded, setBanksLoaded] = useState(false)
   const [bankId, setBankId] = useState(null)
   const [questions, setQuestions] = useState([])
   const [topics, setTopics] = useState([])
   const [rows, setRows] = useState(() => new Map())
-  const [setSize, setSetSize] = useState(DEFAULT_SET_SIZE)
   const [views, setViews] = useState({})
   const [sync, setSync] = useState({ state: 'idle', pending: 0 })
 
   const queueRef = useRef(null)
   const prefsTimer = useRef(null)
   const lastFetch = useRef(0)
-  const latest = useRef({ bankId: null, setSize: DEFAULT_SET_SIZE, views: {} })
+  const openedBank = useRef(null)
+  const latest = useRef({ bankId: null, views: {} })
 
-  latest.current = { bankId, setSize, views }
+  latest.current = { bankId, views }
 
   // ------------------------------------------------------------- the queue
   useEffect(() => {
@@ -94,7 +96,7 @@ export function StudyProvider({ children }) {
       if (cachedQuestions) {
         setQuestions(cachedQuestions.questions ?? [])
         setTopics(cachedQuestions.topics ?? [])
-        if (cachedRows) setRows(rowsFromArray(cachedRows))
+        setRows(cachedRows ? rowsFromArray(cachedRows) : new Map())
         setStatus('ready')
       }
 
@@ -120,33 +122,35 @@ export function StudyProvider({ children }) {
         cacheSet(rowsKey, rowsToArray(merged))
       } catch (loadError) {
         // Cached content is enough to keep studying; answers keep queueing.
-        if (cachedQuestions) setStatus('ready')
-        else setStatus('error')
+        setStatus(cachedQuestions ? 'ready' : 'error')
         setError(loadError.message)
       }
     },
     [userId],
   )
 
+  // Boot loads only the chapter list and prefs. Which chapter is open is the
+  // URL's business, handled by openSlug below.
   useEffect(() => {
     if (!userId) {
-      setStatus('loading')
+      setStatus('idle')
       setBanks([])
+      setBanksLoaded(false)
       setQuestions([])
       setRows(new Map())
+      openedBank.current = null
       return
     }
 
     let active = true
     const prefsKey = cacheKey('prefs', userId)
     const cachedPrefs = cacheGet(prefsKey)
-    if (cachedPrefs) {
-      setSetSize(cachedPrefs.set_size ?? DEFAULT_SET_SIZE)
-      setViews(cachedPrefs.prefs ?? {})
-      if (cachedPrefs.current_bank_id) setBankId(cachedPrefs.current_bank_id)
-    }
+    if (cachedPrefs) setViews(cachedPrefs.prefs ?? {})
     const cachedBanks = cacheGet(cacheKey('banks'))
-    if (cachedBanks) setBanks(cachedBanks)
+    if (cachedBanks) {
+      setBanks(cachedBanks)
+      setBanksLoaded(true)
+    }
 
     async function boot() {
       try {
@@ -154,28 +158,16 @@ export function StudyProvider({ children }) {
         if (!active) return
 
         setBanks(bankList)
+        setBanksLoaded(true)
         cacheSet(cacheKey('banks'), bankList)
 
         if (prefs) {
-          setSetSize(prefs.set_size ?? DEFAULT_SET_SIZE)
           setViews(prefs.prefs ?? {})
           cacheSet(prefsKey, prefs)
         }
-
-        const preferred =
-          (prefs?.current_bank_id && bankList.some((bank) => bank.id === prefs.current_bank_id)
-            ? prefs.current_bank_id
-            : null) ?? bankList[0]?.id ?? null
-
-        if (!preferred) {
-          setStatus('empty')
-          return
-        }
-        setBankId(preferred)
-        await loadBank(preferred)
       } catch (bootError) {
         if (!active) return
-        setStatus(cachedBanks?.length ? 'ready' : 'error')
+        setBanksLoaded(Boolean(cachedBanks))
         setError(bootError.message)
       }
     }
@@ -184,7 +176,7 @@ export function StudyProvider({ children }) {
     return () => {
       active = false
     }
-  }, [userId, loadBank])
+  }, [userId])
 
   // --------------------------------------------- multi-device and multi-tab
   useEffect(() => {
@@ -212,15 +204,6 @@ export function StudyProvider({ children }) {
       document.removeEventListener('visibilitychange', onFocus)
     }
   }, [userId, bankId, loadBank])
-
-  // The bank list is otherwise only fetched at login, so a chapter imported
-  // mid-session would stay invisible until a page reload.
-  const refreshBanks = useCallback(async () => {
-    const bankList = await fetchBanks()
-    setBanks(bankList)
-    cacheSet(cacheKey('banks'), bankList)
-    return bankList
-  }, [])
 
   // ------------------------------------------------------------- mutations
   const commitRows = useCallback(
@@ -286,12 +269,7 @@ export function StudyProvider({ children }) {
         return next
       })
 
-      enqueue({
-        kind: 'flag',
-        question_id: questionId,
-        bank_id: question.bank_id,
-        flagged,
-      })
+      enqueue({ kind: 'flag', question_id: questionId, bank_id: question.bank_id, flagged })
     },
     [questions, rows, commitRows, enqueue],
   )
@@ -321,13 +299,11 @@ export function StudyProvider({ children }) {
       const payload = {
         kind: 'prefs',
         current_bank_id: snapshot.bankId,
-        set_size: snapshot.setSize,
         prefs: snapshot.views,
       }
       if (userId) {
         cacheSet(cacheKey('prefs', userId), {
           current_bank_id: payload.current_bank_id,
-          set_size: payload.set_size,
           prefs: payload.prefs,
         })
       }
@@ -335,6 +311,7 @@ export function StudyProvider({ children }) {
     }, PREFS_DEBOUNCE)
   }, [enqueue, userId])
 
+  // Every per-chapter display setting, set size included, lives in one object.
   const view = useMemo(
     () => ({ ...DEFAULT_VIEW, ...(bankId ? views[bankId] : null) }),
     [views, bankId],
@@ -358,16 +335,15 @@ export function StudyProvider({ children }) {
 
   const changeSetSize = useCallback(
     (size) => {
-      setSetSize(size)
-      latest.current = { ...latest.current, setSize: size }
-      // Keep the reader near the same questions after a resize.
+      if (!bankId) return
       setViews((current) => {
-        if (!bankId) return current
         const existing = { ...DEFAULT_VIEW, ...(current[bankId] ?? {}) }
         const next = {
           ...current,
           [bankId]: {
             ...existing,
+            setSize: size,
+            // Keep the reader near the same questions after a resize.
             setIndex: clampSetIndex(existing.setIndex, questions.length, size),
             sheetIndex: 0,
           },
@@ -380,33 +356,41 @@ export function StudyProvider({ children }) {
     [bankId, questions.length, queuePrefs],
   )
 
-  const changeBank = useCallback(
-    (nextBankId) => {
-      if (nextBankId === bankId) return
-      setBankId(nextBankId)
-      latest.current = { ...latest.current, bankId: nextBankId }
+  // Opens the chapter named in the URL. Returns false when the slug is
+  // unknown, so the page can say so rather than hanging on a spinner.
+  const openSlug = useCallback(
+    (slug) => {
+      const match = banks.find((entry) => entry.slug === slug)
+      if (!match) return false
+      if (openedBank.current === match.id) return true
+
+      openedBank.current = match.id
+      setBankId(match.id)
+      latest.current = { ...latest.current, bankId: match.id }
       queuePrefs()
-      void loadBank(nextBankId, { showLoading: true })
+      void loadBank(match.id, { showLoading: true })
+      return true
     },
-    [bankId, loadBank, queuePrefs],
+    [banks, loadBank, queuePrefs],
   )
 
-  // Called when an import finishes: pick up the new chapter and switch to it.
+  // The chapter list is otherwise only fetched at login, so a chapter imported
+  // mid-session would stay invisible until a page reload.
+  const refreshBanks = useCallback(async () => {
+    const bankList = await fetchBanks()
+    setBanks(bankList)
+    setBanksLoaded(true)
+    cacheSet(cacheKey('banks'), bankList)
+    return bankList
+  }, [])
+
+  // After an import, hand back the slug so the app can navigate to it.
   const afterImport = useCallback(
     async (importedBankId) => {
       const bankList = await refreshBanks()
-      const target = bankList.some((entry) => entry.id === importedBankId)
-        ? importedBankId
-        : bankId
-      if (!target) return
-      if (target !== bankId) {
-        setBankId(target)
-        latest.current = { ...latest.current, bankId: target }
-        queuePrefs()
-      }
-      await loadBank(target, { showLoading: true })
+      return bankList.find((entry) => entry.id === importedBankId)?.slug ?? null
     },
-    [bankId, refreshBanks, loadBank, queuePrefs],
+    [refreshBanks],
   )
 
   const resetBank = useCallback(
@@ -424,12 +408,13 @@ export function StudyProvider({ children }) {
       status,
       error,
       banks,
+      banksLoaded,
       bankId,
       bank: banks.find((entry) => entry.id === bankId) ?? null,
       questions,
       topics,
       rows,
-      setSize,
+      setSize: view.setSize ?? DEFAULT_SET_SIZE,
       view,
       sync,
       profile,
@@ -438,15 +423,15 @@ export function StudyProvider({ children }) {
       redo,
       updateView,
       changeSetSize,
-      changeBank,
+      openSlug,
       resetBank,
       refreshBanks,
       afterImport,
       reload: () => loadBank(bankId, { showLoading: true }),
     }),
     [
-      status, error, banks, bankId, questions, topics, rows, setSize, view, sync, profile,
-      answer, toggleFlag, redo, updateView, changeSetSize, changeBank, resetBank,
+      status, error, banks, banksLoaded, bankId, questions, topics, rows, view, sync, profile,
+      answer, toggleFlag, redo, updateView, changeSetSize, openSlug, resetBank,
       refreshBanks, afterImport, loadBank,
     ],
   )

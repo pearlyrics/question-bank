@@ -88,6 +88,15 @@ describe('buildImport', () => {
     expect(buildImport(parsed).errors.join(' ')).toMatch(/slug/i)
   })
 
+  it('refuses a slug that would collide with an app route', () => {
+    for (const slug of ['chapters', 'import']) {
+      const parsed = parseUpload(JSON.stringify({ ...good, bank: { slug } }))
+      const built = buildImport(parsed)
+      expect(built.ok).toBe(false)
+      expect(built.errors.join(' ')).toMatch(/reserved/i)
+    }
+  })
+
   it('names the line of every bad question', () => {
     const parsed = parseUpload(
       JSON.stringify({

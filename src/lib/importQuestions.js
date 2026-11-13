@@ -8,6 +8,8 @@
 //
 // and each question may itself be an object or the legacy 5-element array.
 
+import { RESERVED_SLUGS } from './routes.js'
+
 const TRUTHY = new Set(['true', 't', '1', 'yes', 'y'])
 const FALSY = new Set(['false', 'f', '0', 'no', 'n'])
 
@@ -93,6 +95,9 @@ export function buildImport({ bank, topics, questions }) {
   if (!slug) errors.push('Bank slug is required.')
   else if (!/^[a-z0-9-]{2,60}$/.test(slug)) {
     errors.push('Bank slug should be lowercase letters, numbers and dashes (2–60 chars).')
+  } else if (RESERVED_SLUGS.includes(slug)) {
+    // The chapter would live at /<slug> and collide with an app route.
+    errors.push(`"${slug}" is reserved — the chapter would be unreachable. Pick another slug.`)
   }
 
   const title = String(bank?.title ?? '').trim() || slug

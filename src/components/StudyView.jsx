@@ -10,6 +10,8 @@ import {
 } from '../lib/score.js'
 import { SHEET_SIZE, chunk, clampSetIndex, questionsInSet, setCount } from '../lib/sets.js'
 import { buildView } from '../lib/view.js'
+import { Link } from '../lib/router.jsx'
+import { CHAPTERS_PATH } from '../lib/routes.js'
 import QuestionRow from './QuestionRow.jsx'
 import SetSizeSlider from './SetSizeSlider.jsx'
 import SyncBadge from './SyncBadge.jsx'
@@ -23,8 +25,8 @@ const TABS = [
 
 export default function StudyView() {
   const {
-    bank, banks, questions, topics, rows, setSize, view, sync, status, error,
-    answer, toggleFlag, redo, updateView, changeSetSize, changeBank, resetBank,
+    bank, questions, topics, rows, setSize, view, sync, status, error,
+    answer, toggleFlag, redo, updateView, changeSetSize, resetBank,
   } = useStudy()
 
   const [snapshot, setSnapshot] = useState(null)
@@ -115,6 +117,13 @@ export default function StudyView() {
 
   return (
     <div className="gutter mx-auto flex w-full max-w-[960px] flex-col gap-4 pt-5 pb-16 sm:gap-[18px] sm:pt-6">
+      <Link
+        href={CHAPTERS_PATH}
+        className="font-mono text-[13px] font-bold text-accent"
+      >
+        ← All chapters
+      </Link>
+
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="m-0 font-display text-[clamp(26px,4vw,36px)] leading-tight font-semibold text-balance">
@@ -149,29 +158,6 @@ export default function StudyView() {
           </span>
         </div>
       </header>
-
-      {banks.length > 1 && (
-        <div className="flex flex-wrap items-center gap-2">
-          <label htmlFor="bank" className="font-mono text-[13px] text-muted">
-            Chapter
-          </label>
-          <select
-            id="bank"
-            value={bank?.id ?? ''}
-            onChange={(event) => changeBank(event.target.value)}
-            className="touch max-w-full flex-1 rounded border border-rule-strong bg-sheet px-2.5 py-1.5 text-ink sm:flex-none"
-          >
-            {banks.map((entry) => (
-              <option key={entry.id} value={entry.id}>
-                {entry.title}
-              </option>
-            ))}
-          </select>
-          <span className="font-mono text-[12px] text-muted tabular-nums">
-            {banks.length} chapters · each keeps its own score, mistakes and flags
-          </span>
-        </div>
-      )}
 
       <div className="sheet-card flex flex-col gap-3 px-4 py-3">
         <SetSizeSlider total={questions.length} setSize={setSize} onChange={changeSetSize} />
