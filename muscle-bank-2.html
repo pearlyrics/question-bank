@@ -1,0 +1,670 @@
+<title>Muscle Tissue Bank II</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Fraunces:opsz,wght@9..144,600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: a printed exam sheet (ruled table, No. | statement | YES/NO) on a quiet desk, with a study toolbar above. */
+:root{
+  --bg:#eef1f5; --sheet:#ffffff; --ink:#1b2433; --muted:#5b6678; --rule:#cfd8e6; --rule-strong:#9fb0c9;
+  --accent:#2a4fa0; --accent-soft:#e3eaf8;
+  --yes:#1d7347; --yes-soft:#e2f3ea; --no:#b3261e; --no-soft:#fbe7e5; --flag:#a8670f; --flag-soft:#fbf0dc;
+  --f-display:"Fraunces",Georgia,serif; --f-body:"Atkinson Hyperlegible",system-ui,sans-serif; --f-mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f131a; --sheet:#171d27; --ink:#e5e9f1; --muted:#97a3b8; --rule:#2a3344; --rule-strong:#44526b;
+  --accent:#93b1ff; --accent-soft:#1f2a42;
+  --yes:#62cf95; --yes-soft:#16302a; --no:#ff8f86; --no-soft:#3a1d1d; --flag:#f2b75a; --flag-soft:#3a2c14; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f131a; --sheet:#171d27; --ink:#e5e9f1; --muted:#97a3b8; --rule:#2a3344; --rule-strong:#44526b;
+  --accent:#93b1ff; --accent-soft:#1f2a42;
+  --yes:#62cf95; --yes-soft:#16302a; --no:#ff8f86; --no-soft:#3a1d1d; --flag:#f2b75a; --flag-soft:#3a2c14; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5}
+.wrap{max-width:960px;margin:0 auto;padding-inline:16px;padding-block:24px 64px;display:flex;flex-direction:column;gap:18px}
+header{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:12px}
+h1{font-family:var(--f-display);font-weight:600;font-size:clamp(26px,4vw,36px);line-height:1.1;margin:0;text-wrap:balance}
+.sub{color:var(--muted);margin:4px 0 0;font-size:14px}
+.stats{display:flex;flex-wrap:wrap;gap:8px}
+.stat{font-family:var(--f-mono);font-size:13px;padding:6px 10px;border:1px solid var(--rule-strong);border-radius:4px;background:var(--sheet);font-variant-numeric:tabular-nums;white-space:nowrap}
+.stat b{font-weight:500;color:var(--accent)}
+.stat.m b{color:var(--no)} .stat.f b{color:var(--flag)}
+nav.tabs{display:flex;flex-wrap:wrap;gap:6px;border-bottom:2px solid var(--rule-strong)}
+.tab{font:inherit;font-weight:700;font-size:15px;background:none;border:0;color:var(--muted);padding:10px 14px;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tab .n{font-family:var(--f-mono);font-weight:500;font-size:12px;margin-left:6px;padding:1px 6px;border-radius:10px;background:var(--accent-soft);color:var(--accent)}
+.tab.mis .n{background:var(--no-soft);color:var(--no)} .tab.flg .n{background:var(--flag-soft);color:var(--flag)}
+.picker{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.chip{font-family:var(--f-mono);font-size:13px;min-width:40px;padding:6px 8px;border:1px solid var(--rule-strong);background:var(--sheet);color:var(--ink);border-radius:4px;cursor:pointer;font-variant-numeric:tabular-nums}
+.chip[aria-pressed="true"]{background:var(--accent);color:var(--sheet);border-color:var(--accent)}
+.chip.done{box-shadow:inset 0 -3px 0 var(--yes)}
+.chip.part{box-shadow:inset 0 -3px 0 var(--flag)}
+select{font:inherit;padding:7px 10px;border:1px solid var(--rule-strong);border-radius:4px;background:var(--sheet);color:var(--ink);max-width:100%}
+.sheet{background:var(--sheet);border:1px solid var(--rule-strong);border-radius:2px;box-shadow:0 1px 0 var(--rule),0 8px 24px -16px rgba(20,30,50,.35)}
+.sheet-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px;padding:14px 16px;border-bottom:2px solid var(--rule-strong)}
+.sheet-title{font-family:var(--f-display);font-weight:600;font-size:20px}
+.sheet-meta{font-family:var(--f-mono);font-size:13px;color:var(--muted)}
+.cols{display:grid;grid-template-columns:44px 1fr 132px;border-bottom:1px solid var(--rule-strong);font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.cols>div{padding:6px 10px} .cols>div+div{border-left:1px solid var(--rule)}
+.row{display:grid;grid-template-columns:44px 1fr 132px;border-bottom:1px solid var(--rule)}
+.row:last-child{border-bottom:0}
+.row>.no{font-family:var(--f-mono);font-size:14px;color:var(--muted);padding:12px 10px;text-align:right;font-variant-numeric:tabular-nums}
+.row>.body{padding:12px 12px;border-left:1px solid var(--rule);min-width:0}
+.row>.act{border-left:1px solid var(--rule);padding:10px;display:flex;flex-direction:column;gap:6px;align-items:stretch}
+.stmt{margin:0;font-size:16.5px}
+.tag{display:inline-block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.yn{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.btn{font:inherit;font-weight:700;font-size:14px;padding:8px 6px;border:1.5px solid var(--rule-strong);background:var(--sheet);color:var(--ink);border-radius:4px;cursor:pointer}
+.btn:hover:not(:disabled){border-color:var(--accent)}
+.btn:focus-visible,.chip:focus-visible,.tab:focus-visible,.flag:focus-visible,.link:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn:disabled{cursor:default}
+.btn.pick-right{background:var(--yes-soft);border-color:var(--yes);color:var(--yes)}
+.btn.pick-wrong{background:var(--no-soft);border-color:var(--no);color:var(--no)}
+.btn.was-right{border-color:var(--yes);border-style:dashed}
+.flag{font:inherit;font-size:13px;background:none;border:1px solid transparent;color:var(--muted);border-radius:4px;padding:4px 6px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+.flag svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2}
+.flag[aria-pressed="true"]{color:var(--flag);background:var(--flag-soft);border-color:var(--flag)}
+.flag[aria-pressed="true"] svg{fill:currentColor}
+.fb{margin-top:10px;padding:10px 12px;border-left:4px solid var(--yes);background:var(--yes-soft);border-radius:0 4px 4px 0;font-size:15px}
+.fb.bad{border-left-color:var(--no);background:var(--no-soft)}
+.fb .v{font-weight:700} .fb.good .v{color:var(--yes)} .fb.bad .v{color:var(--no)}
+.fb .pg{font-family:var(--f-mono);font-size:12px;color:var(--muted);white-space:nowrap}
+.miss{font-family:var(--f-mono);font-size:11px;color:var(--no);margin-left:6px}
+.sheet-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;padding:12px 16px;border-top:2px solid var(--rule-strong)}
+.score{font-family:var(--f-mono);font-size:14px;font-variant-numeric:tabular-nums}
+.foot-btns{display:flex;flex-wrap:wrap;gap:8px}
+.link{font:inherit;font-weight:700;font-size:14px;padding:8px 12px;border-radius:4px;border:1.5px solid var(--accent);background:var(--sheet);color:var(--accent);cursor:pointer}
+.link.solid{background:var(--accent);color:var(--sheet)}
+.empty{padding:40px 20px;text-align:center;color:var(--muted)}
+.empty strong{display:block;color:var(--ink);font-size:18px;margin-bottom:6px}
+.tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;font-size:14px;color:var(--muted)}
+.tools label{display:flex;align-items:center;gap:6px;cursor:pointer}
+.danger{color:var(--no);border-color:var(--no)}
+.confirm{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.note{font-size:13px;color:var(--muted);margin:0}
+.resume{margin:0;padding:10px 14px;border:1px solid var(--accent);background:var(--accent-soft);color:var(--ink);border-radius:4px;font-size:14px}
+.sets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.setbtn{font:inherit;text-align:left;cursor:pointer;background:var(--sheet);color:var(--ink);border:1.5px solid var(--rule-strong);border-radius:4px;padding:10px 12px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.setbtn[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 -3px 0 var(--accent);background:var(--accent-soft)}
+.setbtn .sn{font-family:var(--f-display);font-weight:600;font-size:17px}
+.setbtn .sd{font-size:13px;color:var(--muted);line-height:1.3}
+.setbtn .sp{font-family:var(--f-mono);font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.setbtn .sp b{font-weight:500;color:var(--accent)} .setbtn .sp .m{color:var(--no)} .setbtn .sp .f{color:var(--flag)}
+.setbtn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (max-width:620px){.sets{grid-template-columns:repeat(3,minmax(0,1fr))}.setbtn{padding:8px}.setbtn .sd{display:none}.setbtn .sp{font-size:11px}}
+.sync{font-weight:700}.sync.ok{color:var(--yes)}.sync.warn{color:var(--flag)}
+@media (max-width:620px){
+  .cols{display:none}
+  .row{grid-template-columns:34px 1fr}
+  .row>.no{padding:12px 6px 0 0}
+  .row>.act{grid-column:1/-1;border-left:0;border-top:1px dashed var(--rule);flex-direction:row;align-items:center;padding:8px 12px}
+  .row>.act .yn{flex:1}
+  .row>.body{border-left:0;padding-left:4px}
+}
+@media (prefers-reduced-motion:no-preference){.fb{animation:in .18s ease-out}@keyframes in{from{opacity:.4;transform:translateY(-3px)}}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Muscle Tissue Bank II</h1>
+      <p class="sub">Junqueira's Basic Histology, 15th ed. · Chapter 10: Muscle Tissue · 300 new statements · 3 sets of 100 (50 true / 50 false each)</p>
+    </div>
+    <div class="stats" id="stats"></div>
+  </header>
+
+  <nav class="sets" id="sets" aria-label="Question sets"></nav>
+
+  <nav class="tabs" role="tablist" id="tabs">
+    <button class="tab" role="tab" data-mode="sheets" id="tab-sheets">Exam sheets</button>
+    <button class="tab" role="tab" data-mode="topic" id="tab-topic">By topic</button>
+    <button class="tab mis" role="tab" data-mode="mistakes" id="tab-mistakes">Mistakes<span class="n" id="n-mis">0</span></button>
+    <button class="tab flg" role="tab" data-mode="flagged" id="tab-flagged">Flagged<span class="n" id="n-flag">0</span></button>
+  </nav>
+
+  <p class="resume" id="resume" hidden></p>
+  <div class="picker" id="picker"></div>
+  <section class="sheet" id="sheet" aria-live="polite"></section>
+
+  <div class="tools">
+    <label for="shuffle"><input type="checkbox" id="shuffle"> Shuffle statement order in each sheet</label>
+    <div class="confirm" id="reset-box">
+      <button class="link danger" id="reset">Reset this set</button>
+    </div>
+  </div>
+  <p class="note"><span class="sync" id="sync">Saving in this browser only</span> · Each set keeps its own mistakes, flags and stats. A question leaves Mistakes once you answer it correctly.</p>
+</div>
+
+<script>
+const Q = [
+["OV", 1, "Contractility is a universal cell property that muscle cells have optimized.", "True. Muscle tissue is defined as cells that optimize the universal property of contractility, using actin microfilaments like all cells.", 193],
+["OV", 0, "Muscle is the only tissue whose cells contain actin microfilaments.", "False. Actin microfilaments generate force in ALL cells; muscle only optimizes this universal property.", 193],
+["OV", 1, "Muscle contraction drives movement within organ systems, of blood, and of the body as a whole.", "True. The chapter lists all three levels of movement powered by muscle.", 193],
+["OV", 0, "Most muscle cells arise from embryonic ectoderm.", "False. Essentially ALL muscle cells are of MESODERMAL origin.", 193],
+["OV", 1, "Cardiac muscle cells are elongated and often branched.", "True. They are bound to one another at intercalated discs.", 193],
+["OV", 0, "Smooth muscle cells are often branched and joined by intercalated discs.", "False. Branched cells joined by intercalated discs describe CARDIAC muscle. Smooth muscle cells are fusiform and unbranched.", 193],
+["OV", 1, "Both skeletal and cardiac muscle show cross-striations.", "True. Smooth muscle is the only type lacking striations.", 193],
+["OV", 0, "Cardiac muscle lacks cross-striations.", "False. Cardiac muscle HAS cross-striations; only smooth muscle lacks them.", 193],
+["OV", 1, "Skeletal muscle is usually, but not always, under voluntary control.", "True. The text says its contraction is quick, forceful and USUALLY under voluntary control.", 193],
+["OV", 0, "The word 'sarcolemma' comes from Greek words meaning 'flesh' and 'thing formed'.", "False. Sarcolemma = sarkos (flesh) + lemma (HUSK). 'Thing formed' (plasma) is part of SARCOPLASM.", 193],
+["OV", 1, "'Myo' in myoblast comes from the Latin word for muscle.", "True. L. myo = muscle, so a myoblast is a muscle-forming precursor cell; myoblasts fuse into myotubes.", 193],
+["OV", 1, "Muscle specialists give special names to some muscle cell organelles, as neuron specialists do.", "True. Examples are sarcoplasm, sarcoplasmic reticulum and sarcolemma.", 193],
+["OV", 0, "Contraction force comes from changes in the length of actin and myosin filaments.", "False. Force comes from proteins affecting weak actin-myosin crossbridges; the filaments SLIDE without changing length.", 193],
+["CT", 0, "Connective tissue layers are found only in skeletal muscle, not in cardiac or smooth muscle.", "False. Thin connective tissue layers surround fibers in ALL THREE types; they are just seen best in skeletal muscle.", 194],
+["CT", 1, "The epimysium is made of dense irregular connective tissue.", "True. It is the external sheath around the entire muscle.", 194],
+["CT", 0, "The perimysium is the outermost connective tissue sheath of a skeletal muscle.", "False. The EPIMYSIUM is outermost. The perimysium wraps fascicles inside the muscle.", 194],
+["CT", 1, "Each fascicle acts as a functional unit whose fibers work together.", "True. Each fascicle is wrapped by perimysium.", 194],
+["CT", 0, "The endomysium carries the larger nerves and blood vessels into the muscle.", "False. The larger nerves and vessels travel in septa of EPIMYSIUM; the endomysium holds capillaries and fine nerve fibers.", 194],
+["CT", 1, "The endomysium contains reticular fibers and scattered fibroblasts.", "True. It is very thin and delicate.", 194],
+["CT", 0, "Lymphatics penetrate the endomysium but never the perimysium.", "False. Nerves, blood vessels and lymphatics PENETRATE THE PERIMYSIUM to supply each fascicle.", 194],
+["CT", 1, "Myotendinous junctions show tendon collagen fibers inserting among muscle fibers.", "True. The collagen associates directly with complex sarcolemmal infoldings.", 194],
+["CT", 0, "The deep fascia lies beneath the endomysium.", "False. The deep fascia OVERLIES the EPIMYSIUM, outside the whole muscle.", 194],
+["CT", 1, "The epimysium is continuous with the tendon at the myotendinous junction.", "True. All three layers and the deep fascia are continuous with the tendon.", 194],
+["CT", 0, "Connective tissue in muscle plays no role in transmitting contractile force.", "False. Collagens in these layers TRANSMIT the mechanical force of contracting fibers.", 194],
+["CT", 1, "Skeletal muscle has endomysium, perimysium and epimysium; smooth muscle has endomysium and less-organized sheaths.", "True. Only skeletal muscle has the full three-layer system; smooth muscle has endomysium plus looser, less-organized sheaths (Table 10–1).", 205],
+["CT", 0, "Smooth muscle connective tissue is organized into well-defined endomysium, perimysium and epimysium, like skeletal muscle.", "False. Smooth muscle has endomysium plus LESS-ORGANIZED connective tissue sheaths (Table 10–1).", 205],
+["CT", 1, "The capillary network of skeletal muscle lies in the endomysium.", "True. It brings O2 to each muscle fiber.", 194],
+["MF", 0, "Skeletal muscle fibers are single mononucleated cells.", "False. Skeletal fibers are single MULTINUCLEATED cells formed by myoblast fusion.", 193],
+["MF", 1, "Myotubes are longer multinucleated tubes formed when myoblasts align and fuse.", "True. Myotubes then make myofilament proteins and begin to show striations.", 195],
+["MF", 0, "Satellite cells are fully differentiated muscle fibers that stop contracting.", "False. Satellite cells are UNDIFFERENTIATED reserve myoblasts that never fused.", 213],
+["MF", 1, "Satellite cells are mesenchymal cells.", "True. They are a sparse population of mesenchymal cells inside each fiber's external lamina.", 213],
+["MF", 0, "Satellite cells are found in large numbers next to each skeletal fiber.", "False. Satellite cells are a SMALL, SPARSE population.", 193],
+["MF", 1, "Skeletal muscle fibers can be many centimeters long.", "True. Table 10–1 lists cylindrical fibers 10–100 μm wide and many cm long.", 205],
+["MF", 0, "Skeletal fibers are fusiform, while cardiac cells are cylindrical.", "False. Both skeletal fibers and cardiac cells are CYLINDRICAL; SMOOTH muscle cells are fusiform (Table 10–1).", 205],
+["MF", 1, "The sarcoplasm of skeletal muscle is filled mainly with myofibrils.", "True. Myofibrils run parallel to the fiber's long axis.", 194],
+["MF", 0, "Each myofibril is surrounded by its own external lamina.", "False. The external lamina surrounds each muscle FIBER (cell). Myofibrils are inside the fiber, surrounded by SR.", 197],
+["MF", 1, "Skeletal muscle's key function is voluntary movement (Table 10–1).", "True. Cardiac muscle pumps blood automatically; smooth muscle makes involuntary movements.", 205],
+["MF", 0, "Skeletal muscle responds to increased load mainly by hyperplasia (Table 10–1).", "False. Skeletal muscle responds by HYPERTROPHY (increased fiber size). Only smooth muscle adds hyperplasia.", 205],
+["MF", 1, "Skeletal muscle fibers show peripheral nuclei, while cardiac and smooth muscle nuclei are central.", "True. Peripheral nuclei under the sarcolemma are unique to skeletal fibers; cardiac and smooth nuclei sit centrally (Table 10–1).", 205],
+["MF", 0, "The diaphragm and tongue are made of smooth muscle.", "False. The tongue and diaphragm are SKELETAL muscle (Table 10–1).", 205],
+["SA", 1, "The A band is dark in both light microscopy and TEM.", "True. It holds the thick filaments plus overlapping thin filaments.", 194],
+["SA", 0, "The I band is named for being anisotropic in polarized light.", "False. I = ISOTROPIC (does not alter polarized light). A = anisotropic.", 194],
+["SA", 1, "'Zwischen', the source of the name Z disc, means 'between'.", "True. The Z disc lies between sarcomeres.", 195],
+["SA", 1, "Each myofibril contains thousands of thick and thin filaments in a symmetric pattern.", "True. Their arrangement makes the A and I bands.", 195],
+["SA", 0, "Striations are visible only because sarcomeres in neighboring myofibrils are out of register.", "False. Striations show across the fiber because sarcomeres of adjacent myofibrils are in LATERAL REGISTRATION (aligned).", 195],
+["SA", 1, "Each sarcomere has one A band and two half I bands.", "True. A sarcomere runs Z to Z, so it includes the central A band and half of the I band on each side.", 197],
+["SA", 0, "The I band contains the M line.", "False. The M line is in the middle of the A band, bisecting the H zone. The I band contains the Z disc.", 197],
+["SA", 1, "The H zone looks lighter than the rest of the A band because thin filaments do not reach it.", "True. Only myosin tails are there.", 197],
+["SA", 0, "The lighter H zone is found at the edge of the A band, next to the I band.", "False. The H zone is at the CENTER of the A band.", 197],
+["SA", 1, "'Mitte', the source of the name M line, means 'middle'.", "True. The M line lies in the middle of the sarcomere.", 197],
+["SA", 0, "Myosin and actin make up only a small fraction of striated muscle protein.", "False. Together they are OVER HALF of the total protein.", 197],
+["SA", 1, "Hexagonal patterns of filaments in TEM cross sections helped researchers determine filament functions.", "True. These patterns come from the overlap of thin and thick filaments.", 197],
+["SA", 0, "Each sarcomere contains only one thick and one thin filament.", "False. Each myofibril has THOUSANDS of each filament type in a symmetric pattern.", 195],
+["SA", 1, "Sliding of thin filaments toward the A band center shortens the sarcomere.", "True. The Z discs move toward the ends of the thick filaments.", 203],
+["SA", 0, "During contraction, the H zone widens.", "False. The H zone NARROWS as thin filaments slide toward the center; in relaxed muscle it is at its expanded length.", 203],
+["SA", 1, "The I band becomes shorter when a skeletal muscle contracts.", "True. In relaxed muscle the I band is at its expanded length.", 203],
+["FI", 0, "Thick filaments are 1.0 μm long.", "False. THICK filaments are 1.6 μm long; THIN filaments are 1.0 μm.", 195],
+["FI", 1, "Thick filaments are wider than thin filaments (15 nm vs 8 nm).", "True. Thick filaments are 15 nm wide; thin filaments are 8 nm.", 195],
+["FI", 0, "Myosin is a small protein of about 50 kDa.", "False. Myosin is a LARGE complex of about 500 kDa.", 195],
+["FI", 1, "Myosin heavy chains are described as motor proteins.", "True. They are thin rodlike motor proteins twisted together as tails.", 195],
+["FI", 0, "Each myosin molecule has only one globular head.", "False. A globular head forms at one end of EACH of the two heavy chains, so myosin has TWO heads.", 195],
+["FI", 1, "Myosin heads have actomyosin ATPase activity.", "True. They bind ATP and catalyze energy release.", 195],
+["FI", 0, "Myosin heads bind tropomyosin to form crossbridges.", "False. Myosin heads bind ACTIN to form transient crossbridges. Tropomyosin covers the binding sites.", 195],
+["FI", 1, "In a thick filament, the rodlike myosin portions overlap with one another.", "True. Several hundred molecules are arranged with overlapping rods.", 195],
+["FI", 0, "Thin filaments are straight, unhelical rods.", "False. Thin actin filaments are HELICAL.", 195],
+["FI", 1, "Thin filaments run between the thick filaments.", "True. Overlap makes the dark part of the A band.", 195],
+["FI", 0, "The myosin-binding site is on tropomyosin, not on actin.", "False. EACH G-ACTIN monomer has a binding site for myosin.", 195],
+["FI", 0, "Tropomyosin is a single polypeptide 400 nm long.", "False. Tropomyosin is a 40-nm coil of TWO polypeptide chains.", 197],
+["FI", 1, "TnI is the troponin subunit that regulates the actin-myosin interaction.", "True. TnT attaches to tropomyosin; TnC binds Ca2+.", 197],
+["FI", 0, "Troponin has two subunits.", "False. Troponin has THREE subunits: TnT, TnC and TnI.", 197],
+["FI", 1, "TnT is the troponin subunit that attaches to tropomyosin.", "True. The 'T' links troponin to Tropomyosin.", 197],
+["FI", 0, "α-Actinin anchors thick filaments to the M line.", "False. α-Actinin anchors THIN (actin) filaments at the Z DISC. Myomesin holds thick filaments at the M line.", 197],
+["FI", 1, "Actin filaments attach perpendicularly to the Z disc.", "True. They are anchored by α-actinin.", 197],
+["FI", 0, "Titin is found mainly in the H zone.", "False. Titin is an important accessory protein of the I BANDS, linking thick filaments to the Z disc.", 197],
+["FI", 1, "Titin has both scaffolding and elastic properties.", "True. Its springlike domains span the I band.", 197],
+["FI", 0, "Nebulin connects thick filaments to the Z disc.", "False. TITIN connects thick filaments to the Z disc. Nebulin binds THIN filaments.", 197],
+["FI", 1, "Nebulin specifies the length of actin polymers during myogenesis.", "True. It binds each thin filament laterally.", 197],
+["FI", 0, "Creatine kinase is found in the I band.", "False. Creatine kinase is in the M LINE.", 197],
+["FI", 1, "The M line contains a myosin-binding protein and an enzyme that helps regenerate ATP.", "True. Myomesin and creatine kinase.", 197],
+["FI", 0, "Phosphocreatine is the enzyme that makes ATP from ADP.", "False. Phosphocreatine is a STORAGE FORM of high-energy phosphate; CREATINE KINASE is the enzyme.", 197],
+["FI", 1, "Titin (3700 kDa) is much larger than myosin (~500 kDa).", "True. Titin is the largest protein in the body.", 197],
+["FI", 0, "Myosin heavy chains are 1.5 μm long.", "False. Myosin heavy chains are 150 NM long and 2–3 nm thick.", 195],
+["SR", 0, "In skeletal muscle, the sarcoplasmic reticulum lies outside the sarcolemma.", "False. The SR is an internal membrane system (smooth ER) that SURROUNDS EACH MYOFIBRIL inside the fiber.", 197],
+["SR", 1, "The SR contains pumps and other proteins for sequestering Ca2+.", "True. It stores Ca2+ and releases it on depolarization.", 197],
+["SR", 0, "Ca2+ release from the SR is triggered by repolarization of the membrane.", "False. Ca2+ release is triggered by membrane DEPOLARIZATION produced by a motor nerve.", 197],
+["SR", 1, "Without T-tubules, Ca2+ release would not occur uniformly throughout a large skeletal fiber.", "True. T-tubules let Ca2+ release happen simultaneously throughout the fiber for uniform contraction of all myofibrils.", 197],
+["SR", 0, "T-tubules run parallel to the myofibrils along the length of the fiber.", "False. T-tubules are TRANSVERSE invaginations that penetrate inward and ENCIRCLE each myofibril.", 198],
+["SR", 1, "Each T-tubule is part of the sarcolemma.", "True. T-tubules are tubular infoldings of the sarcolemma.", 198],
+["SR", 0, "Terminal cisternae are narrow, collapsed regions of the SR.", "False. Terminal cisternae are EXPANDED regions of SR next to each T-tubule.", 198],
+["SR", 1, "The triad is best seen in longitudinal TEM sections.", "True. In longitudinal sections the T-tubule and two terminal cisternae appear as a triad.", 198],
+["SR", 0, "The central element of a triad is a terminal cisterna.", "False. The central element is the T-TUBULE, flanked by TWO terminal cisternae.", 198],
+["SR", 1, "Released Ca2+ enters the cytoplasm around the thick and thin filaments.", "True. This initiates contraction of the sarcomeres.", 198],
+["SR", 1, "Cardiac T-tubules form dyads at the Z discs (Table 10–1).", "True. Each dyad has one T-tubule and one terminal cistern.", 205],
+["SR", 0, "Smooth muscle T-tubules form dyads like those of cardiac muscle.", "False. Smooth muscle has NO T-tubules; caveolae may be functionally similar (Table 10–1).", 205],
+["SR", 1, "Caveolae in smooth muscle may be functionally similar to T-tubules (Table 10–1).", "True. They contain ion channels controlling Ca2+ release.", 205],
+["SR", 0, "Mitochondria are absent from the region between skeletal myofibrils.", "False. Mitochondria and SR are found BETWEEN the myofibrils.", 195],
+["CM", 1, "In a resting muscle, myosin-binding sites on actin are blocked by the troponin-tropomyosin complex.", "True. That is why crossbridges cannot form at rest.", 198],
+["CM", 0, "Ca2+ released on stimulation binds myosin heads directly.", "False. Ca2+ binds TROPONIN, which moves tropomyosin to expose actin's binding sites.", 198],
+["CM", 1, "Myosin binding to actin produces a conformational change in the myosin head.", "True. This pivot pulls the thin filaments farther into the A band.", 198],
+["CM", 0, "The pivot of the myosin head pushes thin filaments out of the A band.", "False. The pivot pulls thin filaments FARTHER INTO the A band.", 198],
+["CM", 1, "After the pivot, myosin binds another ATP molecule and detaches from actin.", "True. Then the cycle can repeat.", 198],
+["CM", 0, "ATP is not needed for myosin to detach from actin.", "False. Binding ANOTHER ATP is what makes myosin DETACH; without ATP crossbridges stay locked (rigor mortis).", 198],
+["CM", 1, "The repeating cycle is attach, pivot, detach and return.", "True. It slides thick and thin filaments past each other.", 202],
+["CM", 0, "A single contraction cycle takes about 50 seconds.", "False. Each cycle lasts about 50 MILLISECONDS.", 200],
+["CM", 1, "Repeated crossbridge cycles rapidly shorten the sarcomere.", "True. A single contraction results from hundreds of cycles.", 200],
+["CM", 0, "When the nerve impulse stops, Ca2+ levels rise further.", "False. When the impulse stops, free Ca2+ DIMINISHES as it is pumped back into the SR.", 200],
+["CM", 1, "After the impulse stops, Ca2+ is actively transported back into the SR.", "True. Tropomyosin then re-covers the active sites.", 202],
+["CM", 0, "Rigor mortis results from excess Ca2+ pumped into the SR after death.", "False. Rigor mortis results from LACK OF ATP after mitochondria stop, which leaves crossbridges stable.", 200],
+["CM", 1, "Rigor mortis develops as mitochondrial activity stops after death.", "True. No ATP means crossbridges cannot detach.", 200],
+["CM", 0, "During contraction, the Z discs move apart.", "False. The Z discs are drawn CLOSER together.", 203],
+["CM", 1, "During contraction, the Z discs move toward the ends of the thick filaments.", "True. This is how the sarcomere shortens.", 203],
+["CM", 0, "Titin is stretched (extended) during contraction.", "False. Titin is COMPRESSED during contraction; it is extended in relaxed muscle.", 203],
+["CM", 1, "Titin's springlike action helps the filaments in relaxed muscle.", "True. Titin spans the I band and acts like a spring.", 203],
+["CM", 0, "The A band disappears in fully contracted muscle.", "False. The A band stays because thick filaments do not change length; the I band and H zone narrow.", 203],
+["CM", 1, "Contraction continues as long as Ca2+ remains bound to troponin.", "True. This keeps the active sites exposed.", 202],
+["CM", 0, "Smooth muscle contraction is controlled by the same troponin mechanism as skeletal muscle (Table 10–1).", "False. Smooth muscle uses MYOSIN PHOSPHORYLATION by MLCK, triggered by calmodulin binding Ca2+.", 205],
+["CM", 1, "Cardiac muscle controls contraction in a way similar to skeletal muscle (Table 10–1).", "True. Troponin C binds Ca2+ and moves tropomyosin.", 205],
+["CM", 0, "Thick filaments shorten during contraction while thin filaments stay the same.", "False. NEITHER thick NOR thin filaments change length.", 198],
+["IN", 1, "Motor nerves enter skeletal muscle myelinated and end as unmyelinated twigs.", "True. The twigs pass through the endomysium to synapse with fibers.", 200],
+["IN", 0, "Each motor nerve twig synapses with an entire fascicle at one point.", "False. Each terminal twig forms a synapse with an INDIVIDUAL muscle fiber.", 200],
+["IN", 1, "Schwann cells cover the axon branches at their points of contact with muscle cells.", "True. Their external lamina fuses with the sarcolemma's.", 200],
+["IN", 0, "Synaptic vesicles at the motor end plate are located in the muscle sarcoplasm.", "False. Synaptic vesicles are in the AXON TERMINAL.", 200],
+["IN", 1, "The synaptic cleft lies between the axon terminal and the muscle.", "True. Acetylcholine released from the axon terminal crosses this cleft to reach receptors in the folded sarcolemma.", 200],
+["IN", 0, "Junctional folds reduce the number of acetylcholine receptors at the NMJ.", "False. Junctional folds INCREASE surface area and the number of acetylcholine receptors.", 200],
+["IN", 1, "Acetylcholine diffuses across the cleft and binds receptors in the folded sarcolemma.", "True. This opens cation channels and depolarizes the sarcolemma.", 200],
+["IN", 0, "Acetylcholine binding allows Ca2+ to leave the muscle cell, hyperpolarizing it.", "False. Acetylcholine opens a nonselective CATION channel, allowing INFLUX of cations and DEPOLARIZATION.", 200],
+["IN", 1, "Acetylcholine quickly dissociates from its receptors.", "True. Free transmitter is then removed by acetylcholinesterase.", 201],
+["IN", 0, "Acetylcholinesterase prolongs acetylcholine's contact with its receptors.", "False. Acetylcholinesterase PREVENTS prolonged contact by removing free acetylcholine.", 201],
+["IN", 1, "At triads, the depolarization signal triggers Ca2+ release from terminal cisterns.", "True. This starts the contraction cycle.", 201],
+["IN", 0, "Motor end plates and neuromuscular junctions are different structures.", "False. They are the SAME synapse; MEP, NMJ and myoneural junction are synonyms.", 213],
+["IN", 1, "Extraocular muscles are an example of one motor neuron innervating a single muscle fiber.", "True. This allows precise control of eye movements.", 201],
+["IN", 0, "The firing of one motor axon makes tension independent of how many fibers it innervates.", "False. Tension is PROPORTIONAL to the number of fibers the axon innervates.", 201],
+["IN", 1, "A muscle with many small motor units allows more precise control.", "True. Number and size of motor units control intensity and precision.", 201],
+["IN", 0, "All fibers in a muscle fascicle contract at the same time.", "False. To vary force, fibers within a fascicle do NOT all contract at the same time.", 201],
+["IN", 1, "Individual striated muscle fibers contract either all the way or not at all.", "True. They do not show graded contraction.", 201],
+["IN", 0, "Cardiac and smooth muscle have motor (somatic) efferent innervation (Table 10–1).", "False. Cardiac and smooth muscle have AUTONOMIC innervation; skeletal muscle has MOTOR.", 205],
+["PR", 0, "Proprioceptors send information from the CNS to the muscle.", "False. Proprioceptors are SENSORY: they send data FROM the musculoskeletal system TO the CNS.", 203],
+["PR", 1, "Muscle spindles lie among the muscle fascicles.", "True. They act as stretch detectors.", 203],
+["PR", 0, "Muscle spindles contain no muscle fibers, only nerve endings.", "False. Spindles contain a few thin INTRAFUSAL muscle fibers plus sensory axons.", 203],
+["PR", 1, "The spindle capsule has concentric layers of flattened cells and contains interstitial fluid.", "True. It is modified perimysium.", 203],
+["PR", 0, "Ordinary muscle fibers surrounding the spindle are called intrafusal fibers.", "False. Surrounding ordinary fibers are EXTRAFUSAL. Fibers inside the spindle are intrafusal.", 203],
+["PR", 1, "Body movements that stretch extrafusal fibers are detected by muscle spindles.", "True. Sensory nerves relay this to the spinal cord.", 203],
+["PR", 0, "Muscle spindle information is relayed only to the cerebral cortex, not the spinal cord.", "False. Spindle sensory nerves relay information to the SPINAL CORD.", 203],
+["PR", 1, "Spindle reflexes help regulate the activity of opposing muscle groups during walking.", "True. They also help maintain posture.", 203],
+["PR", 1, "Golgi tendon organs enclose sensory axons that penetrate among collagen bundles.", "True. They are at the myotendinous junction.", 203],
+["PR", 0, "Golgi tendon organs are unencapsulated free nerve endings.", "False. Golgi tendon organs are ENCAPSULATED structures.", 203],
+["PR", 1, "Tendon organs act to inhibit motor nerve activity when tension is excessive.", "True. They protect against excessive force.", 203],
+["PR", 0, "Muscle spindles and tendon organs both detect decreases in tension.", "False. Both proprioceptors detect INCREASES in tension.", 203],
+["PR", 1, "Proprioceptors help regulate the effort needed for movements that need variable force.", "True. Both spindles and tendon organs contribute.", 203],
+["FT", 0, "All skeletal muscle fibers have the same metabolic properties.", "False. Fibers vary in contraction speed and ATP pathway, falling into three major types.", 205],
+["FT", 1, "Fiber diversity comes partly from varied expression of contractile or regulatory protein isoforms.", "True. Factors affecting O2 delivery and use also differ.", 205],
+["FT", 0, "Histochemical staining cannot distinguish fast from slow fibers.", "False. Histochemical staining identifies fibers with different amounts of 'fast' and 'slow' ATPases.", 206],
+["FT", 1, "Capillary density, mitochondrial number, glycogen and myoglobin levels reflect metabolic differences between fibers.", "True. These are histological features of fiber types.", 206],
+["FT", 0, "Myoglobin is similar to collagen in structure.", "False. Myoglobin is a globular protein similar to HEMOGLOBIN.", 206],
+["FT", 1, "Fresh tissue rich in slow oxidative fibers looks dark or red.", "True. Because of many mitochondria, capillaries and much myoglobin.", 206],
+["FT", 0, "Slow oxidative fibers are adapted for short bursts and fatigue quickly.", "False. Slow oxidative fibers contract slowly over LONG periods WITHOUT fatigue.", 206],
+["FT", 1, "Fast glycolytic fibers appear white.", "True. They have few mitochondria or capillaries and little myoglobin.", 206],
+["FT", 0, "Fast glycolytic fibers have many capillaries.", "False. Fast glycolytic fibers have FEW mitochondria and FEW capillaries.", 206],
+["FT", 1, "Lactic acid buildup causes rapid fatigue in fast glycolytic fibers.", "True. It comes from glycolysis during rapid contractions.", 206],
+["FT", 0, "Fast oxidative-glycolytic fibers fatigue faster than fast glycolytic fibers.", "False. FOG fibers are INTERMEDIATE; fast glycolytic fibers fatigue FASTEST.", 206],
+["FT", 1, "A fiber's metabolic type depends on its motor nerve supply.", "True. It is set by the rate of impulse conduction along the motor nerve.", 206],
+["FT", 0, "Most skeletal muscles contain only one fiber type.", "False. Most muscles contain a MIXTURE of fiber types.", 206],
+["FT", 1, "Needle biopsies to identify fiber types help diagnose myopathies and motor neuron diseases.", "True. They also help find other causes of muscle atrophy.", 206],
+["FT", 0, "Fiber types exist only in skeletal muscle.", "False. Different fiber types also exist in CARDIAC muscle and SMOOTH muscle.", 207],
+["FT", 1, "Type IIb fibers have large motor units (Table 10–2).", "True. Type I small; IIa intermediate.", 208],
+["FT", 0, "Type I fibers have large motor units (Table 10–2).", "False. Type I fibers have SMALL motor units and small diameter.", 208],
+["FT", 1, "Type IIa fibers have intermediate glycogen content (Table 10–2).", "True. Glycogen content rises from type I (low) to IIa (intermediate) to IIb (high), matching reliance on glycolysis (Table 10–2).", 208],
+["FT", 0, "Type IIb fibers have high myoglobin and are red (Table 10–2).", "False. Type IIb have LOW myoglobin and are WHITE fibers.", 208],
+["FT", 1, "Type IIb fibers have high glycolytic enzyme activity (Table 10–2).", "True. They depend on anaerobic glycolysis.", 208],
+["FT", 0, "Type IIa fibers have sparse mitochondria (Table 10–2).", "False. Type IIa fibers have NUMEROUS mitochondria and capillaries.", 208],
+["FT", 1, "Type I fibers have low myosin-ATPase activity and slow contraction (Table 10–2).", "True. Types IIa and IIb are high and fast.", 208],
+["FT", 0, "Type IIb fibers rely mainly on oxidative phosphorylation (Table 10–2).", "False. Type IIb rely on ANAEROBIC GLYCOLYSIS.", 208],
+["FT", 1, "Extraocular muscles are a typical location of type IIb fibers (Table 10–2).", "True. They need rapid contraction.", 208],
+["FT", 0, "Type IIa fibers fatigue more slowly than type I fibers (Table 10–2).", "False. Fatigue rate: type I SLOW, IIa INTERMEDIATE, IIb FAST.", 208],
+["FT", 1, "Type IIa fibers have intermediate fiber diameter (Table 10–2).", "True. Type I small; IIb large.", 208],
+["CA", 1, "Developing cardiac muscle cells form complex junctions between interdigitating processes instead of fusing.", "True. This differs from skeletal muscle, where myoblasts fuse.", 207],
+["CA", 0, "Cardiac muscle develops from mesenchyme around the primitive gut tube.", "False. Cardiac muscle develops from mesenchymal cells around the primitive HEART TUBE.", 207],
+["CA", 1, "The heart is made of tightly knit bundles of cells interwoven in spiraling layers.", "True. This gives a wringing wave of contraction.", 207],
+["CA", 0, "Cardiac muscle cells are 10–100 μm in diameter and many centimeters long.", "False. Cardiac cells are 15–30 μm wide and 85–120 μm long. The first description fits skeletal fibers.", 207],
+["CA", 1, "Cardiac muscle has a striated banding pattern comparable to skeletal muscle.", "True. Its sarcomeres are organized similarly.", 207],
+["CA", 0, "Most cardiac muscle cells have many nuclei, like skeletal fibers.", "False. Each cardiac cell usually has ONE nucleus (sometimes two), centrally located.", 207],
+["CA", 1, "Cardiac muscle cells may have one or two central nuclei.", "True. Cardiac cells usually have one central nucleus, sometimes two; unlike multinucleated skeletal fibers.", 213],
+["CA", 0, "Cardiac muscle has no perimysium.", "False. A THICKER perimysium separates bundles and layers of cardiac muscle fibers.", 207],
+["CA", 1, "The 'cardiac skeleton' is made of fibrous connective tissue.", "True. It forms from perimysium in specific areas.", 207],
+["CA", 0, "Intercalated discs are the same as the cross-striations of cardiac muscle.", "False. Intercalated discs are IRREGULAR, widely spaced junctions between cells; striations are much more closely spaced and regular.", 207],
+["CA", 1, "Intercalated discs are steplike and irregular.", "True. They have transverse and longitudinal regions.", 207],
+["CA", 0, "Longitudinal regions of intercalated discs are more abundant than transverse regions.", "False. Longitudinal regions are LESS ABUNDANT than transverse regions.", 207],
+["CA", 1, "Fascia adherens junctions are found in the transverse regions of intercalated discs.", "True. Together with desmosomes they give strong adhesion.", 207],
+["CA", 0, "Gap junctions in intercalated discs run perpendicular to the myofibrils.", "False. Gap junctions are in the LONGITUDINAL regions, running PARALLEL to the myofibrils.", 207],
+["CA", 1, "Gap junctions in intercalated discs promote rapid impulse conduction through many cardiac cells.", "True. They let many adjacent cells contract as a unit.", 207],
+["CA", 0, "Desmosomes act as 'electrical synapses' in cardiac muscle.", "False. GAP JUNCTIONS act as electrical synapses. Desmosomes give adhesion.", 207],
+["CA", 1, "Cardiac mitochondria occupy a larger share of cell volume than those of slow oxidative skeletal fibers.", "True. They occupy up to 40% of cardiac cell volume.", 207],
+["CA", 1, "Cardiac muscle stores its main fuel as triglycerides in small lipid droplets.", "True. Fatty acids are the heart's major fuel.", 207],
+["CA", 0, "Cardiac muscle cells contain no glycogen.", "False. Glycogen granules MAY be present, along with lipid droplets and lipofuscin.", 207],
+["CA", 1, "In atrial muscle, T-tubules are much smaller or absent.", "True. Ventricular T-tubules are well developed.", 207],
+["CA", 0, "Cardiac SR is better organized than skeletal SR.", "False. Cardiac SR is LESS well-organized than skeletal SR.", 207],
+["CA", 1, "A cardiac dyad has one T-tubule and one terminal cistern.", "True. Junctions involve only one structure of each type.", 207],
+["CA", 0, "Cardiac T-tubules lie at the A–I junctions.", "False. Cardiac (ventricular) T-tubules lie near the Z DISCS.", 207],
+["CA", 1, "Cultured cardiac muscle cells keep contracting, showing that contraction is intrinsic.", "True. Cardiac contraction is intrinsic and spontaneous.", 208],
+["CA", 0, "The heartbeat is initiated by motor neurons from the spinal cord.", "False. Impulses are initiated locally by NODES of specialized myocardial fibers; autonomic nerves only adjust the rate.", 208],
+["CA", 1, "Autonomic nerves modify the heart rate at the nodes of conducting cells.", "True. Sympathetic speeds it up; parasympathetic slows it.", 208],
+["CA", 0, "Individual cardiac fibers show graded contraction.", "False. Contraction of individual myocardial fibers is ALL-OR-NONE.", 208],
+["CA", 1, "Atrial granules are associated with small Golgi complexes near the nucleus.", "True. They are 0.2–0.3 μm and contain ANF.", 208],
+["CA", 0, "ANF acts mainly on target cells in the liver.", "False. ANF acts on target cells in the KIDNEY to affect Na+ excretion and water balance.", 208],
+["CA", 1, "Atrial contractile cells also serve an endocrine function.", "True. They secrete atrial natriuretic factor.", 208],
+["CA", 0, "The key function of cardiac muscle is voluntary movement (Table 10–1).", "False. Cardiac muscle's key function is AUTOMATIC (involuntary) pumping of blood.", 205],
+["CA", 1, "Cardiac muscle's capacity for regeneration is very poor (Table 10–1).", "True. It lacks satellite cells.", 205],
+["CA", 1, "Table 10–1 lists cardiac cells as cylindrical, 10–20 μm in diameter and 50–100 μm long.", "True. Table 10–1 gives these values. The text gives 15–30 μm × 85–120 μm for MATURE cells; either way they are far smaller than skeletal fibers.", 205],
+["CA", 1, "Intercalated discs have many adherent and gap junctions (Table 10–1).", "True. These are special structural features of cardiac muscle.", 205],
+["CA", 0, "Cardiac muscle is found in the walls of large arteries.", "False. Cardiac muscle is found in the HEART. Blood vessels have SMOOTH muscle (Table 10–1).", 205],
+["CA", 1, "Muscle of the heart ventricles is thicker than that of the atria because it pumps blood through the circulation.", "True. Ventricles do the main pumping.", 207],
+["SM", 0, "Smooth muscle is specialized for fast, powerful contraction.", "False. Smooth muscle is specialized for SLOW, STEADY contraction.", 208],
+["SM", 1, "Smooth muscle contraction is influenced by autonomic nerves and various hormones.", "True. It is not under voluntary control.", 208],
+["SM", 0, "Smooth muscle is a minor component of blood vessels.", "False. Smooth muscle is a MAJOR component of blood vessels and of the digestive, respiratory, urinary and reproductive tracts.", 208],
+["SM", 1, "Smooth muscle cells are elongated, tapering and unstriated.", "True. They are also called visceral muscle.", 208],
+["SM", 0, "The endomysium of smooth muscle is made mainly of type II collagen.", "False. Smooth muscle endomysium is TYPE I and TYPE III collagen fibers.", 208],
+["SM", 1, "The shortest smooth muscle cells are found in small blood vessels.", "True. Smooth muscle cells range from about 20 μm in small blood vessels to 500 μm in the pregnant uterus.", 208],
+["SM", 0, "The nucleus of a smooth muscle cell lies at one tapered end.", "False. The single nucleus lies at the CENTRAL, BROADEST part of the cell.", 208],
+["SM", 1, "Smooth muscle cells stain uniformly along their length.", "True. They have no striations.", 208],
+["SM", 0, "Smooth muscle cells are joined by intercalated discs.", "False. Smooth muscle cells are linked by numerous GAP JUNCTIONS; intercalated discs are unique to cardiac muscle.", 208],
+["SM", 1, "A contracted smooth muscle cell has a distorted nucleus.", "True. Its borders also become scalloped.", 208],
+["SM", 0, "Mitochondria and Golgi of smooth muscle are concentrated at the tapered ends of the cell.", "False. Mitochondria, polyribosomes, RER and Golgi are concentrated NEAR THE NUCLEUS.", 208],
+["SM", 1, "Smooth muscle cells have numerous small plasmalemma invaginations resembling caveolae.", "True. They compartmentalize signaling components.", 208],
+["SM", 0, "Smooth muscle cells have no sarcoplasmic reticulum at all.", "False. Smooth muscle has RUDIMENTARY sarcoplasmic reticulum.", 208],
+["SM", 1, "T-tubules are unnecessary in smooth muscle because its cells are small, tapering and joined by many gap junctions.", "True. That is the textbook's explanation.", 208],
+["SM", 0, "Smooth muscle filaments are arranged in myofibrils with sarcomeres.", "False. Smooth muscle filaments CRISSCROSS obliquely and do NOT form sarcomeres.", 210],
+["SM", 1, "Smooth muscle uses calmodulin and Ca2+-sensitive MLCK to produce contraction.", "True. Its actin lacks troponin and tropomyosin.", 210],
+["SM", 0, "Calmodulin is the enzyme that phosphorylates myosin in smooth muscle.", "False. Calmodulin is the Ca2+-BINDING protein. MLCK (myosin light-chain kinase) phosphorylates myosin.", 210],
+["SM", 1, "Dense bodies are functionally similar to Z discs.", "True. Actin filaments insert into them.", 210],
+["SM", 0, "Dense bodies are found only deep in the cytoplasm, never at the cell membrane.", "False. Dense bodies are found BOTH in the cytoplasm AND associated with the plasmalemma.", 210],
+["SM", 1, "Desmin intermediate filaments attach to dense bodies.", "True. They form an elaborate 10-nm array.", 210],
+["SM", 0, "Smooth muscle intermediate filaments are about 25 nm wide.", "False. They are 10-nm intermediate filaments of desmin.", 210],
+["SM", 1, "Dense bodies transmit contractile force both within cells and between adjacent cells.", "True. Submembranous dense bodies include desmosomal cadherins.", 210],
+["SM", 0, "Peristalsis depends only on the contraction of individual smooth muscle cells, not connective tissue.", "False. The endomysium and other connective tissue layers help COMBINE smooth muscle forces into concerted actions like peristalsis.", 210],
+["SM", 1, "In smooth muscle, contraction causes each cell to shorten individually.", "True. Thin filaments pull on dense bodies throughout the cell, so each cell shortens on its own, and its nucleus becomes distorted.", 213],
+["SM", 0, "Smooth muscle is under voluntary motor control.", "False. Smooth muscle is NOT under voluntary control.", 210],
+["SM", 1, "Contraction of smooth muscle is most commonly stimulated by autonomic nerves.", "True. Hormones and paracrine signals also act.", 210],
+["SM", 0, "Oxytocin from the pituitary controls smooth muscle of the bladder.", "False. The textbook names oxytocin as controlling smooth muscle of the UTERUS.", 210],
+["SM", 1, "Autonomic varicosities lie in close contact with smooth muscle fibers.", "True. They are periodic swellings of autonomic axons.", 210],
+["SM", 0, "A transmitter released from a varicosity acts on only one smooth muscle cell.", "False. The transmitter diffuses and binds receptors on NUMEROUS muscle cells.", 210],
+["SM", 1, "Gap junctions let smooth muscle cells contract synchronously or in a coordinated way.", "True. Stimulation spreads to more distant fibers through them.", 211],
+["SM", 0, "Smooth muscle cells are less active than fibroblasts in making ECM, contributing nothing to it.", "False. Smooth muscle cells SUPPLEMENT fibroblast activity, making collagen, elastin and proteoglycans.", 211],
+["SM", 1, "Active ECM synthesis by smooth muscle may reflect less specialization for strong contraction.", "True. This compares with skeletal and cardiac muscle.", 211],
+["SM", 0, "Smooth muscle cells are 0.2–10 mm in diameter (Table 10–1).", "False. The units are MICROMETERS: 0.2–10 μm in diameter, 50–200 μm long.", 205],
+["SM", 1, "In smooth muscle, actin-myosin binding requires myosin phosphorylation (Table 10–1).", "True. MLCK does this when calmodulin binds Ca2+.", 205],
+["SM", 0, "Smooth muscle special structural features include triads and intercalated discs (Table 10–1).", "False. Smooth muscle features are GAP JUNCTIONS, CAVEOLAE and DENSE BODIES.", 205],
+["SM", 1, "Smooth muscle is found in the uterus and bladder (Table 10–1).", "True. Also blood vessels and digestive and respiratory tracts.", 205],
+["SM", 0, "Smooth muscle contractions are always triggered by nerves and are never spontaneous (Table 10–1).", "False. Smooth muscle contractions are partial, slow, and OFTEN SPONTANEOUS, wavelike and rhythmic.", 205],
+["SM", 1, "Smooth muscle's capacity for regeneration is good, through mitosis of its cells (Table 10–1).", "True. Unlike skeletal (limited) and cardiac (very poor).", 205],
+["RG", 0, "The three adult muscle types have the same regenerative potential.", "False. They differ: skeletal limited, cardiac very poor, smooth good (Table 10–1).", 213],
+["RG", 1, "Even though skeletal muscle cells cannot divide, the tissue shows limited regeneration.", "True. Satellite cells provide new fibers.", 213],
+["RG", 0, "Satellite cells are normally highly active and dividing in uninjured muscle.", "False. Satellite cells are normally QUIESCENT until activated by injury.", 213],
+["RG", 0, "Cardiac muscle shows good regenerative capacity throughout adult life.", "False. Cardiac muscle shows very little regeneration beyond EARLY CHILDHOOD.", 213],
+["RG", 1, "Myocardial infarcts are generally repaired by connective tissue, forming scars.", "True. Proliferating fibroblasts form myocardial scars.", 213],
+["RG", 0, "Smooth muscle regenerates slowly because its cells are large and highly differentiated.", "False. Smooth muscle regenerates RAPIDLY because its cells are SMALL and relatively LESS differentiated.", 213],
+["RG", 1, "Smooth muscle cells are mononucleated.", "True. Simpler, smaller mononucleated cells allow a more active regenerative response.", 213],
+["RG", 0, "Fibroblasts are the main source of new smooth muscle cells after injury.", "False. Viable SMOOTH MUSCLE CELLS undergo mitosis to replace damaged tissue; pericytes help in vessels.", 213],
+["RG", 1, "Pericytes are contractile cells in the walls of small blood vessels.", "True. They help repair vascular smooth muscle.", 213],
+["SA", 1, "From outside in, the order is muscle → fascicle → muscle fiber → myofibril → myofilament.", "True. Epimysium wraps the muscle, perimysium each fascicle, endomysium each fiber; fibers contain myofibrils built of thick and thin myofilaments.", 194],
+["SA", 1, "Myofibrils are 1–2 μm wide, while whole skeletal fibers are 10–100 μm wide.", "True. So each fiber holds many myofibrils side by side.", 195],
+["CM", 1, "The sequence of skeletal muscle excitation is NMJ → sarcolemma → T-tubules → terminal cisternae → Ca2+ release.", "True. The action potential travels along the sarcolemma and T-tubules to the triads, where SR releases Ca2+.", 198],
+["CM", 1, "Both Ca2+ and ATP must be present for crossbridge cycling to continue.", "True. In their continued presence the attach-pivot-detach events repeat.", 198],
+["IN", 1, "Motor axons branch more in large muscles with coarse movements than in muscles needing precise control.", "True. Coarse muscles have axons innervating 100+ fibers; precise ones like extraocular muscles approach one fiber per neuron.", 201],
+["IN", 1, "At the NMJ, the axon terminal sits in a trough on the muscle fiber surface.", "True. The dilated termination of each axonal branch lies in a trough of the sarcolemma.", 200],
+["FI", 1, "The H zone contains the M line.", "True. The M line bisects the H zone at the center of the A band.", 197],
+["FI", 1, "The I band contains thin filaments, the Z disc and parts of titin.", "True. Titin is an important accessory protein in I bands, connecting thick filaments to the Z disc.", 197],
+["FT", 1, "Type IIa fibers resemble type I in oxidative metabolism but type IIb in contraction speed.", "True. Type IIa: oxidative phosphorylation (like type I) and fast contraction with high myosin-ATPase (like IIb) (Table 10–2).", 208],
+["FT", 1, "Fiber diameter increases from type I to type IIa to type IIb.", "True. Small, intermediate, large (Table 10–2).", 208],
+["CA", 1, "Cardiac and smooth muscle both have centrally located nuclei.", "True. Only skeletal muscle has peripheral nuclei (Table 10–1).", 205],
+["CA", 1, "Both cardiac muscle and smooth muscle spread excitation from cell to cell through gap junctions.", "True. Cardiac gap junctions are in the intercalated discs; smooth muscle cells are linked by numerous gap junctions.", 210],
+["CA", 1, "Skeletal and cardiac fibers both contract in an all-or-none manner.", "True. Skeletal is triggered at motor end plates; cardiac is intrinsic, beginning at conducting nodes (Table 10–1).", 205],
+["SM", 1, "Smooth muscle cells have fewer, less regularly arranged crossbridges than striated muscle.", "True. Myosin filaments are less regular among the thin filaments, with fewer crossbridges.", 210],
+["SM", 1, "α-Actinin is found in both Z discs of striated muscle and dense bodies of smooth muscle.", "True. In both it anchors thin actin filaments.", 210],
+["SR", 1, "Skeletal muscle has the best-developed SR of the three muscle types.", "True. Skeletal SR is well-developed; cardiac is less; smooth is irregular and rudimentary (Table 10–1).", 205],
+["SM", 1, "Smooth muscle cells in the pregnant uterus can be about 25 times longer than those in small blood vessels.", "True. They range from 20 μm in small vessels to 500 μm in the pregnant uterus (500 ÷ 20 = 25).", 208],
+["MF", 1, "Skeletal fibers are innervated at motor end plates, while cardiac contraction starts at nodes of conducting fibers.", "True. Table 10–1 contrasts these triggers of contraction.", 205],
+["OV", 1, "Of the three muscle types, only smooth muscle lacks both striations and T-tubules.", "True. Skeletal and cardiac are striated with T-tubules; smooth muscle has neither (Table 10–1).", 205],
+["SA", 0, "Myofibrils are wider than whole muscle fibers.", "False. Myofibrils (1–2 μm) are INSIDE fibers (10–100 μm); each fiber has many myofibrils.", 195],
+["SA", 0, "From outside in: myofibril → muscle fiber → fascicle → muscle.", "False. That is INSIDE OUT. From outside in: muscle → fascicle → fiber → myofibril → myofilament.", 194],
+["CM", 0, "Ca2+ is released from the SR before the action potential reaches the T-tubules.", "False. The action potential travels along T-tubules FIRST; depolarization at triads then triggers Ca2+ release.", 198],
+["CM", 0, "Only ATP, not Ca2+, is needed for crossbridge cycling to continue.", "False. BOTH Ca2+ and ATP are needed; without Ca2+ tropomyosin re-covers the binding sites.", 198],
+["IN", 0, "At the NMJ, the axon terminal sits on a ridge projecting from the muscle surface.", "False. Each axon terminal lies in a TROUGH on the muscle cell surface.", 200],
+["IN", 0, "Precise muscles have motor axons that each innervate more fibers than coarse muscles do.", "False. Precise muscles have FEW fibers per axon (even one); coarse muscles have 100 or more.", 201],
+["FI", 0, "The Z disc lies within the H zone.", "False. The Z disc bisects the I BAND. The M line lies within the H zone.", 197],
+["FI", 0, "The H zone contains thin filaments but no thick filaments.", "False. The H zone has the rodlike parts of THICK filaments and NO thin filaments.", 197],
+["FT", 0, "Type IIa fibers resemble type IIb in metabolism, depending on anaerobic glycolysis.", "False. Type IIa use OXIDATIVE phosphorylation like type I. Only IIb rely on anaerobic glycolysis (Table 10–2).", 208],
+["FT", 0, "Fiber diameter decreases from type I to type IIa to type IIb.", "False. It INCREASES: type I small, IIa intermediate, IIb large (Table 10–2).", 208],
+["CA", 0, "Cardiac and skeletal muscle both have peripheral nuclei.", "False. Only SKELETAL muscle has peripheral nuclei. Cardiac nuclei are CENTRAL (Table 10–1).", 205],
+["CA", 0, "Cardiac muscle cells are not connected by gap junctions.", "False. Gap junctions fill the longitudinal regions of intercalated discs, coupling cells electrically.", 207],
+["CA", 0, "Smooth muscle contractions are all-or-none, like skeletal and cardiac (Table 10–1).", "False. Smooth muscle contractions are PARTIAL and slow; skeletal and cardiac are all-or-none.", 205],
+["SM", 0, "Smooth muscle has more crossbridges than striated muscle because its filaments crisscross.", "False. Smooth muscle has FEWER crossbridges and a less regular myosin arrangement.", 210],
+["SM", 0, "α-Actinin is found in skeletal Z discs but not in smooth muscle.", "False. Smooth muscle DENSE BODIES contain α-actinin too.", 210],
+["SR", 0, "Cardiac muscle has the best-developed SR of the three muscle types.", "False. SKELETAL muscle has the best-developed SR; cardiac SR is less well-organized (Table 10–1).", 205],
+["RG", 0, "Satellite cells are found inside the external lamina of cardiac muscle cells.", "False. Cardiac muscle LACKS satellite cells.", 213],
+["MF", 0, "Skeletal muscle contraction starts spontaneously at pacemaker nodes.", "False. Skeletal contraction is triggered at MOTOR END PLATES. Pacemaker nodes start CARDIAC contraction.", 205],
+["OV", 0, "Of the three muscle types, only cardiac muscle lacks T-tubules.", "False. SMOOTH muscle lacks T-tubules. Cardiac muscle has T-tubules (forming dyads) (Table 10–1).", 205],
+["MF", 0, "Peripheral nuclei are found in skeletal, cardiac and smooth muscle alike.", "False. Peripheral nuclei are UNIQUE to skeletal muscle fibers.", 193],
+["FT", 0, "Type I fibers have high glycolytic enzyme activity and low capillary density (Table 10–2).", "False. Type I have LOW glycolytic activity and NUMEROUS capillaries.", 208],
+["PR", 0, "Golgi tendon organs are found among muscle fascicles, and muscle spindles in tendons.", "False. Reversed: MUSCLE SPINDLES are among fascicles; GOLGI TENDON ORGANS are at the myotendinous junction.", 203],
+["CT", 0, "Myotendinous junctions connect the endomysium directly to the periosteum without involving the epimysium or perimysium.", "False. ALL THREE layers plus the deep fascia are continuous with the tendon at myotendinous junctions.", 194]
+];
+const SETS=[{"name": "Set 1", "desc": "Mixed \u00b7 all topics"}, {"name": "Set 2", "desc": "Mixed \u00b7 all topics"}, {"name": "Set 3", "desc": "Mixed \u00b7 all topics"}];
+
+const TOPICS={OV:"Overview & terminology",CT:"Connective tissue of muscle",MF:"Skeletal fibers & development",SA:"Sarcomere & bands",FI:"Thick & thin filament proteins",SR:"Sarcoplasmic reticulum & T-tubules",CM:"Mechanism of contraction",IN:"Innervation & motor units",PR:"Muscle spindles & tendon organs",FT:"Skeletal fiber types",CA:"Cardiac muscle",SM:"Smooth muscle",RG:"Regeneration"};
+const ITEMS=Q.map((q,i)=>({id:i+1,s:q[0],a:!!q[1],t:q[2],e:q[3],p:q[4],set:0}));
+// Mix: deal every topic's statements round-robin into the 3 sets, so each set covers all topics of both chapters.
+(function(){let seed=202020;const r=()=>{seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
+  const sh=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+  const tops=[...new Set(ITEMS.map(x=>x.s))];
+  [true,false].forEach(v=>{const pool=[];tops.forEach(t=>pool.push(...sh(ITEMS.filter(x=>x.s===t&&x.a===v))));
+    const cap=Math.ceil(pool.length/3);const count=[0,0,0];let k=0;pool.forEach(x=>{while(count[k%3]>=cap)k++;x.set=k%3;count[k%3]++;k++})});})();
+const BY=Object.fromEntries(ITEMS.map(x=>[x.id,x]));
+
+// Deterministic mixed sheets, like real exam tickets: each sheet draws across topics.
+function rng(seed){return()=>{seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function shuffled(arr,r){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+const SETSHEETS=SETS.map((S,k)=>{const r=rng(20200+k*7);const ids=shuffled(ITEMS.filter(x=>x.set===k).map(x=>x.id),r);const out=[];for(let i=0;i<ids.length;i+=10)out.push(ids.slice(i,i+10));return out});
+let SHEETS=SETSHEETS[0];
+function setItems(){return ITEMS.filter(x=>x.set===nav.set)}
+
+// ---- Progress model ----
+// r: answer history per question, f: flags (1 on / 0 off), s: answers of the current pass, p: place in the bank.
+// Every change is sent as a small merge-update, so two open copies of the page never overwrite each other.
+const KEY="muscle-bank2-v1";
+function defaultSetPrefs(k){const first=ITEMS.find(x=>x.set===k).s;return {mode:"sheets",sheet:0,topic:first,page:0,shuffle:false}}
+let nav={set:0,sets:[0, 1, 2].map(defaultSetPrefs)};
+let prefs=nav.sets[0];
+function useSet(k){nav.set=k;prefs=nav.sets[k];SHEETS=SETSHEETS[k]}
+function loadNav(p){if(!p||!Array.isArray(p.sets))return;const n={set:Math.min(2,Math.max(0,p.set|0)),sets:[0, 1, 2].map(k=>Object.assign(defaultSetPrefs(k),p.sets[k]||{}))};nav=n;useSet(n.set)}
+const session={};
+let store={r:{},f:{}};
+function applyDoc(d,withPrefs){
+  store.r={};for(const k in (d.r||{})){const v=d.r[k];if(v&&((v.c||0)+(v.w||0))>0)store.r[k]=v}
+  store.f={};for(const k in (d.f||{}))if(d.f[k])store.f[k]=1;
+  for(const k in session)delete session[k];
+  for(const k in (d.s||{}))if(d.s[k]===true||d.s[k]===false)session[k]=d.s[k];
+  if(withPrefs&&d.p)loadNav(d.p);
+}
+function navCopy(){return JSON.parse(JSON.stringify(nav))}
+function fullDoc(){return {r:store.r,f:store.f,s:Object.assign({},session),p:navCopy()}}
+function cacheLocal(){try{localStorage.setItem(KEY,JSON.stringify(fullDoc()))}catch(e){}}
+try{const raw=localStorage.getItem(KEY);if(raw)applyDoc(JSON.parse(raw),true)}catch(e){}
+
+let cloud=null, ready=false, queue=[], sending=false, unsub=null;
+function setSync(state){const el=document.getElementById("sync");if(!el)return;
+  const m={local:["Saving in this browser only","warn"],loading:["Loading your saved progress…",""],ok:["Progress saved to your account","ok"],saving:["Saving…",""],err:["Couldn't save to your account. Check your connection; changes are kept in this browser","warn"]}[state];
+  el.textContent=m[0];el.className="sync "+m[1];}
+// Record a change: patch is a partial document, merged into the saved one.
+function commit(patch){
+  cacheLocal();
+  queue.push(patch);
+  flush();
+}
+async function flush(){
+  if(!ready||sending||!queue.length)return;
+  sending=true;setSync("saving");
+  while(queue.length){
+    const patch=queue.shift();
+    try{await cloud.update(patch)}
+    catch(e){
+      try{await new Promise(r=>setTimeout(r,800+Math.random()*700));await cloud.update(patch)}
+      catch(e2){queue.unshift(patch);sending=false;setSync("err");setTimeout(flush,5000);return}
+    }
+  }
+  sending=false;setSync("ok");
+}
+function showResume(){
+  const el=document.getElementById("resume");if(!el)return;
+  if(!Object.keys(store.r).length){el.hidden=true;return}
+  const where=`Set ${nav.set+1}, `+(prefs.mode==="sheets"?`Sheet ${prefs.sheet+1}`:prefs.mode==="topic"?TOPICS[prefs.topic]:prefs.mode==="mistakes"?"Mistakes":"Flagged");
+  const n=setItems().filter(x=>session[x.id]!==undefined).length;
+  el.textContent=`Welcome back. You're on ${where}${n?`, with ${n} answer${n>1?"s":""} from your current pass still shown`:""}.`;el.hidden=false;
+}
+function refreshLists(){if(prefs.mode==="mistakes"||prefs.mode==="flagged")snapshot=prefs.mode==="mistakes"?mistakes():flagged()}
+async function connectCloud(){
+  setSync("local");
+  if(!window.claude||!window.claude.use)return;
+  try{
+    const [db,user]=await Promise.all([window.claude.use("db"),window.claude.use("user")]);
+    if(!db||!user)return;
+    const uid=await user.id(); if(!uid)return;
+    setSync("loading");
+    cloud=db.doc("data/users/"+uid+"/muscle2-progress");
+    const snap=await cloud.get();
+    if(snap.exists){
+      // The account copy is the source of truth; re-apply anything done while it was loading.
+      const pending=queue.slice();
+      applyDoc(snap.data(),true);
+      pending.forEach(p=>applyPatch(p));
+    }else{
+      await cloud.set(fullDoc()); queue=[];
+    }
+    ready=true; cacheLocal();
+    $("#shuffle").checked=prefs.shuffle; refreshLists(); render(); showResume();
+    if(queue.length)flush(); else setSync("ok");
+    // Stay in sync with other open copies (another tab, phone, side panel).
+    unsub=cloud.onSnapshot(s=>{
+      if(!s.exists||s.metadata.hasPendingWrites||sending||queue.length)return;
+      const before=JSON.stringify([store.r,store.f,session]);
+      applyDoc(s.data(),false);
+      if(JSON.stringify([store.r,store.f,session])!==before){cacheLocal();render()}
+    },()=>{});
+  }catch(e){setSync("err")}
+}
+function applyPatch(p){
+  if(p.r)for(const k in p.r){const v=p.r[k];if(v&&((v.c||0)+(v.w||0))>0)store.r[k]=v;else delete store.r[k]}
+  if(p.f)for(const k in p.f){if(p.f[k])store.f[k]=1;else delete store.f[k]}
+  if(p.s)for(const k in p.s){if(p.s[k]===null)delete session[k];else session[k]=p.s[k]}
+  if(p.p)loadNav(p.p);
+}
+function savePrefs(){commit({p:navCopy()})}
+let snapshot=null;
+const $=s=>document.querySelector(s);
+
+function mistakes(k){const set=k===undefined?nav.set:k;return ITEMS.filter(x=>x.set===set&&store.r[x.id]&&store.r[x.id].last===0).map(x=>x.id)}
+function flagged(k){const set=k===undefined?nav.set:k;return ITEMS.filter(x=>x.set===set&&store.f[x.id]).map(x=>x.id)}
+function seenIn(k){return ITEMS.filter(x=>x.set===k&&store.r[x.id]).length}
+function renderSets(){
+  $("#sets").innerHTML=SETS.map((S,k)=>`<button class="setbtn" aria-pressed="${k===nav.set}" data-set="${k}"><span class="sn">${S.name}</span><span class="sd">${S.desc}</span><span class="sp"><b>${seenIn(k)}</b>/100 seen · <span class="m">${mistakes(k).length} missed</span> · <span class="f">${flagged(k).length} flagged</span></span></button>`).join("");
+}
+
+function renderStats(){
+  const items=setItems();const seen=items.filter(x=>store.r[x.id]).length;
+  let c=0,t=0;items.forEach(x=>{const r=store.r[x.id];if(r){c+=r.c||0;t+=(r.c||0)+(r.w||0)}});
+  const acc=t?Math.round(c/t*100)+"%":"–";
+  $("#stats").innerHTML=`<span class="stat">Set ${nav.set+1} · Seen <b>${seen}</b>/${items.length}</span><span class="stat">Accuracy <b>${acc}</b></span><span class="stat m">Mistakes <b>${mistakes().length}</b></span><span class="stat f">Flagged <b>${flagged().length}</b></span>`;
+  $("#n-mis").textContent=mistakes().length;$("#n-flag").textContent=flagged().length;
+}
+
+function currentList(){
+  if(prefs.mode==="sheets")return {ids:SHEETS[prefs.sheet],title:`Sheet ${prefs.sheet+1}`,meta:"Mixed topics · 10 statements"};
+  if(prefs.mode==="topic"){const all=setItems().filter(x=>x.s===prefs.topic).map(x=>x.id);return {ids:all,title:TOPICS[prefs.topic],meta:`${all.length} statements`}}
+  const ids=snapshot||[];
+  const pages=Math.max(1,Math.ceil(ids.length/10));if(prefs.page>=pages)prefs.page=pages-1;
+  const slice=ids.slice(prefs.page*10,prefs.page*10+10);
+  return {ids:slice,all:ids,title:prefs.mode==="mistakes"?"Mistakes to redo":"Flagged statements",meta:ids.length?`Page ${prefs.page+1} of ${pages} · ${ids.length} total`:""};
+}
+
+function renderPicker(){
+  const el=$("#picker");
+  if(prefs.mode==="sheets"){
+    el.innerHTML=SHEETS.map((ids,i)=>{
+      const done=ids.filter(id=>store.r[id]).length;
+      const cls=done===10?"done":done?"part":"";
+      return `<button class="chip ${cls}" aria-pressed="${i===prefs.sheet}" data-sheet="${i}" title="Sheet ${i+1}: ${done}/10 seen">${i+1}</button>`}).join("");
+  }else if(prefs.mode==="topic"){
+    const here=[...new Set(setItems().map(x=>x.s))];if(!here.includes(prefs.topic))prefs.topic=here[0];el.innerHTML=`<label for="topic-sel" class="note">Topic&nbsp;</label><select id="topic-sel">${here.map(k=>`<option value="${k}" ${k===prefs.topic?"selected":""}>${TOPICS[k]} (${setItems().filter(x=>x.s===k).length})</option>`).join("")}</select>`;
+  }else{
+    const ids=snapshot||[];const pages=Math.ceil(ids.length/10);
+    el.innerHTML=pages>1?Array.from({length:pages},(_,i)=>`<button class="chip" aria-pressed="${i===prefs.page}" data-page="${i}">${i+1}</button>`).join(""):"";
+  }
+}
+
+const FLAG_SVG='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 21V4h11l-2 4 2 4H5"/></svg>';
+
+function rowHTML(id,n){
+  const q=BY[id];const ch=session[id];const answered=ch!==undefined;const right=answered&&ch===q.a;
+  const rec=store.r[id];const missN=rec&&rec.w?`<span class="miss">missed ${rec.w}×</span>`:"";
+  const cls=v=>{if(!answered)return"";if(ch===v)return right?"pick-right":"pick-wrong";if(q.a===v)return"was-right";return""};
+  let fb="";
+  if(answered){
+    const cleared=prefs.mode==="mistakes"&&right?" Removed from your mistakes.":"";
+    fb=`<div class="fb ${right?"good":"bad"}"><span class="v">${right?"Correct.":"Wrong."}</span> The statement is <b>${q.a?"TRUE":"FALSE"}</b>.${cleared}<br>${q.e.replace(/^(True|False)\.\s*/,"")} <span class="pg">Junqueira p. ${q.p}</span></div>`;
+  }
+  return `<div class="row" data-id="${id}">
+    <div class="no">${n}</div>
+    <div class="body"><span class="tag">${TOPICS[q.s]}</span>${missN}<p class="stmt">${q.t}</p>${fb}</div>
+    <div class="act">
+      <div class="yn"><button class="btn ${cls(true)}" data-ans="1" ${answered?"disabled":""} aria-label="True">YES</button><button class="btn ${cls(false)}" data-ans="0" ${answered?"disabled":""} aria-label="False">NO</button></div>
+      <button class="flag" aria-pressed="${!!store.f[id]}" data-flag="${id}">${FLAG_SVG}<span>${store.f[id]?"Flagged":"Flag"}</span></button>
+    </div></div>`;
+}
+
+let order={}; // view key -> ordering when shuffled
+function render(){
+  document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected",t.dataset.mode===prefs.mode));
+  renderSets();renderStats();renderPicker();
+  const L=currentList();const sheet=$("#sheet");
+  if(!L.ids.length){
+    sheet.innerHTML=`<div class="empty"><strong>${prefs.mode==="mistakes"?"No mistakes saved":"Nothing flagged yet"}</strong>${prefs.mode==="mistakes"?"Wrong answers from any sheet or topic land here so you can redo them.":"Tap Flag on any statement to keep it here for review."}</div>`;return;
+  }
+  let ids=L.ids;
+  const vk=prefs.mode+":"+prefs.sheet+":"+prefs.topic+":"+prefs.page+":"+ids.join(",");
+  if(prefs.shuffle){if(!order[vk])order[vk]=shuffled(ids,Math.random);ids=order[vk]}
+  const done=ids.filter(id=>session[id]!==undefined);const ok=done.filter(id=>session[id]===BY[id].a).length;
+  const offset=(prefs.mode==="mistakes"||prefs.mode==="flagged")?prefs.page*10:0;
+  const hasNext=(prefs.mode==="sheets"&&prefs.sheet<SHEETS.length-1)||(L.all&&(prefs.page+1)*10<L.all.length);
+  sheet.innerHTML=`<div class="sheet-head"><span class="sheet-title">${L.title}</span><span class="sheet-meta">${L.meta}</span></div>
+    <div class="cols" aria-hidden="true"><div>No.</div><div>Statement</div><div>Yes / No</div></div>
+    ${ids.map((id,i)=>rowHTML(id,offset+i+1)).join("")}
+    <div class="sheet-foot"><span class="score">Score ${ok}/${done.length}${done.length===ids.length?` · ${Math.round(ok/ids.length*100)}%`:` · ${ids.length-done.length} left`}</span>
+    <div class="foot-btns"><button class="link" id="redo">Redo these</button>${prefs.mode!=="sheets"&&prefs.mode!=="topic"?`<button class="link" id="refresh">Refresh list</button>`:""}${hasNext?`<button class="link solid" id="next">Next ${prefs.mode==="sheets"?"sheet":"page"}</button>`:""}</div></div>`;
+}
+
+function enterMode(m){
+  prefs.mode=m;prefs.page=0;
+  const p={p:null};
+  if(m==="mistakes"||m==="flagged"){snapshot=m==="mistakes"?mistakes():flagged();const s={};snapshot.forEach(id=>{if(session[id]!==undefined){delete session[id];s[id]=null}});if(Object.keys(s).length)p.s=s}
+  p.p=Object.assign({},prefs);commit(p);render();
+}
+
+document.addEventListener("click",e=>{
+  const t=e.target.closest("button");if(!t)return;
+  if(t.dataset.set!==undefined){useSet(+t.dataset.set);order={};refreshLists();$("#shuffle").checked=prefs.shuffle;savePrefs();render();showResume();return}
+  if(t.classList.contains("tab")){enterMode(t.dataset.mode);return}
+  if(t.dataset.sheet!==undefined){prefs.sheet=+t.dataset.sheet;savePrefs();render();window.scrollTo({top:0});return}
+  if(t.dataset.page!==undefined){prefs.page=+t.dataset.page;savePrefs();render();return}
+  if(t.dataset.ans!==undefined){
+    const id=+t.closest(".row").dataset.id;const q=BY[id];const ch=t.dataset.ans==="1";
+    if(session[id]!==undefined)return; // already answered in this pass
+    session[id]=ch;const old=store.r[id]||{c:0,w:0,last:null};const rec={c:old.c||0,w:old.w||0,last:null};
+    if(ch===q.a){rec.c++;rec.last=1}else{rec.w++;rec.last=0}
+    store.r[id]=rec;commit({r:{[id]:rec},s:{[id]:ch}});render();return}
+  if(t.dataset.flag!==undefined){const id=String(t.dataset.flag);const on=!store.f[id];if(on)store.f[id]=1;else delete store.f[id];commit({f:{[id]:on?1:0}});render();return}
+  if(t.id==="redo"){const p={};currentList().ids.forEach(id=>{delete session[id];p[id]=null});order={};commit({s:p});render();return}
+  if(t.id==="refresh"){enterMode(prefs.mode);return}
+  if(t.id==="next"){if(prefs.mode==="sheets")prefs.sheet++;else prefs.page++;savePrefs();render();window.scrollTo({top:0});return}
+  if(t.id==="reset"){$("#reset-box").innerHTML=`<span>Erase mistakes, flags and stats for Set ${nav.set+1} only?</span><button class="link danger" id="reset-yes">Erase</button><button class="link" id="reset-no">Keep</button>`;return}
+  if(t.id==="reset-no"){$("#reset-box").innerHTML=`<button class="link danger" id="reset">Reset this set</button>`;return}
+  if(t.id==="reset-yes"){const p={r:{},f:{},s:{}};setItems().forEach(x=>{const k=String(x.id);if(store.r[k]){p.r[k]={c:0,w:0,last:null};delete store.r[k]}if(store.f[k]){p.f[k]=0;delete store.f[k]}if(session[k]!==undefined){p.s[k]=null;delete session[k]}});commit(p);snapshot=[];$("#reset-box").innerHTML=`<button class="link danger" id="reset">Reset this set</button>`;render();return}
+});
+document.addEventListener("change",e=>{
+  if(e.target.id==="topic-sel"){prefs.topic=e.target.value;savePrefs();render()}
+  if(e.target.id==="shuffle"){prefs.shuffle=e.target.checked;order={};savePrefs();render()}
+});
+useSet(nav.set);
+$("#shuffle").checked=prefs.shuffle;
+if(prefs.mode==="mistakes"||prefs.mode==="flagged")snapshot=prefs.mode==="mistakes"?mistakes():flagged();
+render();
+showResume();
+connectCloud();
+</script>

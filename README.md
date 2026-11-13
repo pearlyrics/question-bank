@@ -1,0 +1,132 @@
+# Question Bank
+
+True/false question bank with accounts, flags, mistakes, resizable sets, and
+weekly bulk uploads. React + Vite + Tailwind v4 + Supabase.
+
+## Setup
+
+**1. Create the schema.** Open your Supabase project → SQL Editor → New query,
+paste all of `supabase/migrations/0001_init.sql`, run it. This is the only step
+that can't be done from the app.
+
+**2. Turn off email confirmation.** Authentication → Sign In / Providers →
+Email → turn **Confirm email** off. Accounts here are username-only, and the
+synthesised addresses never receive mail.
+
+**3. Add your keys** to `.env` (already done if `.env` has both values):
+
+```
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_ANON_KEY=your-anon-key
+```
+
+**4. Run it.**
+
+```
+npm install
+npm run dev
+```
+
+**5. Make yourself an admin.** Create your account in the app, then run this
+once in the SQL editor — only admins see the Import tab:
+
+```sql
+update profiles set is_admin = true where username = 'your-username';
+```
+
+## Loading your existing 300 questions
+
+```
+npm run convert-legacy -- muscle-bank-2.html data/muscle-tissue-ii.json
+```
+
+Then open **Import**, drop `data/muscle-tissue-ii.json` in, check the batch, and
+import it.
+
+## Adding ~400 questions each week
+
+Generate a file in this shape and import it the same way:
+
+```json
+{
+  "bank": {
+    "slug": "w05-nerve-tissue",
+    "title": "Week 5 · Nerve tissue",
+    "source": "Junqueira's Basic Histology, 15th ed. · Ch. 11"
+  },
+  "topics": [{ "code": "OV", "label": "Overview & terminology" }],
+  "questions": [
+    {
+      "topic": "OV",
+      "answer": true,
+      "statement": "Neurons are the functional unit of nervous tissue.",
+      "explanation": "True. Neurons receive, process and transmit signals.",
+      "page": 221
+    }
+  ]
+}
+```
+
+Notes:
+
+- The legacy array form `["OV", 1, "statement", "explanation", 193]` is accepted too.
+- A `slug` that already exists adds to that bank; a new one creates a new bank.
+- Re-importing the same statement **updates** it rather than duplicating it, so
+  re-running a file is safe.
+- `topics` is optional — any topic code used gets an entry, labelled by its code.
+- The Check step reports counts, true/false balance per topic, duplicates and
+  the exact line of anything malformed, before anything is written.
+
+## How scoring works
+
+Every question stores your **first** answer permanently, in write-once columns
+that `record_answer()` will not overwrite. The score on screen is
+`correct-on-first-try / first-answered` across whatever you're looking at.
+
+Redoing mistakes or flagged questions updates the mistake list, the flag list
+and the separate **all attempts** accuracy. It cannot move the score — not
+because the UI avoids recalculating it, but because the first-attempt data is
+immutable in the database.
+
+Answers you give stay on screen when you switch tabs or sets and come back — a
+pass in progress is never thrown away. To take a list again, press **Redo these**
+(it appears at the top of the sheet once every row is answered, and always in the
+footer). That hides the revealed answers without touching your score.
+
+`Reset this bank` offers two things:
+
+- **Start a fresh pass** — clears revealed answers so you can go through again.
+  Score, mistakes and flags survive.
+- **Erase everything** — deletes this bank's rows, score included. The only
+  path that clears a score.
+
+## Sets, mistakes and flags
+
+Mistakes and Flagged are scoped to the set you have selected, so they line up
+with the set stats above them. Switching sets keeps the tab you're on — you can
+work Set 1's mistakes, then Set 2's, without leaving the tab.
+
+## Sets and the slider
+
+Each question has a stable `position` in its bank, assigned at import by a
+round-robin interleave across topics alternating true/false — so any slice stays
+balanced. A set is just a slice of that order, which is why the slider can
+re-cut 400 questions into sets of any size instantly, and why your progress is
+unaffected by the size you pick. Sheets of 10 page within a set.
+
+## Offline and multi-device
+
+Answers render immediately, are written to `localStorage`, then queued to
+Supabase with retries. Closing the tab mid-send loses nothing — the queue
+replays on next load, and `record_answer()` is idempotent per attempt, so a
+replayed write can't inflate your counts. Other tabs update through `storage`
+events; other devices refresh when the tab regains focus.
+
+## Tests
+
+```
+npm test
+```
+
+Covers the first-attempt immutability rule, queue durability and replay safety,
+set slicing and resize clamping, view paging, and import validation.

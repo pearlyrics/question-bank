@@ -1,0 +1,2176 @@
+{
+  "bank": {
+    "slug": "muscle-tissue-bank-ii",
+    "title": "Muscle Tissue Bank II",
+    "source": "Junqueira's Basic Histology, 15th ed. · Chapter 10: Muscle Tissue"
+  },
+  "topics": [
+    {
+      "code": "OV",
+      "label": "Overview & terminology",
+      "sort_order": 0
+    },
+    {
+      "code": "CT",
+      "label": "Connective tissue of muscle",
+      "sort_order": 1
+    },
+    {
+      "code": "MF",
+      "label": "Skeletal fibers & development",
+      "sort_order": 2
+    },
+    {
+      "code": "SA",
+      "label": "Sarcomere & bands",
+      "sort_order": 3
+    },
+    {
+      "code": "FI",
+      "label": "Thick & thin filament proteins",
+      "sort_order": 4
+    },
+    {
+      "code": "SR",
+      "label": "Sarcoplasmic reticulum & T-tubules",
+      "sort_order": 5
+    },
+    {
+      "code": "CM",
+      "label": "Mechanism of contraction",
+      "sort_order": 6
+    },
+    {
+      "code": "IN",
+      "label": "Innervation & motor units",
+      "sort_order": 7
+    },
+    {
+      "code": "PR",
+      "label": "Muscle spindles & tendon organs",
+      "sort_order": 8
+    },
+    {
+      "code": "FT",
+      "label": "Skeletal fiber types",
+      "sort_order": 9
+    },
+    {
+      "code": "CA",
+      "label": "Cardiac muscle",
+      "sort_order": 10
+    },
+    {
+      "code": "SM",
+      "label": "Smooth muscle",
+      "sort_order": 11
+    },
+    {
+      "code": "RG",
+      "label": "Regeneration",
+      "sort_order": 12
+    }
+  ],
+  "questions": [
+    {
+      "topic": "OV",
+      "answer": true,
+      "statement": "Contractility is a universal cell property that muscle cells have optimized.",
+      "explanation": "True. Muscle tissue is defined as cells that optimize the universal property of contractility, using actin microfilaments like all cells.",
+      "page": 193
+    },
+    {
+      "topic": "OV",
+      "answer": false,
+      "statement": "Muscle is the only tissue whose cells contain actin microfilaments.",
+      "explanation": "False. Actin microfilaments generate force in ALL cells; muscle only optimizes this universal property.",
+      "page": 193
+    },
+    {
+      "topic": "OV",
+      "answer": true,
+      "statement": "Muscle contraction drives movement within organ systems, of blood, and of the body as a whole.",
+      "explanation": "True. The chapter lists all three levels of movement powered by muscle.",
+      "page": 193
+    },
+    {
+      "topic": "OV",
+      "answer": false,
+      "statement": "Most muscle cells arise from embryonic ectoderm.",
+      "explanation": "False. Essentially ALL muscle cells are of MESODERMAL origin.",
+      "page": 193
+    },
+    {
+      "topic": "OV",
+      "answer": true,
+      "statement": "Cardiac muscle cells are elongated and often branched.",
+      "explanation": "True. They are bound to one another at intercalated discs.",
+      "page": 193
+    },
+    {
+      "topic": "OV",
+      "answer": false,
+      "statement": "Smooth muscle cells are often branched and joined by intercalated discs.",
+      "explanation": "False. Branched cells joined by intercalated discs describe CARDIAC muscle. Smooth muscle cells are fusiform and unbranched.",
+      "page": 193
+    },
+    {
+      "topic": "OV",
+      "answer": true,
+      "statement": "Both skeletal and cardiac muscle show cross-striations.",
+      "explanation": "True. Smooth muscle is the only type lacking striations.",
+      "page": 193
+    },
+    {
+      "topic": "OV",
+      "answer": false,
+      "statement": "Cardiac muscle lacks cross-striations.",
+      "explanation": "False. Cardiac muscle HAS cross-striations; only smooth muscle lacks them.",
+      "page": 193
+    },
+    {
+      "topic": "OV",
+      "answer": true,
+      "statement": "Skeletal muscle is usually, but not always, under voluntary control.",
+      "explanation": "True. The text says its contraction is quick, forceful and USUALLY under voluntary control.",
+      "page": 193
+    },
+    {
+      "topic": "OV",
+      "answer": false,
+      "statement": "The word 'sarcolemma' comes from Greek words meaning 'flesh' and 'thing formed'.",
+      "explanation": "False. Sarcolemma = sarkos (flesh) + lemma (HUSK). 'Thing formed' (plasma) is part of SARCOPLASM.",
+      "page": 193
+    },
+    {
+      "topic": "OV",
+      "answer": true,
+      "statement": "'Myo' in myoblast comes from the Latin word for muscle.",
+      "explanation": "True. L. myo = muscle, so a myoblast is a muscle-forming precursor cell; myoblasts fuse into myotubes.",
+      "page": 193
+    },
+    {
+      "topic": "OV",
+      "answer": true,
+      "statement": "Muscle specialists give special names to some muscle cell organelles, as neuron specialists do.",
+      "explanation": "True. Examples are sarcoplasm, sarcoplasmic reticulum and sarcolemma.",
+      "page": 193
+    },
+    {
+      "topic": "OV",
+      "answer": false,
+      "statement": "Contraction force comes from changes in the length of actin and myosin filaments.",
+      "explanation": "False. Force comes from proteins affecting weak actin-myosin crossbridges; the filaments SLIDE without changing length.",
+      "page": 193
+    },
+    {
+      "topic": "CT",
+      "answer": false,
+      "statement": "Connective tissue layers are found only in skeletal muscle, not in cardiac or smooth muscle.",
+      "explanation": "False. Thin connective tissue layers surround fibers in ALL THREE types; they are just seen best in skeletal muscle.",
+      "page": 194
+    },
+    {
+      "topic": "CT",
+      "answer": true,
+      "statement": "The epimysium is made of dense irregular connective tissue.",
+      "explanation": "True. It is the external sheath around the entire muscle.",
+      "page": 194
+    },
+    {
+      "topic": "CT",
+      "answer": false,
+      "statement": "The perimysium is the outermost connective tissue sheath of a skeletal muscle.",
+      "explanation": "False. The EPIMYSIUM is outermost. The perimysium wraps fascicles inside the muscle.",
+      "page": 194
+    },
+    {
+      "topic": "CT",
+      "answer": true,
+      "statement": "Each fascicle acts as a functional unit whose fibers work together.",
+      "explanation": "True. Each fascicle is wrapped by perimysium.",
+      "page": 194
+    },
+    {
+      "topic": "CT",
+      "answer": false,
+      "statement": "The endomysium carries the larger nerves and blood vessels into the muscle.",
+      "explanation": "False. The larger nerves and vessels travel in septa of EPIMYSIUM; the endomysium holds capillaries and fine nerve fibers.",
+      "page": 194
+    },
+    {
+      "topic": "CT",
+      "answer": true,
+      "statement": "The endomysium contains reticular fibers and scattered fibroblasts.",
+      "explanation": "True. It is very thin and delicate.",
+      "page": 194
+    },
+    {
+      "topic": "CT",
+      "answer": false,
+      "statement": "Lymphatics penetrate the endomysium but never the perimysium.",
+      "explanation": "False. Nerves, blood vessels and lymphatics PENETRATE THE PERIMYSIUM to supply each fascicle.",
+      "page": 194
+    },
+    {
+      "topic": "CT",
+      "answer": true,
+      "statement": "Myotendinous junctions show tendon collagen fibers inserting among muscle fibers.",
+      "explanation": "True. The collagen associates directly with complex sarcolemmal infoldings.",
+      "page": 194
+    },
+    {
+      "topic": "CT",
+      "answer": false,
+      "statement": "The deep fascia lies beneath the endomysium.",
+      "explanation": "False. The deep fascia OVERLIES the EPIMYSIUM, outside the whole muscle.",
+      "page": 194
+    },
+    {
+      "topic": "CT",
+      "answer": true,
+      "statement": "The epimysium is continuous with the tendon at the myotendinous junction.",
+      "explanation": "True. All three layers and the deep fascia are continuous with the tendon.",
+      "page": 194
+    },
+    {
+      "topic": "CT",
+      "answer": false,
+      "statement": "Connective tissue in muscle plays no role in transmitting contractile force.",
+      "explanation": "False. Collagens in these layers TRANSMIT the mechanical force of contracting fibers.",
+      "page": 194
+    },
+    {
+      "topic": "CT",
+      "answer": true,
+      "statement": "Skeletal muscle has endomysium, perimysium and epimysium; smooth muscle has endomysium and less-organized sheaths.",
+      "explanation": "True. Only skeletal muscle has the full three-layer system; smooth muscle has endomysium plus looser, less-organized sheaths (Table 10–1).",
+      "page": 205
+    },
+    {
+      "topic": "CT",
+      "answer": false,
+      "statement": "Smooth muscle connective tissue is organized into well-defined endomysium, perimysium and epimysium, like skeletal muscle.",
+      "explanation": "False. Smooth muscle has endomysium plus LESS-ORGANIZED connective tissue sheaths (Table 10–1).",
+      "page": 205
+    },
+    {
+      "topic": "CT",
+      "answer": true,
+      "statement": "The capillary network of skeletal muscle lies in the endomysium.",
+      "explanation": "True. It brings O2 to each muscle fiber.",
+      "page": 194
+    },
+    {
+      "topic": "MF",
+      "answer": false,
+      "statement": "Skeletal muscle fibers are single mononucleated cells.",
+      "explanation": "False. Skeletal fibers are single MULTINUCLEATED cells formed by myoblast fusion.",
+      "page": 193
+    },
+    {
+      "topic": "MF",
+      "answer": true,
+      "statement": "Myotubes are longer multinucleated tubes formed when myoblasts align and fuse.",
+      "explanation": "True. Myotubes then make myofilament proteins and begin to show striations.",
+      "page": 195
+    },
+    {
+      "topic": "MF",
+      "answer": false,
+      "statement": "Satellite cells are fully differentiated muscle fibers that stop contracting.",
+      "explanation": "False. Satellite cells are UNDIFFERENTIATED reserve myoblasts that never fused.",
+      "page": 213
+    },
+    {
+      "topic": "MF",
+      "answer": true,
+      "statement": "Satellite cells are mesenchymal cells.",
+      "explanation": "True. They are a sparse population of mesenchymal cells inside each fiber's external lamina.",
+      "page": 213
+    },
+    {
+      "topic": "MF",
+      "answer": false,
+      "statement": "Satellite cells are found in large numbers next to each skeletal fiber.",
+      "explanation": "False. Satellite cells are a SMALL, SPARSE population.",
+      "page": 193
+    },
+    {
+      "topic": "MF",
+      "answer": true,
+      "statement": "Skeletal muscle fibers can be many centimeters long.",
+      "explanation": "True. Table 10–1 lists cylindrical fibers 10–100 μm wide and many cm long.",
+      "page": 205
+    },
+    {
+      "topic": "MF",
+      "answer": false,
+      "statement": "Skeletal fibers are fusiform, while cardiac cells are cylindrical.",
+      "explanation": "False. Both skeletal fibers and cardiac cells are CYLINDRICAL; SMOOTH muscle cells are fusiform (Table 10–1).",
+      "page": 205
+    },
+    {
+      "topic": "MF",
+      "answer": true,
+      "statement": "The sarcoplasm of skeletal muscle is filled mainly with myofibrils.",
+      "explanation": "True. Myofibrils run parallel to the fiber's long axis.",
+      "page": 194
+    },
+    {
+      "topic": "MF",
+      "answer": false,
+      "statement": "Each myofibril is surrounded by its own external lamina.",
+      "explanation": "False. The external lamina surrounds each muscle FIBER (cell). Myofibrils are inside the fiber, surrounded by SR.",
+      "page": 197
+    },
+    {
+      "topic": "MF",
+      "answer": true,
+      "statement": "Skeletal muscle's key function is voluntary movement (Table 10–1).",
+      "explanation": "True. Cardiac muscle pumps blood automatically; smooth muscle makes involuntary movements.",
+      "page": 205
+    },
+    {
+      "topic": "MF",
+      "answer": false,
+      "statement": "Skeletal muscle responds to increased load mainly by hyperplasia (Table 10–1).",
+      "explanation": "False. Skeletal muscle responds by HYPERTROPHY (increased fiber size). Only smooth muscle adds hyperplasia.",
+      "page": 205
+    },
+    {
+      "topic": "MF",
+      "answer": true,
+      "statement": "Skeletal muscle fibers show peripheral nuclei, while cardiac and smooth muscle nuclei are central.",
+      "explanation": "True. Peripheral nuclei under the sarcolemma are unique to skeletal fibers; cardiac and smooth nuclei sit centrally (Table 10–1).",
+      "page": 205
+    },
+    {
+      "topic": "MF",
+      "answer": false,
+      "statement": "The diaphragm and tongue are made of smooth muscle.",
+      "explanation": "False. The tongue and diaphragm are SKELETAL muscle (Table 10–1).",
+      "page": 205
+    },
+    {
+      "topic": "SA",
+      "answer": true,
+      "statement": "The A band is dark in both light microscopy and TEM.",
+      "explanation": "True. It holds the thick filaments plus overlapping thin filaments.",
+      "page": 194
+    },
+    {
+      "topic": "SA",
+      "answer": false,
+      "statement": "The I band is named for being anisotropic in polarized light.",
+      "explanation": "False. I = ISOTROPIC (does not alter polarized light). A = anisotropic.",
+      "page": 194
+    },
+    {
+      "topic": "SA",
+      "answer": true,
+      "statement": "'Zwischen', the source of the name Z disc, means 'between'.",
+      "explanation": "True. The Z disc lies between sarcomeres.",
+      "page": 195
+    },
+    {
+      "topic": "SA",
+      "answer": true,
+      "statement": "Each myofibril contains thousands of thick and thin filaments in a symmetric pattern.",
+      "explanation": "True. Their arrangement makes the A and I bands.",
+      "page": 195
+    },
+    {
+      "topic": "SA",
+      "answer": false,
+      "statement": "Striations are visible only because sarcomeres in neighboring myofibrils are out of register.",
+      "explanation": "False. Striations show across the fiber because sarcomeres of adjacent myofibrils are in LATERAL REGISTRATION (aligned).",
+      "page": 195
+    },
+    {
+      "topic": "SA",
+      "answer": true,
+      "statement": "Each sarcomere has one A band and two half I bands.",
+      "explanation": "True. A sarcomere runs Z to Z, so it includes the central A band and half of the I band on each side.",
+      "page": 197
+    },
+    {
+      "topic": "SA",
+      "answer": false,
+      "statement": "The I band contains the M line.",
+      "explanation": "False. The M line is in the middle of the A band, bisecting the H zone. The I band contains the Z disc.",
+      "page": 197
+    },
+    {
+      "topic": "SA",
+      "answer": true,
+      "statement": "The H zone looks lighter than the rest of the A band because thin filaments do not reach it.",
+      "explanation": "True. Only myosin tails are there.",
+      "page": 197
+    },
+    {
+      "topic": "SA",
+      "answer": false,
+      "statement": "The lighter H zone is found at the edge of the A band, next to the I band.",
+      "explanation": "False. The H zone is at the CENTER of the A band.",
+      "page": 197
+    },
+    {
+      "topic": "SA",
+      "answer": true,
+      "statement": "'Mitte', the source of the name M line, means 'middle'.",
+      "explanation": "True. The M line lies in the middle of the sarcomere.",
+      "page": 197
+    },
+    {
+      "topic": "SA",
+      "answer": false,
+      "statement": "Myosin and actin make up only a small fraction of striated muscle protein.",
+      "explanation": "False. Together they are OVER HALF of the total protein.",
+      "page": 197
+    },
+    {
+      "topic": "SA",
+      "answer": true,
+      "statement": "Hexagonal patterns of filaments in TEM cross sections helped researchers determine filament functions.",
+      "explanation": "True. These patterns come from the overlap of thin and thick filaments.",
+      "page": 197
+    },
+    {
+      "topic": "SA",
+      "answer": false,
+      "statement": "Each sarcomere contains only one thick and one thin filament.",
+      "explanation": "False. Each myofibril has THOUSANDS of each filament type in a symmetric pattern.",
+      "page": 195
+    },
+    {
+      "topic": "SA",
+      "answer": true,
+      "statement": "Sliding of thin filaments toward the A band center shortens the sarcomere.",
+      "explanation": "True. The Z discs move toward the ends of the thick filaments.",
+      "page": 203
+    },
+    {
+      "topic": "SA",
+      "answer": false,
+      "statement": "During contraction, the H zone widens.",
+      "explanation": "False. The H zone NARROWS as thin filaments slide toward the center; in relaxed muscle it is at its expanded length.",
+      "page": 203
+    },
+    {
+      "topic": "SA",
+      "answer": true,
+      "statement": "The I band becomes shorter when a skeletal muscle contracts.",
+      "explanation": "True. In relaxed muscle the I band is at its expanded length.",
+      "page": 203
+    },
+    {
+      "topic": "FI",
+      "answer": false,
+      "statement": "Thick filaments are 1.0 μm long.",
+      "explanation": "False. THICK filaments are 1.6 μm long; THIN filaments are 1.0 μm.",
+      "page": 195
+    },
+    {
+      "topic": "FI",
+      "answer": true,
+      "statement": "Thick filaments are wider than thin filaments (15 nm vs 8 nm).",
+      "explanation": "True. Thick filaments are 15 nm wide; thin filaments are 8 nm.",
+      "page": 195
+    },
+    {
+      "topic": "FI",
+      "answer": false,
+      "statement": "Myosin is a small protein of about 50 kDa.",
+      "explanation": "False. Myosin is a LARGE complex of about 500 kDa.",
+      "page": 195
+    },
+    {
+      "topic": "FI",
+      "answer": true,
+      "statement": "Myosin heavy chains are described as motor proteins.",
+      "explanation": "True. They are thin rodlike motor proteins twisted together as tails.",
+      "page": 195
+    },
+    {
+      "topic": "FI",
+      "answer": false,
+      "statement": "Each myosin molecule has only one globular head.",
+      "explanation": "False. A globular head forms at one end of EACH of the two heavy chains, so myosin has TWO heads.",
+      "page": 195
+    },
+    {
+      "topic": "FI",
+      "answer": true,
+      "statement": "Myosin heads have actomyosin ATPase activity.",
+      "explanation": "True. They bind ATP and catalyze energy release.",
+      "page": 195
+    },
+    {
+      "topic": "FI",
+      "answer": false,
+      "statement": "Myosin heads bind tropomyosin to form crossbridges.",
+      "explanation": "False. Myosin heads bind ACTIN to form transient crossbridges. Tropomyosin covers the binding sites.",
+      "page": 195
+    },
+    {
+      "topic": "FI",
+      "answer": true,
+      "statement": "In a thick filament, the rodlike myosin portions overlap with one another.",
+      "explanation": "True. Several hundred molecules are arranged with overlapping rods.",
+      "page": 195
+    },
+    {
+      "topic": "FI",
+      "answer": false,
+      "statement": "Thin filaments are straight, unhelical rods.",
+      "explanation": "False. Thin actin filaments are HELICAL.",
+      "page": 195
+    },
+    {
+      "topic": "FI",
+      "answer": true,
+      "statement": "Thin filaments run between the thick filaments.",
+      "explanation": "True. Overlap makes the dark part of the A band.",
+      "page": 195
+    },
+    {
+      "topic": "FI",
+      "answer": false,
+      "statement": "The myosin-binding site is on tropomyosin, not on actin.",
+      "explanation": "False. EACH G-ACTIN monomer has a binding site for myosin.",
+      "page": 195
+    },
+    {
+      "topic": "FI",
+      "answer": false,
+      "statement": "Tropomyosin is a single polypeptide 400 nm long.",
+      "explanation": "False. Tropomyosin is a 40-nm coil of TWO polypeptide chains.",
+      "page": 197
+    },
+    {
+      "topic": "FI",
+      "answer": true,
+      "statement": "TnI is the troponin subunit that regulates the actin-myosin interaction.",
+      "explanation": "True. TnT attaches to tropomyosin; TnC binds Ca2+.",
+      "page": 197
+    },
+    {
+      "topic": "FI",
+      "answer": false,
+      "statement": "Troponin has two subunits.",
+      "explanation": "False. Troponin has THREE subunits: TnT, TnC and TnI.",
+      "page": 197
+    },
+    {
+      "topic": "FI",
+      "answer": true,
+      "statement": "TnT is the troponin subunit that attaches to tropomyosin.",
+      "explanation": "True. The 'T' links troponin to Tropomyosin.",
+      "page": 197
+    },
+    {
+      "topic": "FI",
+      "answer": false,
+      "statement": "α-Actinin anchors thick filaments to the M line.",
+      "explanation": "False. α-Actinin anchors THIN (actin) filaments at the Z DISC. Myomesin holds thick filaments at the M line.",
+      "page": 197
+    },
+    {
+      "topic": "FI",
+      "answer": true,
+      "statement": "Actin filaments attach perpendicularly to the Z disc.",
+      "explanation": "True. They are anchored by α-actinin.",
+      "page": 197
+    },
+    {
+      "topic": "FI",
+      "answer": false,
+      "statement": "Titin is found mainly in the H zone.",
+      "explanation": "False. Titin is an important accessory protein of the I BANDS, linking thick filaments to the Z disc.",
+      "page": 197
+    },
+    {
+      "topic": "FI",
+      "answer": true,
+      "statement": "Titin has both scaffolding and elastic properties.",
+      "explanation": "True. Its springlike domains span the I band.",
+      "page": 197
+    },
+    {
+      "topic": "FI",
+      "answer": false,
+      "statement": "Nebulin connects thick filaments to the Z disc.",
+      "explanation": "False. TITIN connects thick filaments to the Z disc. Nebulin binds THIN filaments.",
+      "page": 197
+    },
+    {
+      "topic": "FI",
+      "answer": true,
+      "statement": "Nebulin specifies the length of actin polymers during myogenesis.",
+      "explanation": "True. It binds each thin filament laterally.",
+      "page": 197
+    },
+    {
+      "topic": "FI",
+      "answer": false,
+      "statement": "Creatine kinase is found in the I band.",
+      "explanation": "False. Creatine kinase is in the M LINE.",
+      "page": 197
+    },
+    {
+      "topic": "FI",
+      "answer": true,
+      "statement": "The M line contains a myosin-binding protein and an enzyme that helps regenerate ATP.",
+      "explanation": "True. Myomesin and creatine kinase.",
+      "page": 197
+    },
+    {
+      "topic": "FI",
+      "answer": false,
+      "statement": "Phosphocreatine is the enzyme that makes ATP from ADP.",
+      "explanation": "False. Phosphocreatine is a STORAGE FORM of high-energy phosphate; CREATINE KINASE is the enzyme.",
+      "page": 197
+    },
+    {
+      "topic": "FI",
+      "answer": true,
+      "statement": "Titin (3700 kDa) is much larger than myosin (~500 kDa).",
+      "explanation": "True. Titin is the largest protein in the body.",
+      "page": 197
+    },
+    {
+      "topic": "FI",
+      "answer": false,
+      "statement": "Myosin heavy chains are 1.5 μm long.",
+      "explanation": "False. Myosin heavy chains are 150 NM long and 2–3 nm thick.",
+      "page": 195
+    },
+    {
+      "topic": "SR",
+      "answer": false,
+      "statement": "In skeletal muscle, the sarcoplasmic reticulum lies outside the sarcolemma.",
+      "explanation": "False. The SR is an internal membrane system (smooth ER) that SURROUNDS EACH MYOFIBRIL inside the fiber.",
+      "page": 197
+    },
+    {
+      "topic": "SR",
+      "answer": true,
+      "statement": "The SR contains pumps and other proteins for sequestering Ca2+.",
+      "explanation": "True. It stores Ca2+ and releases it on depolarization.",
+      "page": 197
+    },
+    {
+      "topic": "SR",
+      "answer": false,
+      "statement": "Ca2+ release from the SR is triggered by repolarization of the membrane.",
+      "explanation": "False. Ca2+ release is triggered by membrane DEPOLARIZATION produced by a motor nerve.",
+      "page": 197
+    },
+    {
+      "topic": "SR",
+      "answer": true,
+      "statement": "Without T-tubules, Ca2+ release would not occur uniformly throughout a large skeletal fiber.",
+      "explanation": "True. T-tubules let Ca2+ release happen simultaneously throughout the fiber for uniform contraction of all myofibrils.",
+      "page": 197
+    },
+    {
+      "topic": "SR",
+      "answer": false,
+      "statement": "T-tubules run parallel to the myofibrils along the length of the fiber.",
+      "explanation": "False. T-tubules are TRANSVERSE invaginations that penetrate inward and ENCIRCLE each myofibril.",
+      "page": 198
+    },
+    {
+      "topic": "SR",
+      "answer": true,
+      "statement": "Each T-tubule is part of the sarcolemma.",
+      "explanation": "True. T-tubules are tubular infoldings of the sarcolemma.",
+      "page": 198
+    },
+    {
+      "topic": "SR",
+      "answer": false,
+      "statement": "Terminal cisternae are narrow, collapsed regions of the SR.",
+      "explanation": "False. Terminal cisternae are EXPANDED regions of SR next to each T-tubule.",
+      "page": 198
+    },
+    {
+      "topic": "SR",
+      "answer": true,
+      "statement": "The triad is best seen in longitudinal TEM sections.",
+      "explanation": "True. In longitudinal sections the T-tubule and two terminal cisternae appear as a triad.",
+      "page": 198
+    },
+    {
+      "topic": "SR",
+      "answer": false,
+      "statement": "The central element of a triad is a terminal cisterna.",
+      "explanation": "False. The central element is the T-TUBULE, flanked by TWO terminal cisternae.",
+      "page": 198
+    },
+    {
+      "topic": "SR",
+      "answer": true,
+      "statement": "Released Ca2+ enters the cytoplasm around the thick and thin filaments.",
+      "explanation": "True. This initiates contraction of the sarcomeres.",
+      "page": 198
+    },
+    {
+      "topic": "SR",
+      "answer": true,
+      "statement": "Cardiac T-tubules form dyads at the Z discs (Table 10–1).",
+      "explanation": "True. Each dyad has one T-tubule and one terminal cistern.",
+      "page": 205
+    },
+    {
+      "topic": "SR",
+      "answer": false,
+      "statement": "Smooth muscle T-tubules form dyads like those of cardiac muscle.",
+      "explanation": "False. Smooth muscle has NO T-tubules; caveolae may be functionally similar (Table 10–1).",
+      "page": 205
+    },
+    {
+      "topic": "SR",
+      "answer": true,
+      "statement": "Caveolae in smooth muscle may be functionally similar to T-tubules (Table 10–1).",
+      "explanation": "True. They contain ion channels controlling Ca2+ release.",
+      "page": 205
+    },
+    {
+      "topic": "SR",
+      "answer": false,
+      "statement": "Mitochondria are absent from the region between skeletal myofibrils.",
+      "explanation": "False. Mitochondria and SR are found BETWEEN the myofibrils.",
+      "page": 195
+    },
+    {
+      "topic": "CM",
+      "answer": true,
+      "statement": "In a resting muscle, myosin-binding sites on actin are blocked by the troponin-tropomyosin complex.",
+      "explanation": "True. That is why crossbridges cannot form at rest.",
+      "page": 198
+    },
+    {
+      "topic": "CM",
+      "answer": false,
+      "statement": "Ca2+ released on stimulation binds myosin heads directly.",
+      "explanation": "False. Ca2+ binds TROPONIN, which moves tropomyosin to expose actin's binding sites.",
+      "page": 198
+    },
+    {
+      "topic": "CM",
+      "answer": true,
+      "statement": "Myosin binding to actin produces a conformational change in the myosin head.",
+      "explanation": "True. This pivot pulls the thin filaments farther into the A band.",
+      "page": 198
+    },
+    {
+      "topic": "CM",
+      "answer": false,
+      "statement": "The pivot of the myosin head pushes thin filaments out of the A band.",
+      "explanation": "False. The pivot pulls thin filaments FARTHER INTO the A band.",
+      "page": 198
+    },
+    {
+      "topic": "CM",
+      "answer": true,
+      "statement": "After the pivot, myosin binds another ATP molecule and detaches from actin.",
+      "explanation": "True. Then the cycle can repeat.",
+      "page": 198
+    },
+    {
+      "topic": "CM",
+      "answer": false,
+      "statement": "ATP is not needed for myosin to detach from actin.",
+      "explanation": "False. Binding ANOTHER ATP is what makes myosin DETACH; without ATP crossbridges stay locked (rigor mortis).",
+      "page": 198
+    },
+    {
+      "topic": "CM",
+      "answer": true,
+      "statement": "The repeating cycle is attach, pivot, detach and return.",
+      "explanation": "True. It slides thick and thin filaments past each other.",
+      "page": 202
+    },
+    {
+      "topic": "CM",
+      "answer": false,
+      "statement": "A single contraction cycle takes about 50 seconds.",
+      "explanation": "False. Each cycle lasts about 50 MILLISECONDS.",
+      "page": 200
+    },
+    {
+      "topic": "CM",
+      "answer": true,
+      "statement": "Repeated crossbridge cycles rapidly shorten the sarcomere.",
+      "explanation": "True. A single contraction results from hundreds of cycles.",
+      "page": 200
+    },
+    {
+      "topic": "CM",
+      "answer": false,
+      "statement": "When the nerve impulse stops, Ca2+ levels rise further.",
+      "explanation": "False. When the impulse stops, free Ca2+ DIMINISHES as it is pumped back into the SR.",
+      "page": 200
+    },
+    {
+      "topic": "CM",
+      "answer": true,
+      "statement": "After the impulse stops, Ca2+ is actively transported back into the SR.",
+      "explanation": "True. Tropomyosin then re-covers the active sites.",
+      "page": 202
+    },
+    {
+      "topic": "CM",
+      "answer": false,
+      "statement": "Rigor mortis results from excess Ca2+ pumped into the SR after death.",
+      "explanation": "False. Rigor mortis results from LACK OF ATP after mitochondria stop, which leaves crossbridges stable.",
+      "page": 200
+    },
+    {
+      "topic": "CM",
+      "answer": true,
+      "statement": "Rigor mortis develops as mitochondrial activity stops after death.",
+      "explanation": "True. No ATP means crossbridges cannot detach.",
+      "page": 200
+    },
+    {
+      "topic": "CM",
+      "answer": false,
+      "statement": "During contraction, the Z discs move apart.",
+      "explanation": "False. The Z discs are drawn CLOSER together.",
+      "page": 203
+    },
+    {
+      "topic": "CM",
+      "answer": true,
+      "statement": "During contraction, the Z discs move toward the ends of the thick filaments.",
+      "explanation": "True. This is how the sarcomere shortens.",
+      "page": 203
+    },
+    {
+      "topic": "CM",
+      "answer": false,
+      "statement": "Titin is stretched (extended) during contraction.",
+      "explanation": "False. Titin is COMPRESSED during contraction; it is extended in relaxed muscle.",
+      "page": 203
+    },
+    {
+      "topic": "CM",
+      "answer": true,
+      "statement": "Titin's springlike action helps the filaments in relaxed muscle.",
+      "explanation": "True. Titin spans the I band and acts like a spring.",
+      "page": 203
+    },
+    {
+      "topic": "CM",
+      "answer": false,
+      "statement": "The A band disappears in fully contracted muscle.",
+      "explanation": "False. The A band stays because thick filaments do not change length; the I band and H zone narrow.",
+      "page": 203
+    },
+    {
+      "topic": "CM",
+      "answer": true,
+      "statement": "Contraction continues as long as Ca2+ remains bound to troponin.",
+      "explanation": "True. This keeps the active sites exposed.",
+      "page": 202
+    },
+    {
+      "topic": "CM",
+      "answer": false,
+      "statement": "Smooth muscle contraction is controlled by the same troponin mechanism as skeletal muscle (Table 10–1).",
+      "explanation": "False. Smooth muscle uses MYOSIN PHOSPHORYLATION by MLCK, triggered by calmodulin binding Ca2+.",
+      "page": 205
+    },
+    {
+      "topic": "CM",
+      "answer": true,
+      "statement": "Cardiac muscle controls contraction in a way similar to skeletal muscle (Table 10–1).",
+      "explanation": "True. Troponin C binds Ca2+ and moves tropomyosin.",
+      "page": 205
+    },
+    {
+      "topic": "CM",
+      "answer": false,
+      "statement": "Thick filaments shorten during contraction while thin filaments stay the same.",
+      "explanation": "False. NEITHER thick NOR thin filaments change length.",
+      "page": 198
+    },
+    {
+      "topic": "IN",
+      "answer": true,
+      "statement": "Motor nerves enter skeletal muscle myelinated and end as unmyelinated twigs.",
+      "explanation": "True. The twigs pass through the endomysium to synapse with fibers.",
+      "page": 200
+    },
+    {
+      "topic": "IN",
+      "answer": false,
+      "statement": "Each motor nerve twig synapses with an entire fascicle at one point.",
+      "explanation": "False. Each terminal twig forms a synapse with an INDIVIDUAL muscle fiber.",
+      "page": 200
+    },
+    {
+      "topic": "IN",
+      "answer": true,
+      "statement": "Schwann cells cover the axon branches at their points of contact with muscle cells.",
+      "explanation": "True. Their external lamina fuses with the sarcolemma's.",
+      "page": 200
+    },
+    {
+      "topic": "IN",
+      "answer": false,
+      "statement": "Synaptic vesicles at the motor end plate are located in the muscle sarcoplasm.",
+      "explanation": "False. Synaptic vesicles are in the AXON TERMINAL.",
+      "page": 200
+    },
+    {
+      "topic": "IN",
+      "answer": true,
+      "statement": "The synaptic cleft lies between the axon terminal and the muscle.",
+      "explanation": "True. Acetylcholine released from the axon terminal crosses this cleft to reach receptors in the folded sarcolemma.",
+      "page": 200
+    },
+    {
+      "topic": "IN",
+      "answer": false,
+      "statement": "Junctional folds reduce the number of acetylcholine receptors at the NMJ.",
+      "explanation": "False. Junctional folds INCREASE surface area and the number of acetylcholine receptors.",
+      "page": 200
+    },
+    {
+      "topic": "IN",
+      "answer": true,
+      "statement": "Acetylcholine diffuses across the cleft and binds receptors in the folded sarcolemma.",
+      "explanation": "True. This opens cation channels and depolarizes the sarcolemma.",
+      "page": 200
+    },
+    {
+      "topic": "IN",
+      "answer": false,
+      "statement": "Acetylcholine binding allows Ca2+ to leave the muscle cell, hyperpolarizing it.",
+      "explanation": "False. Acetylcholine opens a nonselective CATION channel, allowing INFLUX of cations and DEPOLARIZATION.",
+      "page": 200
+    },
+    {
+      "topic": "IN",
+      "answer": true,
+      "statement": "Acetylcholine quickly dissociates from its receptors.",
+      "explanation": "True. Free transmitter is then removed by acetylcholinesterase.",
+      "page": 201
+    },
+    {
+      "topic": "IN",
+      "answer": false,
+      "statement": "Acetylcholinesterase prolongs acetylcholine's contact with its receptors.",
+      "explanation": "False. Acetylcholinesterase PREVENTS prolonged contact by removing free acetylcholine.",
+      "page": 201
+    },
+    {
+      "topic": "IN",
+      "answer": true,
+      "statement": "At triads, the depolarization signal triggers Ca2+ release from terminal cisterns.",
+      "explanation": "True. This starts the contraction cycle.",
+      "page": 201
+    },
+    {
+      "topic": "IN",
+      "answer": false,
+      "statement": "Motor end plates and neuromuscular junctions are different structures.",
+      "explanation": "False. They are the SAME synapse; MEP, NMJ and myoneural junction are synonyms.",
+      "page": 213
+    },
+    {
+      "topic": "IN",
+      "answer": true,
+      "statement": "Extraocular muscles are an example of one motor neuron innervating a single muscle fiber.",
+      "explanation": "True. This allows precise control of eye movements.",
+      "page": 201
+    },
+    {
+      "topic": "IN",
+      "answer": false,
+      "statement": "The firing of one motor axon makes tension independent of how many fibers it innervates.",
+      "explanation": "False. Tension is PROPORTIONAL to the number of fibers the axon innervates.",
+      "page": 201
+    },
+    {
+      "topic": "IN",
+      "answer": true,
+      "statement": "A muscle with many small motor units allows more precise control.",
+      "explanation": "True. Number and size of motor units control intensity and precision.",
+      "page": 201
+    },
+    {
+      "topic": "IN",
+      "answer": false,
+      "statement": "All fibers in a muscle fascicle contract at the same time.",
+      "explanation": "False. To vary force, fibers within a fascicle do NOT all contract at the same time.",
+      "page": 201
+    },
+    {
+      "topic": "IN",
+      "answer": true,
+      "statement": "Individual striated muscle fibers contract either all the way or not at all.",
+      "explanation": "True. They do not show graded contraction.",
+      "page": 201
+    },
+    {
+      "topic": "IN",
+      "answer": false,
+      "statement": "Cardiac and smooth muscle have motor (somatic) efferent innervation (Table 10–1).",
+      "explanation": "False. Cardiac and smooth muscle have AUTONOMIC innervation; skeletal muscle has MOTOR.",
+      "page": 205
+    },
+    {
+      "topic": "PR",
+      "answer": false,
+      "statement": "Proprioceptors send information from the CNS to the muscle.",
+      "explanation": "False. Proprioceptors are SENSORY: they send data FROM the musculoskeletal system TO the CNS.",
+      "page": 203
+    },
+    {
+      "topic": "PR",
+      "answer": true,
+      "statement": "Muscle spindles lie among the muscle fascicles.",
+      "explanation": "True. They act as stretch detectors.",
+      "page": 203
+    },
+    {
+      "topic": "PR",
+      "answer": false,
+      "statement": "Muscle spindles contain no muscle fibers, only nerve endings.",
+      "explanation": "False. Spindles contain a few thin INTRAFUSAL muscle fibers plus sensory axons.",
+      "page": 203
+    },
+    {
+      "topic": "PR",
+      "answer": true,
+      "statement": "The spindle capsule has concentric layers of flattened cells and contains interstitial fluid.",
+      "explanation": "True. It is modified perimysium.",
+      "page": 203
+    },
+    {
+      "topic": "PR",
+      "answer": false,
+      "statement": "Ordinary muscle fibers surrounding the spindle are called intrafusal fibers.",
+      "explanation": "False. Surrounding ordinary fibers are EXTRAFUSAL. Fibers inside the spindle are intrafusal.",
+      "page": 203
+    },
+    {
+      "topic": "PR",
+      "answer": true,
+      "statement": "Body movements that stretch extrafusal fibers are detected by muscle spindles.",
+      "explanation": "True. Sensory nerves relay this to the spinal cord.",
+      "page": 203
+    },
+    {
+      "topic": "PR",
+      "answer": false,
+      "statement": "Muscle spindle information is relayed only to the cerebral cortex, not the spinal cord.",
+      "explanation": "False. Spindle sensory nerves relay information to the SPINAL CORD.",
+      "page": 203
+    },
+    {
+      "topic": "PR",
+      "answer": true,
+      "statement": "Spindle reflexes help regulate the activity of opposing muscle groups during walking.",
+      "explanation": "True. They also help maintain posture.",
+      "page": 203
+    },
+    {
+      "topic": "PR",
+      "answer": true,
+      "statement": "Golgi tendon organs enclose sensory axons that penetrate among collagen bundles.",
+      "explanation": "True. They are at the myotendinous junction.",
+      "page": 203
+    },
+    {
+      "topic": "PR",
+      "answer": false,
+      "statement": "Golgi tendon organs are unencapsulated free nerve endings.",
+      "explanation": "False. Golgi tendon organs are ENCAPSULATED structures.",
+      "page": 203
+    },
+    {
+      "topic": "PR",
+      "answer": true,
+      "statement": "Tendon organs act to inhibit motor nerve activity when tension is excessive.",
+      "explanation": "True. They protect against excessive force.",
+      "page": 203
+    },
+    {
+      "topic": "PR",
+      "answer": false,
+      "statement": "Muscle spindles and tendon organs both detect decreases in tension.",
+      "explanation": "False. Both proprioceptors detect INCREASES in tension.",
+      "page": 203
+    },
+    {
+      "topic": "PR",
+      "answer": true,
+      "statement": "Proprioceptors help regulate the effort needed for movements that need variable force.",
+      "explanation": "True. Both spindles and tendon organs contribute.",
+      "page": 203
+    },
+    {
+      "topic": "FT",
+      "answer": false,
+      "statement": "All skeletal muscle fibers have the same metabolic properties.",
+      "explanation": "False. Fibers vary in contraction speed and ATP pathway, falling into three major types.",
+      "page": 205
+    },
+    {
+      "topic": "FT",
+      "answer": true,
+      "statement": "Fiber diversity comes partly from varied expression of contractile or regulatory protein isoforms.",
+      "explanation": "True. Factors affecting O2 delivery and use also differ.",
+      "page": 205
+    },
+    {
+      "topic": "FT",
+      "answer": false,
+      "statement": "Histochemical staining cannot distinguish fast from slow fibers.",
+      "explanation": "False. Histochemical staining identifies fibers with different amounts of 'fast' and 'slow' ATPases.",
+      "page": 206
+    },
+    {
+      "topic": "FT",
+      "answer": true,
+      "statement": "Capillary density, mitochondrial number, glycogen and myoglobin levels reflect metabolic differences between fibers.",
+      "explanation": "True. These are histological features of fiber types.",
+      "page": 206
+    },
+    {
+      "topic": "FT",
+      "answer": false,
+      "statement": "Myoglobin is similar to collagen in structure.",
+      "explanation": "False. Myoglobin is a globular protein similar to HEMOGLOBIN.",
+      "page": 206
+    },
+    {
+      "topic": "FT",
+      "answer": true,
+      "statement": "Fresh tissue rich in slow oxidative fibers looks dark or red.",
+      "explanation": "True. Because of many mitochondria, capillaries and much myoglobin.",
+      "page": 206
+    },
+    {
+      "topic": "FT",
+      "answer": false,
+      "statement": "Slow oxidative fibers are adapted for short bursts and fatigue quickly.",
+      "explanation": "False. Slow oxidative fibers contract slowly over LONG periods WITHOUT fatigue.",
+      "page": 206
+    },
+    {
+      "topic": "FT",
+      "answer": true,
+      "statement": "Fast glycolytic fibers appear white.",
+      "explanation": "True. They have few mitochondria or capillaries and little myoglobin.",
+      "page": 206
+    },
+    {
+      "topic": "FT",
+      "answer": false,
+      "statement": "Fast glycolytic fibers have many capillaries.",
+      "explanation": "False. Fast glycolytic fibers have FEW mitochondria and FEW capillaries.",
+      "page": 206
+    },
+    {
+      "topic": "FT",
+      "answer": true,
+      "statement": "Lactic acid buildup causes rapid fatigue in fast glycolytic fibers.",
+      "explanation": "True. It comes from glycolysis during rapid contractions.",
+      "page": 206
+    },
+    {
+      "topic": "FT",
+      "answer": false,
+      "statement": "Fast oxidative-glycolytic fibers fatigue faster than fast glycolytic fibers.",
+      "explanation": "False. FOG fibers are INTERMEDIATE; fast glycolytic fibers fatigue FASTEST.",
+      "page": 206
+    },
+    {
+      "topic": "FT",
+      "answer": true,
+      "statement": "A fiber's metabolic type depends on its motor nerve supply.",
+      "explanation": "True. It is set by the rate of impulse conduction along the motor nerve.",
+      "page": 206
+    },
+    {
+      "topic": "FT",
+      "answer": false,
+      "statement": "Most skeletal muscles contain only one fiber type.",
+      "explanation": "False. Most muscles contain a MIXTURE of fiber types.",
+      "page": 206
+    },
+    {
+      "topic": "FT",
+      "answer": true,
+      "statement": "Needle biopsies to identify fiber types help diagnose myopathies and motor neuron diseases.",
+      "explanation": "True. They also help find other causes of muscle atrophy.",
+      "page": 206
+    },
+    {
+      "topic": "FT",
+      "answer": false,
+      "statement": "Fiber types exist only in skeletal muscle.",
+      "explanation": "False. Different fiber types also exist in CARDIAC muscle and SMOOTH muscle.",
+      "page": 207
+    },
+    {
+      "topic": "FT",
+      "answer": true,
+      "statement": "Type IIb fibers have large motor units (Table 10–2).",
+      "explanation": "True. Type I small; IIa intermediate.",
+      "page": 208
+    },
+    {
+      "topic": "FT",
+      "answer": false,
+      "statement": "Type I fibers have large motor units (Table 10–2).",
+      "explanation": "False. Type I fibers have SMALL motor units and small diameter.",
+      "page": 208
+    },
+    {
+      "topic": "FT",
+      "answer": true,
+      "statement": "Type IIa fibers have intermediate glycogen content (Table 10–2).",
+      "explanation": "True. Glycogen content rises from type I (low) to IIa (intermediate) to IIb (high), matching reliance on glycolysis (Table 10–2).",
+      "page": 208
+    },
+    {
+      "topic": "FT",
+      "answer": false,
+      "statement": "Type IIb fibers have high myoglobin and are red (Table 10–2).",
+      "explanation": "False. Type IIb have LOW myoglobin and are WHITE fibers.",
+      "page": 208
+    },
+    {
+      "topic": "FT",
+      "answer": true,
+      "statement": "Type IIb fibers have high glycolytic enzyme activity (Table 10–2).",
+      "explanation": "True. They depend on anaerobic glycolysis.",
+      "page": 208
+    },
+    {
+      "topic": "FT",
+      "answer": false,
+      "statement": "Type IIa fibers have sparse mitochondria (Table 10–2).",
+      "explanation": "False. Type IIa fibers have NUMEROUS mitochondria and capillaries.",
+      "page": 208
+    },
+    {
+      "topic": "FT",
+      "answer": true,
+      "statement": "Type I fibers have low myosin-ATPase activity and slow contraction (Table 10–2).",
+      "explanation": "True. Types IIa and IIb are high and fast.",
+      "page": 208
+    },
+    {
+      "topic": "FT",
+      "answer": false,
+      "statement": "Type IIb fibers rely mainly on oxidative phosphorylation (Table 10–2).",
+      "explanation": "False. Type IIb rely on ANAEROBIC GLYCOLYSIS.",
+      "page": 208
+    },
+    {
+      "topic": "FT",
+      "answer": true,
+      "statement": "Extraocular muscles are a typical location of type IIb fibers (Table 10–2).",
+      "explanation": "True. They need rapid contraction.",
+      "page": 208
+    },
+    {
+      "topic": "FT",
+      "answer": false,
+      "statement": "Type IIa fibers fatigue more slowly than type I fibers (Table 10–2).",
+      "explanation": "False. Fatigue rate: type I SLOW, IIa INTERMEDIATE, IIb FAST.",
+      "page": 208
+    },
+    {
+      "topic": "FT",
+      "answer": true,
+      "statement": "Type IIa fibers have intermediate fiber diameter (Table 10–2).",
+      "explanation": "True. Type I small; IIb large.",
+      "page": 208
+    },
+    {
+      "topic": "CA",
+      "answer": true,
+      "statement": "Developing cardiac muscle cells form complex junctions between interdigitating processes instead of fusing.",
+      "explanation": "True. This differs from skeletal muscle, where myoblasts fuse.",
+      "page": 207
+    },
+    {
+      "topic": "CA",
+      "answer": false,
+      "statement": "Cardiac muscle develops from mesenchyme around the primitive gut tube.",
+      "explanation": "False. Cardiac muscle develops from mesenchymal cells around the primitive HEART TUBE.",
+      "page": 207
+    },
+    {
+      "topic": "CA",
+      "answer": true,
+      "statement": "The heart is made of tightly knit bundles of cells interwoven in spiraling layers.",
+      "explanation": "True. This gives a wringing wave of contraction.",
+      "page": 207
+    },
+    {
+      "topic": "CA",
+      "answer": false,
+      "statement": "Cardiac muscle cells are 10–100 μm in diameter and many centimeters long.",
+      "explanation": "False. Cardiac cells are 15–30 μm wide and 85–120 μm long. The first description fits skeletal fibers.",
+      "page": 207
+    },
+    {
+      "topic": "CA",
+      "answer": true,
+      "statement": "Cardiac muscle has a striated banding pattern comparable to skeletal muscle.",
+      "explanation": "True. Its sarcomeres are organized similarly.",
+      "page": 207
+    },
+    {
+      "topic": "CA",
+      "answer": false,
+      "statement": "Most cardiac muscle cells have many nuclei, like skeletal fibers.",
+      "explanation": "False. Each cardiac cell usually has ONE nucleus (sometimes two), centrally located.",
+      "page": 207
+    },
+    {
+      "topic": "CA",
+      "answer": true,
+      "statement": "Cardiac muscle cells may have one or two central nuclei.",
+      "explanation": "True. Cardiac cells usually have one central nucleus, sometimes two; unlike multinucleated skeletal fibers.",
+      "page": 213
+    },
+    {
+      "topic": "CA",
+      "answer": false,
+      "statement": "Cardiac muscle has no perimysium.",
+      "explanation": "False. A THICKER perimysium separates bundles and layers of cardiac muscle fibers.",
+      "page": 207
+    },
+    {
+      "topic": "CA",
+      "answer": true,
+      "statement": "The 'cardiac skeleton' is made of fibrous connective tissue.",
+      "explanation": "True. It forms from perimysium in specific areas.",
+      "page": 207
+    },
+    {
+      "topic": "CA",
+      "answer": false,
+      "statement": "Intercalated discs are the same as the cross-striations of cardiac muscle.",
+      "explanation": "False. Intercalated discs are IRREGULAR, widely spaced junctions between cells; striations are much more closely spaced and regular.",
+      "page": 207
+    },
+    {
+      "topic": "CA",
+      "answer": true,
+      "statement": "Intercalated discs are steplike and irregular.",
+      "explanation": "True. They have transverse and longitudinal regions.",
+      "page": 207
+    },
+    {
+      "topic": "CA",
+      "answer": false,
+      "statement": "Longitudinal regions of intercalated discs are more abundant than transverse regions.",
+      "explanation": "False. Longitudinal regions are LESS ABUNDANT than transverse regions.",
+      "page": 207
+    },
+    {
+      "topic": "CA",
+      "answer": true,
+      "statement": "Fascia adherens junctions are found in the transverse regions of intercalated discs.",
+      "explanation": "True. Together with desmosomes they give strong adhesion.",
+      "page": 207
+    },
+    {
+      "topic": "CA",
+      "answer": false,
+      "statement": "Gap junctions in intercalated discs run perpendicular to the myofibrils.",
+      "explanation": "False. Gap junctions are in the LONGITUDINAL regions, running PARALLEL to the myofibrils.",
+      "page": 207
+    },
+    {
+      "topic": "CA",
+      "answer": true,
+      "statement": "Gap junctions in intercalated discs promote rapid impulse conduction through many cardiac cells.",
+      "explanation": "True. They let many adjacent cells contract as a unit.",
+      "page": 207
+    },
+    {
+      "topic": "CA",
+      "answer": false,
+      "statement": "Desmosomes act as 'electrical synapses' in cardiac muscle.",
+      "explanation": "False. GAP JUNCTIONS act as electrical synapses. Desmosomes give adhesion.",
+      "page": 207
+    },
+    {
+      "topic": "CA",
+      "answer": true,
+      "statement": "Cardiac mitochondria occupy a larger share of cell volume than those of slow oxidative skeletal fibers.",
+      "explanation": "True. They occupy up to 40% of cardiac cell volume.",
+      "page": 207
+    },
+    {
+      "topic": "CA",
+      "answer": true,
+      "statement": "Cardiac muscle stores its main fuel as triglycerides in small lipid droplets.",
+      "explanation": "True. Fatty acids are the heart's major fuel.",
+      "page": 207
+    },
+    {
+      "topic": "CA",
+      "answer": false,
+      "statement": "Cardiac muscle cells contain no glycogen.",
+      "explanation": "False. Glycogen granules MAY be present, along with lipid droplets and lipofuscin.",
+      "page": 207
+    },
+    {
+      "topic": "CA",
+      "answer": true,
+      "statement": "In atrial muscle, T-tubules are much smaller or absent.",
+      "explanation": "True. Ventricular T-tubules are well developed.",
+      "page": 207
+    },
+    {
+      "topic": "CA",
+      "answer": false,
+      "statement": "Cardiac SR is better organized than skeletal SR.",
+      "explanation": "False. Cardiac SR is LESS well-organized than skeletal SR.",
+      "page": 207
+    },
+    {
+      "topic": "CA",
+      "answer": true,
+      "statement": "A cardiac dyad has one T-tubule and one terminal cistern.",
+      "explanation": "True. Junctions involve only one structure of each type.",
+      "page": 207
+    },
+    {
+      "topic": "CA",
+      "answer": false,
+      "statement": "Cardiac T-tubules lie at the A–I junctions.",
+      "explanation": "False. Cardiac (ventricular) T-tubules lie near the Z DISCS.",
+      "page": 207
+    },
+    {
+      "topic": "CA",
+      "answer": true,
+      "statement": "Cultured cardiac muscle cells keep contracting, showing that contraction is intrinsic.",
+      "explanation": "True. Cardiac contraction is intrinsic and spontaneous.",
+      "page": 208
+    },
+    {
+      "topic": "CA",
+      "answer": false,
+      "statement": "The heartbeat is initiated by motor neurons from the spinal cord.",
+      "explanation": "False. Impulses are initiated locally by NODES of specialized myocardial fibers; autonomic nerves only adjust the rate.",
+      "page": 208
+    },
+    {
+      "topic": "CA",
+      "answer": true,
+      "statement": "Autonomic nerves modify the heart rate at the nodes of conducting cells.",
+      "explanation": "True. Sympathetic speeds it up; parasympathetic slows it.",
+      "page": 208
+    },
+    {
+      "topic": "CA",
+      "answer": false,
+      "statement": "Individual cardiac fibers show graded contraction.",
+      "explanation": "False. Contraction of individual myocardial fibers is ALL-OR-NONE.",
+      "page": 208
+    },
+    {
+      "topic": "CA",
+      "answer": true,
+      "statement": "Atrial granules are associated with small Golgi complexes near the nucleus.",
+      "explanation": "True. They are 0.2–0.3 μm and contain ANF.",
+      "page": 208
+    },
+    {
+      "topic": "CA",
+      "answer": false,
+      "statement": "ANF acts mainly on target cells in the liver.",
+      "explanation": "False. ANF acts on target cells in the KIDNEY to affect Na+ excretion and water balance.",
+      "page": 208
+    },
+    {
+      "topic": "CA",
+      "answer": true,
+      "statement": "Atrial contractile cells also serve an endocrine function.",
+      "explanation": "True. They secrete atrial natriuretic factor.",
+      "page": 208
+    },
+    {
+      "topic": "CA",
+      "answer": false,
+      "statement": "The key function of cardiac muscle is voluntary movement (Table 10–1).",
+      "explanation": "False. Cardiac muscle's key function is AUTOMATIC (involuntary) pumping of blood.",
+      "page": 205
+    },
+    {
+      "topic": "CA",
+      "answer": true,
+      "statement": "Cardiac muscle's capacity for regeneration is very poor (Table 10–1).",
+      "explanation": "True. It lacks satellite cells.",
+      "page": 205
+    },
+    {
+      "topic": "CA",
+      "answer": true,
+      "statement": "Table 10–1 lists cardiac cells as cylindrical, 10–20 μm in diameter and 50–100 μm long.",
+      "explanation": "True. Table 10–1 gives these values. The text gives 15–30 μm × 85–120 μm for MATURE cells; either way they are far smaller than skeletal fibers.",
+      "page": 205
+    },
+    {
+      "topic": "CA",
+      "answer": true,
+      "statement": "Intercalated discs have many adherent and gap junctions (Table 10–1).",
+      "explanation": "True. These are special structural features of cardiac muscle.",
+      "page": 205
+    },
+    {
+      "topic": "CA",
+      "answer": false,
+      "statement": "Cardiac muscle is found in the walls of large arteries.",
+      "explanation": "False. Cardiac muscle is found in the HEART. Blood vessels have SMOOTH muscle (Table 10–1).",
+      "page": 205
+    },
+    {
+      "topic": "CA",
+      "answer": true,
+      "statement": "Muscle of the heart ventricles is thicker than that of the atria because it pumps blood through the circulation.",
+      "explanation": "True. Ventricles do the main pumping.",
+      "page": 207
+    },
+    {
+      "topic": "SM",
+      "answer": false,
+      "statement": "Smooth muscle is specialized for fast, powerful contraction.",
+      "explanation": "False. Smooth muscle is specialized for SLOW, STEADY contraction.",
+      "page": 208
+    },
+    {
+      "topic": "SM",
+      "answer": true,
+      "statement": "Smooth muscle contraction is influenced by autonomic nerves and various hormones.",
+      "explanation": "True. It is not under voluntary control.",
+      "page": 208
+    },
+    {
+      "topic": "SM",
+      "answer": false,
+      "statement": "Smooth muscle is a minor component of blood vessels.",
+      "explanation": "False. Smooth muscle is a MAJOR component of blood vessels and of the digestive, respiratory, urinary and reproductive tracts.",
+      "page": 208
+    },
+    {
+      "topic": "SM",
+      "answer": true,
+      "statement": "Smooth muscle cells are elongated, tapering and unstriated.",
+      "explanation": "True. They are also called visceral muscle.",
+      "page": 208
+    },
+    {
+      "topic": "SM",
+      "answer": false,
+      "statement": "The endomysium of smooth muscle is made mainly of type II collagen.",
+      "explanation": "False. Smooth muscle endomysium is TYPE I and TYPE III collagen fibers.",
+      "page": 208
+    },
+    {
+      "topic": "SM",
+      "answer": true,
+      "statement": "The shortest smooth muscle cells are found in small blood vessels.",
+      "explanation": "True. Smooth muscle cells range from about 20 μm in small blood vessels to 500 μm in the pregnant uterus.",
+      "page": 208
+    },
+    {
+      "topic": "SM",
+      "answer": false,
+      "statement": "The nucleus of a smooth muscle cell lies at one tapered end.",
+      "explanation": "False. The single nucleus lies at the CENTRAL, BROADEST part of the cell.",
+      "page": 208
+    },
+    {
+      "topic": "SM",
+      "answer": true,
+      "statement": "Smooth muscle cells stain uniformly along their length.",
+      "explanation": "True. They have no striations.",
+      "page": 208
+    },
+    {
+      "topic": "SM",
+      "answer": false,
+      "statement": "Smooth muscle cells are joined by intercalated discs.",
+      "explanation": "False. Smooth muscle cells are linked by numerous GAP JUNCTIONS; intercalated discs are unique to cardiac muscle.",
+      "page": 208
+    },
+    {
+      "topic": "SM",
+      "answer": true,
+      "statement": "A contracted smooth muscle cell has a distorted nucleus.",
+      "explanation": "True. Its borders also become scalloped.",
+      "page": 208
+    },
+    {
+      "topic": "SM",
+      "answer": false,
+      "statement": "Mitochondria and Golgi of smooth muscle are concentrated at the tapered ends of the cell.",
+      "explanation": "False. Mitochondria, polyribosomes, RER and Golgi are concentrated NEAR THE NUCLEUS.",
+      "page": 208
+    },
+    {
+      "topic": "SM",
+      "answer": true,
+      "statement": "Smooth muscle cells have numerous small plasmalemma invaginations resembling caveolae.",
+      "explanation": "True. They compartmentalize signaling components.",
+      "page": 208
+    },
+    {
+      "topic": "SM",
+      "answer": false,
+      "statement": "Smooth muscle cells have no sarcoplasmic reticulum at all.",
+      "explanation": "False. Smooth muscle has RUDIMENTARY sarcoplasmic reticulum.",
+      "page": 208
+    },
+    {
+      "topic": "SM",
+      "answer": true,
+      "statement": "T-tubules are unnecessary in smooth muscle because its cells are small, tapering and joined by many gap junctions.",
+      "explanation": "True. That is the textbook's explanation.",
+      "page": 208
+    },
+    {
+      "topic": "SM",
+      "answer": false,
+      "statement": "Smooth muscle filaments are arranged in myofibrils with sarcomeres.",
+      "explanation": "False. Smooth muscle filaments CRISSCROSS obliquely and do NOT form sarcomeres.",
+      "page": 210
+    },
+    {
+      "topic": "SM",
+      "answer": true,
+      "statement": "Smooth muscle uses calmodulin and Ca2+-sensitive MLCK to produce contraction.",
+      "explanation": "True. Its actin lacks troponin and tropomyosin.",
+      "page": 210
+    },
+    {
+      "topic": "SM",
+      "answer": false,
+      "statement": "Calmodulin is the enzyme that phosphorylates myosin in smooth muscle.",
+      "explanation": "False. Calmodulin is the Ca2+-BINDING protein. MLCK (myosin light-chain kinase) phosphorylates myosin.",
+      "page": 210
+    },
+    {
+      "topic": "SM",
+      "answer": true,
+      "statement": "Dense bodies are functionally similar to Z discs.",
+      "explanation": "True. Actin filaments insert into them.",
+      "page": 210
+    },
+    {
+      "topic": "SM",
+      "answer": false,
+      "statement": "Dense bodies are found only deep in the cytoplasm, never at the cell membrane.",
+      "explanation": "False. Dense bodies are found BOTH in the cytoplasm AND associated with the plasmalemma.",
+      "page": 210
+    },
+    {
+      "topic": "SM",
+      "answer": true,
+      "statement": "Desmin intermediate filaments attach to dense bodies.",
+      "explanation": "True. They form an elaborate 10-nm array.",
+      "page": 210
+    },
+    {
+      "topic": "SM",
+      "answer": false,
+      "statement": "Smooth muscle intermediate filaments are about 25 nm wide.",
+      "explanation": "False. They are 10-nm intermediate filaments of desmin.",
+      "page": 210
+    },
+    {
+      "topic": "SM",
+      "answer": true,
+      "statement": "Dense bodies transmit contractile force both within cells and between adjacent cells.",
+      "explanation": "True. Submembranous dense bodies include desmosomal cadherins.",
+      "page": 210
+    },
+    {
+      "topic": "SM",
+      "answer": false,
+      "statement": "Peristalsis depends only on the contraction of individual smooth muscle cells, not connective tissue.",
+      "explanation": "False. The endomysium and other connective tissue layers help COMBINE smooth muscle forces into concerted actions like peristalsis.",
+      "page": 210
+    },
+    {
+      "topic": "SM",
+      "answer": true,
+      "statement": "In smooth muscle, contraction causes each cell to shorten individually.",
+      "explanation": "True. Thin filaments pull on dense bodies throughout the cell, so each cell shortens on its own, and its nucleus becomes distorted.",
+      "page": 213
+    },
+    {
+      "topic": "SM",
+      "answer": false,
+      "statement": "Smooth muscle is under voluntary motor control.",
+      "explanation": "False. Smooth muscle is NOT under voluntary control.",
+      "page": 210
+    },
+    {
+      "topic": "SM",
+      "answer": true,
+      "statement": "Contraction of smooth muscle is most commonly stimulated by autonomic nerves.",
+      "explanation": "True. Hormones and paracrine signals also act.",
+      "page": 210
+    },
+    {
+      "topic": "SM",
+      "answer": false,
+      "statement": "Oxytocin from the pituitary controls smooth muscle of the bladder.",
+      "explanation": "False. The textbook names oxytocin as controlling smooth muscle of the UTERUS.",
+      "page": 210
+    },
+    {
+      "topic": "SM",
+      "answer": true,
+      "statement": "Autonomic varicosities lie in close contact with smooth muscle fibers.",
+      "explanation": "True. They are periodic swellings of autonomic axons.",
+      "page": 210
+    },
+    {
+      "topic": "SM",
+      "answer": false,
+      "statement": "A transmitter released from a varicosity acts on only one smooth muscle cell.",
+      "explanation": "False. The transmitter diffuses and binds receptors on NUMEROUS muscle cells.",
+      "page": 210
+    },
+    {
+      "topic": "SM",
+      "answer": true,
+      "statement": "Gap junctions let smooth muscle cells contract synchronously or in a coordinated way.",
+      "explanation": "True. Stimulation spreads to more distant fibers through them.",
+      "page": 211
+    },
+    {
+      "topic": "SM",
+      "answer": false,
+      "statement": "Smooth muscle cells are less active than fibroblasts in making ECM, contributing nothing to it.",
+      "explanation": "False. Smooth muscle cells SUPPLEMENT fibroblast activity, making collagen, elastin and proteoglycans.",
+      "page": 211
+    },
+    {
+      "topic": "SM",
+      "answer": true,
+      "statement": "Active ECM synthesis by smooth muscle may reflect less specialization for strong contraction.",
+      "explanation": "True. This compares with skeletal and cardiac muscle.",
+      "page": 211
+    },
+    {
+      "topic": "SM",
+      "answer": false,
+      "statement": "Smooth muscle cells are 0.2–10 mm in diameter (Table 10–1).",
+      "explanation": "False. The units are MICROMETERS: 0.2–10 μm in diameter, 50–200 μm long.",
+      "page": 205
+    },
+    {
+      "topic": "SM",
+      "answer": true,
+      "statement": "In smooth muscle, actin-myosin binding requires myosin phosphorylation (Table 10–1).",
+      "explanation": "True. MLCK does this when calmodulin binds Ca2+.",
+      "page": 205
+    },
+    {
+      "topic": "SM",
+      "answer": false,
+      "statement": "Smooth muscle special structural features include triads and intercalated discs (Table 10–1).",
+      "explanation": "False. Smooth muscle features are GAP JUNCTIONS, CAVEOLAE and DENSE BODIES.",
+      "page": 205
+    },
+    {
+      "topic": "SM",
+      "answer": true,
+      "statement": "Smooth muscle is found in the uterus and bladder (Table 10–1).",
+      "explanation": "True. Also blood vessels and digestive and respiratory tracts.",
+      "page": 205
+    },
+    {
+      "topic": "SM",
+      "answer": false,
+      "statement": "Smooth muscle contractions are always triggered by nerves and are never spontaneous (Table 10–1).",
+      "explanation": "False. Smooth muscle contractions are partial, slow, and OFTEN SPONTANEOUS, wavelike and rhythmic.",
+      "page": 205
+    },
+    {
+      "topic": "SM",
+      "answer": true,
+      "statement": "Smooth muscle's capacity for regeneration is good, through mitosis of its cells (Table 10–1).",
+      "explanation": "True. Unlike skeletal (limited) and cardiac (very poor).",
+      "page": 205
+    },
+    {
+      "topic": "RG",
+      "answer": false,
+      "statement": "The three adult muscle types have the same regenerative potential.",
+      "explanation": "False. They differ: skeletal limited, cardiac very poor, smooth good (Table 10–1).",
+      "page": 213
+    },
+    {
+      "topic": "RG",
+      "answer": true,
+      "statement": "Even though skeletal muscle cells cannot divide, the tissue shows limited regeneration.",
+      "explanation": "True. Satellite cells provide new fibers.",
+      "page": 213
+    },
+    {
+      "topic": "RG",
+      "answer": false,
+      "statement": "Satellite cells are normally highly active and dividing in uninjured muscle.",
+      "explanation": "False. Satellite cells are normally QUIESCENT until activated by injury.",
+      "page": 213
+    },
+    {
+      "topic": "RG",
+      "answer": false,
+      "statement": "Cardiac muscle shows good regenerative capacity throughout adult life.",
+      "explanation": "False. Cardiac muscle shows very little regeneration beyond EARLY CHILDHOOD.",
+      "page": 213
+    },
+    {
+      "topic": "RG",
+      "answer": true,
+      "statement": "Myocardial infarcts are generally repaired by connective tissue, forming scars.",
+      "explanation": "True. Proliferating fibroblasts form myocardial scars.",
+      "page": 213
+    },
+    {
+      "topic": "RG",
+      "answer": false,
+      "statement": "Smooth muscle regenerates slowly because its cells are large and highly differentiated.",
+      "explanation": "False. Smooth muscle regenerates RAPIDLY because its cells are SMALL and relatively LESS differentiated.",
+      "page": 213
+    },
+    {
+      "topic": "RG",
+      "answer": true,
+      "statement": "Smooth muscle cells are mononucleated.",
+      "explanation": "True. Simpler, smaller mononucleated cells allow a more active regenerative response.",
+      "page": 213
+    },
+    {
+      "topic": "RG",
+      "answer": false,
+      "statement": "Fibroblasts are the main source of new smooth muscle cells after injury.",
+      "explanation": "False. Viable SMOOTH MUSCLE CELLS undergo mitosis to replace damaged tissue; pericytes help in vessels.",
+      "page": 213
+    },
+    {
+      "topic": "RG",
+      "answer": true,
+      "statement": "Pericytes are contractile cells in the walls of small blood vessels.",
+      "explanation": "True. They help repair vascular smooth muscle.",
+      "page": 213
+    },
+    {
+      "topic": "SA",
+      "answer": true,
+      "statement": "From outside in, the order is muscle → fascicle → muscle fiber → myofibril → myofilament.",
+      "explanation": "True. Epimysium wraps the muscle, perimysium each fascicle, endomysium each fiber; fibers contain myofibrils built of thick and thin myofilaments.",
+      "page": 194
+    },
+    {
+      "topic": "SA",
+      "answer": true,
+      "statement": "Myofibrils are 1–2 μm wide, while whole skeletal fibers are 10–100 μm wide.",
+      "explanation": "True. So each fiber holds many myofibrils side by side.",
+      "page": 195
+    },
+    {
+      "topic": "CM",
+      "answer": true,
+      "statement": "The sequence of skeletal muscle excitation is NMJ → sarcolemma → T-tubules → terminal cisternae → Ca2+ release.",
+      "explanation": "True. The action potential travels along the sarcolemma and T-tubules to the triads, where SR releases Ca2+.",
+      "page": 198
+    },
+    {
+      "topic": "CM",
+      "answer": true,
+      "statement": "Both Ca2+ and ATP must be present for crossbridge cycling to continue.",
+      "explanation": "True. In their continued presence the attach-pivot-detach events repeat.",
+      "page": 198
+    },
+    {
+      "topic": "IN",
+      "answer": true,
+      "statement": "Motor axons branch more in large muscles with coarse movements than in muscles needing precise control.",
+      "explanation": "True. Coarse muscles have axons innervating 100+ fibers; precise ones like extraocular muscles approach one fiber per neuron.",
+      "page": 201
+    },
+    {
+      "topic": "IN",
+      "answer": true,
+      "statement": "At the NMJ, the axon terminal sits in a trough on the muscle fiber surface.",
+      "explanation": "True. The dilated termination of each axonal branch lies in a trough of the sarcolemma.",
+      "page": 200
+    },
+    {
+      "topic": "FI",
+      "answer": true,
+      "statement": "The H zone contains the M line.",
+      "explanation": "True. The M line bisects the H zone at the center of the A band.",
+      "page": 197
+    },
+    {
+      "topic": "FI",
+      "answer": true,
+      "statement": "The I band contains thin filaments, the Z disc and parts of titin.",
+      "explanation": "True. Titin is an important accessory protein in I bands, connecting thick filaments to the Z disc.",
+      "page": 197
+    },
+    {
+      "topic": "FT",
+      "answer": true,
+      "statement": "Type IIa fibers resemble type I in oxidative metabolism but type IIb in contraction speed.",
+      "explanation": "True. Type IIa: oxidative phosphorylation (like type I) and fast contraction with high myosin-ATPase (like IIb) (Table 10–2).",
+      "page": 208
+    },
+    {
+      "topic": "FT",
+      "answer": true,
+      "statement": "Fiber diameter increases from type I to type IIa to type IIb.",
+      "explanation": "True. Small, intermediate, large (Table 10–2).",
+      "page": 208
+    },
+    {
+      "topic": "CA",
+      "answer": true,
+      "statement": "Cardiac and smooth muscle both have centrally located nuclei.",
+      "explanation": "True. Only skeletal muscle has peripheral nuclei (Table 10–1).",
+      "page": 205
+    },
+    {
+      "topic": "CA",
+      "answer": true,
+      "statement": "Both cardiac muscle and smooth muscle spread excitation from cell to cell through gap junctions.",
+      "explanation": "True. Cardiac gap junctions are in the intercalated discs; smooth muscle cells are linked by numerous gap junctions.",
+      "page": 210
+    },
+    {
+      "topic": "CA",
+      "answer": true,
+      "statement": "Skeletal and cardiac fibers both contract in an all-or-none manner.",
+      "explanation": "True. Skeletal is triggered at motor end plates; cardiac is intrinsic, beginning at conducting nodes (Table 10–1).",
+      "page": 205
+    },
+    {
+      "topic": "SM",
+      "answer": true,
+      "statement": "Smooth muscle cells have fewer, less regularly arranged crossbridges than striated muscle.",
+      "explanation": "True. Myosin filaments are less regular among the thin filaments, with fewer crossbridges.",
+      "page": 210
+    },
+    {
+      "topic": "SM",
+      "answer": true,
+      "statement": "α-Actinin is found in both Z discs of striated muscle and dense bodies of smooth muscle.",
+      "explanation": "True. In both it anchors thin actin filaments.",
+      "page": 210
+    },
+    {
+      "topic": "SR",
+      "answer": true,
+      "statement": "Skeletal muscle has the best-developed SR of the three muscle types.",
+      "explanation": "True. Skeletal SR is well-developed; cardiac is less; smooth is irregular and rudimentary (Table 10–1).",
+      "page": 205
+    },
+    {
+      "topic": "SM",
+      "answer": true,
+      "statement": "Smooth muscle cells in the pregnant uterus can be about 25 times longer than those in small blood vessels.",
+      "explanation": "True. They range from 20 μm in small vessels to 500 μm in the pregnant uterus (500 ÷ 20 = 25).",
+      "page": 208
+    },
+    {
+      "topic": "MF",
+      "answer": true,
+      "statement": "Skeletal fibers are innervated at motor end plates, while cardiac contraction starts at nodes of conducting fibers.",
+      "explanation": "True. Table 10–1 contrasts these triggers of contraction.",
+      "page": 205
+    },
+    {
+      "topic": "OV",
+      "answer": true,
+      "statement": "Of the three muscle types, only smooth muscle lacks both striations and T-tubules.",
+      "explanation": "True. Skeletal and cardiac are striated with T-tubules; smooth muscle has neither (Table 10–1).",
+      "page": 205
+    },
+    {
+      "topic": "SA",
+      "answer": false,
+      "statement": "Myofibrils are wider than whole muscle fibers.",
+      "explanation": "False. Myofibrils (1–2 μm) are INSIDE fibers (10–100 μm); each fiber has many myofibrils.",
+      "page": 195
+    },
+    {
+      "topic": "SA",
+      "answer": false,
+      "statement": "From outside in: myofibril → muscle fiber → fascicle → muscle.",
+      "explanation": "False. That is INSIDE OUT. From outside in: muscle → fascicle → fiber → myofibril → myofilament.",
+      "page": 194
+    },
+    {
+      "topic": "CM",
+      "answer": false,
+      "statement": "Ca2+ is released from the SR before the action potential reaches the T-tubules.",
+      "explanation": "False. The action potential travels along T-tubules FIRST; depolarization at triads then triggers Ca2+ release.",
+      "page": 198
+    },
+    {
+      "topic": "CM",
+      "answer": false,
+      "statement": "Only ATP, not Ca2+, is needed for crossbridge cycling to continue.",
+      "explanation": "False. BOTH Ca2+ and ATP are needed; without Ca2+ tropomyosin re-covers the binding sites.",
+      "page": 198
+    },
+    {
+      "topic": "IN",
+      "answer": false,
+      "statement": "At the NMJ, the axon terminal sits on a ridge projecting from the muscle surface.",
+      "explanation": "False. Each axon terminal lies in a TROUGH on the muscle cell surface.",
+      "page": 200
+    },
+    {
+      "topic": "IN",
+      "answer": false,
+      "statement": "Precise muscles have motor axons that each innervate more fibers than coarse muscles do.",
+      "explanation": "False. Precise muscles have FEW fibers per axon (even one); coarse muscles have 100 or more.",
+      "page": 201
+    },
+    {
+      "topic": "FI",
+      "answer": false,
+      "statement": "The Z disc lies within the H zone.",
+      "explanation": "False. The Z disc bisects the I BAND. The M line lies within the H zone.",
+      "page": 197
+    },
+    {
+      "topic": "FI",
+      "answer": false,
+      "statement": "The H zone contains thin filaments but no thick filaments.",
+      "explanation": "False. The H zone has the rodlike parts of THICK filaments and NO thin filaments.",
+      "page": 197
+    },
+    {
+      "topic": "FT",
+      "answer": false,
+      "statement": "Type IIa fibers resemble type IIb in metabolism, depending on anaerobic glycolysis.",
+      "explanation": "False. Type IIa use OXIDATIVE phosphorylation like type I. Only IIb rely on anaerobic glycolysis (Table 10–2).",
+      "page": 208
+    },
+    {
+      "topic": "FT",
+      "answer": false,
+      "statement": "Fiber diameter decreases from type I to type IIa to type IIb.",
+      "explanation": "False. It INCREASES: type I small, IIa intermediate, IIb large (Table 10–2).",
+      "page": 208
+    },
+    {
+      "topic": "CA",
+      "answer": false,
+      "statement": "Cardiac and skeletal muscle both have peripheral nuclei.",
+      "explanation": "False. Only SKELETAL muscle has peripheral nuclei. Cardiac nuclei are CENTRAL (Table 10–1).",
+      "page": 205
+    },
+    {
+      "topic": "CA",
+      "answer": false,
+      "statement": "Cardiac muscle cells are not connected by gap junctions.",
+      "explanation": "False. Gap junctions fill the longitudinal regions of intercalated discs, coupling cells electrically.",
+      "page": 207
+    },
+    {
+      "topic": "CA",
+      "answer": false,
+      "statement": "Smooth muscle contractions are all-or-none, like skeletal and cardiac (Table 10–1).",
+      "explanation": "False. Smooth muscle contractions are PARTIAL and slow; skeletal and cardiac are all-or-none.",
+      "page": 205
+    },
+    {
+      "topic": "SM",
+      "answer": false,
+      "statement": "Smooth muscle has more crossbridges than striated muscle because its filaments crisscross.",
+      "explanation": "False. Smooth muscle has FEWER crossbridges and a less regular myosin arrangement.",
+      "page": 210
+    },
+    {
+      "topic": "SM",
+      "answer": false,
+      "statement": "α-Actinin is found in skeletal Z discs but not in smooth muscle.",
+      "explanation": "False. Smooth muscle DENSE BODIES contain α-actinin too.",
+      "page": 210
+    },
+    {
+      "topic": "SR",
+      "answer": false,
+      "statement": "Cardiac muscle has the best-developed SR of the three muscle types.",
+      "explanation": "False. SKELETAL muscle has the best-developed SR; cardiac SR is less well-organized (Table 10–1).",
+      "page": 205
+    },
+    {
+      "topic": "RG",
+      "answer": false,
+      "statement": "Satellite cells are found inside the external lamina of cardiac muscle cells.",
+      "explanation": "False. Cardiac muscle LACKS satellite cells.",
+      "page": 213
+    },
+    {
+      "topic": "MF",
+      "answer": false,
+      "statement": "Skeletal muscle contraction starts spontaneously at pacemaker nodes.",
+      "explanation": "False. Skeletal contraction is triggered at MOTOR END PLATES. Pacemaker nodes start CARDIAC contraction.",
+      "page": 205
+    },
+    {
+      "topic": "OV",
+      "answer": false,
+      "statement": "Of the three muscle types, only cardiac muscle lacks T-tubules.",
+      "explanation": "False. SMOOTH muscle lacks T-tubules. Cardiac muscle has T-tubules (forming dyads) (Table 10–1).",
+      "page": 205
+    },
+    {
+      "topic": "MF",
+      "answer": false,
+      "statement": "Peripheral nuclei are found in skeletal, cardiac and smooth muscle alike.",
+      "explanation": "False. Peripheral nuclei are UNIQUE to skeletal muscle fibers.",
+      "page": 193
+    },
+    {
+      "topic": "FT",
+      "answer": false,
+      "statement": "Type I fibers have high glycolytic enzyme activity and low capillary density (Table 10–2).",
+      "explanation": "False. Type I have LOW glycolytic activity and NUMEROUS capillaries.",
+      "page": 208
+    },
+    {
+      "topic": "PR",
+      "answer": false,
+      "statement": "Golgi tendon organs are found among muscle fascicles, and muscle spindles in tendons.",
+      "explanation": "False. Reversed: MUSCLE SPINDLES are among fascicles; GOLGI TENDON ORGANS are at the myotendinous junction.",
+      "page": 203
+    },
+    {
+      "topic": "CT",
+      "answer": false,
+      "statement": "Myotendinous junctions connect the endomysium directly to the periosteum without involving the epimysium or perimysium.",
+      "explanation": "False. ALL THREE layers plus the deep fascia are continuous with the tendon at myotendinous junctions.",
+      "page": 194
+    }
+  ]
+}

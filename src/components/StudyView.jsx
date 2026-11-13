@@ -1,0 +1,485 @@
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { useStudy } from '../lib/studyStore.jsx'
+import {
+  activeCount,
+  firstRunScore,
+  flaggedIds,
+  mistakeIds,
+  reviewAccuracy,
+  seenCount,
+} from '../lib/score.js'
+import { SHEET_SIZE, chunk, clampSetIndex, questionsInSet, setCount } from '../lib/sets.js'
+import { buildView } from '../lib/view.js'
+import QuestionRow from './QuestionRow.jsx'
+import SetSizeSlider from './SetSizeSlider.jsx'
+import SyncBadge from './SyncBadge.jsx'
+
+const TABS = [
+  { mode: 'sets', label: 'Exam sheets' },
+  { mode: 'topic', label: 'By topic' },
+  { mode: 'mistakes', label: 'Mistakes', tone: 'mis' },
+  { mode: 'flagged', label: 'Flagged', tone: 'flg' },
+]
+
+export default function StudyView() {
+  const {
+    bank, banks, questions, topics, rows, setSize, view, sync, status, error,
+    answer, toggleFlag, redo, updateView, changeSetSize, changeBank, resetBank,
+  } = useStudy()
+
+  const [snapshot, setSnapshot] = useState(null)
+  const [confirmReset, setConfirmReset] = useState(false)
+  const rowsRef = useRef(rows)
+  rowsRef.current = rows
+
+  const bankIds = useMemo(() => questions.map((question) => question.id), [questions])
+  const topicById = useMemo(() => new Map(topics.map((topic) => [topic.id, topic])), [topics])
+  const questionById = useMemo(
+    () => new Map(questions.map((question) => [question.id, question])),
+    [questions],
+  )
+
+  // The current set is the scope for the stats, the tab counts, and the
+  // Mistakes and Flagged lists.
+  const setIndex = clampSetIndex(view.setIndex, questions.length, setSize)
+  const setIds = useMemo(
+    () => questionsInSet(questions, setSize, setIndex).map((question) => question.id),
+    [questions, setSize, setIndex],
+  )
+
+  // Entering Mistakes or Flagged — or moving to another set while on one of
+  // them — freezes the list so rows don't vanish mid-pass.
+  //
+  // It deliberately does NOT clear the answers already showing: leaving for
+  // another tab and coming back must not throw away a pass in progress.
+  // Clearing happens only when "Redo these" is pressed.
+  useEffect(() => {
+    if (view.mode !== 'mistakes' && view.mode !== 'flagged') {
+      setSnapshot(null)
+      return
+    }
+    const current = rowsRef.current
+    setSnapshot(
+      view.mode === 'mistakes' ? mistakeIds(setIds, current) : flaggedIds(setIds, current),
+    )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [view.mode, bank?.id, setIndex, setIds.length])
+
+  const built = useMemo(
+    () => buildView({ questions, rows, view, setSize, topics, snapshot }),
+    [questions, rows, view, setSize, topics, snapshot],
+  )
+
+  // Set-scoped numbers.
+  const setScore = firstRunScore(setIds, rows)
+  const setMistakes = mistakeIds(setIds, rows)
+  const setFlags = flaggedIds(setIds, rows)
+  const setReview = reviewAccuracy(setIds, rows)
+
+  // Bank-wide totals, shown alongside so the set never hides the whole picture.
+  const bankScore = firstRunScore(bankIds, rows)
+  const bankMistakes = mistakeIds(bankIds, rows)
+  const bankFlags = flaggedIds(bankIds, rows)
+
+  const sheetScore = firstRunScore(built.ids, rows)
+  const pass = activeCount(built.ids, rows)
+  const passCorrect = built.ids.filter((id) => {
+    const row = rows.get(id)
+    return row?.active_choice !== null && row?.active_choice === questionById.get(id)?.answer
+  }).length
+
+  const sets = useMemo(() => {
+    const total = setCount(questions.length, setSize)
+    return Array.from({ length: total }, (_, index) => {
+      const ids = questionsInSet(questions, setSize, index).map((question) => question.id)
+      return { index, ids, score: firstRunScore(ids, rows), seen: seenCount(ids, rows) }
+    })
+  }, [questions, setSize, rows])
+
+  if (status === 'loading') {
+    return <p className="px-4 py-10 text-center text-muted">Loading your progress…</p>
+  }
+
+  if (status === 'empty') {
+    return (
+      <div className="sheet-card mx-auto my-10 max-w-[600px] p-6 text-center">
+        <strong className="mb-1.5 block text-lg">No question banks yet</strong>
+        <p className="m-0 text-sm text-muted">
+          Upload a batch from the Import tab to start studying.
+        </p>
+      </div>
+    )
+  }
+
+  const topicCode = view.topicCode ?? topics[0]?.code ?? null
+
+  return (
+    <div className="mx-auto flex w-full max-w-[960px] flex-col gap-[18px] px-4 pt-6 pb-16">
+      <header className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h1 className="m-0 font-display text-[clamp(26px,4vw,36px)] leading-tight font-semibold text-balance">
+            {bank?.title ?? 'Question Bank'}
+          </h1>
+          <p className="mt-1 text-sm text-muted">
+            {bank?.source ? `${bank.source} · ` : ''}
+            {questions.length} statements · {setCount(questions.length, setSize)} sets of {setSize}
+          </p>
+          <p className="mt-0.5 font-mono text-[12px] text-muted tabular-nums">
+            Bank · seen {bankScore.answered}/{questions.length} · score{' '}
+            {bankScore.pct === null ? '–' : `${bankScore.pct}%`} · {bankMistakes.length} mistake
+            {bankMistakes.length === 1 ? '' : 's'} · {bankFlags.length} flagged
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <span className="stat-chip">
+            Set {setIndex + 1} · Seen{' '}
+            <b className="font-medium text-accent">{setScore.answered}</b>/{setIds.length}
+          </span>
+          <span className="stat-chip">
+            Score{' '}
+            <b className="font-medium text-accent">
+              {setScore.pct === null ? '–' : `${setScore.pct}%`}
+            </b>
+          </span>
+          <span className="stat-chip">
+            Mistakes <b className="font-medium text-no">{setMistakes.length}</b>
+          </span>
+          <span className="stat-chip">
+            Flagged <b className="font-medium text-flag">{setFlags.length}</b>
+          </span>
+        </div>
+      </header>
+
+      {banks.length > 1 && (
+        <div className="flex flex-wrap items-center gap-2">
+          <label htmlFor="bank" className="text-[13px] text-muted">
+            Bank
+          </label>
+          <select
+            id="bank"
+            value={bank?.id ?? ''}
+            onChange={(event) => changeBank(event.target.value)}
+            className="max-w-full rounded border border-rule-strong bg-sheet px-2.5 py-1.5 text-ink"
+          >
+            {banks.map((entry) => (
+              <option key={entry.id} value={entry.id}>
+                {entry.title}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
+
+      <div className="sheet-card flex flex-col gap-3 px-4 py-3">
+        <SetSizeSlider total={questions.length} setSize={setSize} onChange={changeSetSize} />
+        <nav aria-label="Question sets" className="grid grid-cols-3 gap-2 sm:grid-cols-4">
+          {sets.map((entry) => (
+            <button
+              key={entry.index}
+              type="button"
+              aria-pressed={entry.index === setIndex}
+              // Switching sets keeps the tab you are on, so Mistakes and
+              // Flagged follow you from set to set.
+              onClick={() => updateView({ setIndex: entry.index, sheetIndex: 0, listPage: 0 })}
+              className={`flex min-w-0 flex-col gap-0.5 rounded border-[1.5px] p-2 text-left ${
+                entry.index === setIndex
+                  ? 'border-accent bg-accent-soft shadow-[inset_0_-3px_0_var(--accent)]'
+                  : 'border-rule-strong bg-sheet'
+              }`}
+            >
+              <span className="font-display text-[17px] font-semibold">Set {entry.index + 1}</span>
+              <span className="font-mono text-[11px] text-muted tabular-nums">
+                <b className="font-medium text-accent">{entry.seen}</b>/{entry.ids.length} seen
+                {entry.score.pct === null ? '' : ` · ${entry.score.pct}%`}
+              </span>
+            </button>
+          ))}
+        </nav>
+      </div>
+
+      <nav role="tablist" className="flex flex-wrap gap-1.5 border-b-2 border-rule-strong">
+        {TABS.map((tab) => {
+          const selected = view.mode === tab.mode
+          const count =
+            tab.mode === 'mistakes'
+              ? setMistakes.length
+              : tab.mode === 'flagged'
+                ? setFlags.length
+                : null
+          return (
+            <button
+              key={tab.mode}
+              role="tab"
+              type="button"
+              aria-selected={selected}
+              onClick={() => updateView({ mode: tab.mode, listPage: 0 })}
+              className={`-mb-0.5 border-b-[3px] px-3.5 py-2.5 text-[15px] font-bold ${
+                selected ? 'border-accent text-ink' : 'border-transparent text-muted'
+              }`}
+            >
+              {tab.label}
+              {count !== null && (
+                <span
+                  className={`ml-1.5 rounded-[10px] px-1.5 py-px font-mono text-xs font-medium ${
+                    tab.tone === 'mis' ? 'bg-no-soft text-no' : 'bg-flag-soft text-flag'
+                  }`}
+                >
+                  {count}
+                </span>
+              )}
+            </button>
+          )
+        })}
+      </nav>
+
+      {/* Picker: sheets within the set, a topic, or list pages. */}
+      <div className="flex flex-wrap items-center gap-1.5">
+        {view.mode === 'sets' &&
+          chunk(setIds, SHEET_SIZE).map((ids, index) => {
+            const done = ids.filter((id) => rows.get(id)?.first_at).length
+            return (
+              <button
+                key={index}
+                type="button"
+                aria-pressed={index === built.sheetIndex}
+                title={`Sheet ${index + 1}: ${done}/${ids.length} seen`}
+                onClick={() => {
+                  updateView({ sheetIndex: index })
+                  window.scrollTo({ top: 0 })
+                }}
+                className={`min-w-10 rounded border px-2 py-1.5 font-mono text-[13px] tabular-nums ${
+                  index === built.sheetIndex
+                    ? 'border-accent bg-accent text-sheet'
+                    : 'border-rule-strong bg-sheet text-ink'
+                } ${
+                  done === ids.length
+                    ? 'shadow-[inset_0_-3px_0_var(--yes)]'
+                    : done > 0
+                      ? 'shadow-[inset_0_-3px_0_var(--flag)]'
+                      : ''
+                }`}
+              >
+                {index + 1}
+              </button>
+            )
+          })}
+
+        {view.mode === 'topic' && topics.length > 0 && (
+          <>
+            <label htmlFor="topic" className="text-[13px] text-muted">
+              Topic
+            </label>
+            <select
+              id="topic"
+              value={topicCode ?? ''}
+              onChange={(event) => updateView({ topicCode: event.target.value, listPage: 0 })}
+              className="max-w-full rounded border border-rule-strong bg-sheet px-2.5 py-1.5 text-ink"
+            >
+              {topics.map((topic) => {
+                const count = questions.filter((question) => question.topic_id === topic.id).length
+                return (
+                  <option key={topic.id} value={topic.code}>
+                    {topic.label} ({count})
+                  </option>
+                )
+              })}
+            </select>
+          </>
+        )}
+
+        {(view.mode === 'mistakes' || view.mode === 'flagged') &&
+          built.pageCount > 1 &&
+          Array.from({ length: built.pageCount }, (_, index) => (
+            <button
+              key={index}
+              type="button"
+              aria-pressed={index === built.pageIndex}
+              onClick={() => updateView({ listPage: index })}
+              className={`min-w-10 rounded border px-2 py-1.5 font-mono text-[13px] tabular-nums ${
+                index === built.pageIndex
+                  ? 'border-accent bg-accent text-sheet'
+                  : 'border-rule-strong bg-sheet text-ink'
+              }`}
+            >
+              {index + 1}
+            </button>
+          ))}
+      </div>
+
+      <section className="sheet-card" aria-live="polite">
+        {built.ids.length === 0 ? (
+          <div className="px-5 py-10 text-center text-muted">
+            <strong className="mb-1.5 block text-lg text-ink">
+              {view.mode === 'mistakes'
+                ? `No mistakes in Set ${setIndex + 1}`
+                : `Nothing flagged in Set ${setIndex + 1}`}
+            </strong>
+            {view.mode === 'mistakes'
+              ? 'Wrong answers from this set land here so you can redo them. Pick another set above to see its mistakes.'
+              : 'Tap Flag on any statement to keep it here. Pick another set above to see its flags.'}
+          </div>
+        ) : (
+          <>
+            <div className="flex flex-wrap items-baseline justify-between gap-2 border-b-2 border-rule-strong px-4 py-3.5">
+              <span className="font-display text-xl font-semibold">
+                {built.title}
+                {view.mode === 'mistakes' || view.mode === 'flagged' ? (
+                  <span className="ml-2 font-body text-sm font-normal text-muted">
+                    Set {setIndex + 1}
+                  </span>
+                ) : null}
+              </span>
+              <div className="flex items-baseline gap-3">
+                <span className="font-mono text-[13px] text-muted">{built.meta}</span>
+                {/* With nothing left to answer, redoing is the only move — so
+                    the button is here too, rather than ten rows further down. */}
+                {pass === built.ids.length && (
+                  <button
+                    type="button"
+                    onClick={() => redo(built.ids)}
+                    className="rounded border-[1.5px] border-accent bg-sheet px-2.5 py-1 text-[13px] font-bold text-accent"
+                  >
+                    Redo these
+                  </button>
+                )}
+              </div>
+            </div>
+
+            <div
+              aria-hidden="true"
+              className="exam-grid hidden border-b border-rule text-[13px] font-bold uppercase tracking-[0.06em] text-muted sm:grid"
+            >
+              <div className="px-2.5 py-1.5">No.</div>
+              <div className="border-l border-rule px-2.5 py-1.5">Statement</div>
+              <div className="border-l border-rule px-2.5 py-1.5">Yes / No</div>
+            </div>
+
+            {built.ids.map((id, index) => {
+              const question = questionById.get(id)
+              if (!question) return null
+              return (
+                <QuestionRow
+                  key={id}
+                  question={question}
+                  row={rows.get(id)}
+                  number={built.firstNumber + index}
+                  topicLabel={topicById.get(question.topic_id)?.label ?? ''}
+                  onAnswer={answer}
+                  onFlag={toggleFlag}
+                  showCleared={view.mode === 'mistakes'}
+                />
+              )
+            })}
+
+            <div className="flex flex-wrap items-center justify-between gap-2.5 border-t-2 border-rule-strong px-4 py-3">
+              <span className="font-mono text-sm tabular-nums">
+                {/* The score is the first run. The pass tally moves; the score doesn't. */}
+                First run {sheetScore.correct}/{sheetScore.answered}
+                {sheetScore.pct === null ? '' : ` · ${sheetScore.pct}%`}
+                <span className="text-muted">
+                  {' '}
+                  · this pass {passCorrect}/{pass}
+                  {pass < built.ids.length ? ` · ${built.ids.length - pass} left` : ''}
+                </span>
+              </span>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => redo(built.ids)}
+                  className="rounded border-[1.5px] border-accent bg-sheet px-3 py-2 text-sm font-bold text-accent"
+                >
+                  Redo these
+                </button>
+                {(view.mode === 'mistakes' || view.mode === 'flagged') && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSnapshot(view.mode === 'mistakes' ? setMistakes : setFlags)
+                      updateView({ listPage: 0 })
+                    }}
+                    className="rounded border-[1.5px] border-accent bg-sheet px-3 py-2 text-sm font-bold text-accent"
+                  >
+                    Refresh list
+                  </button>
+                )}
+                {built.hasNext && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (view.mode === 'sets') updateView({ sheetIndex: built.sheetIndex + 1 })
+                      else updateView({ listPage: built.pageIndex + 1 })
+                      window.scrollTo({ top: 0 })
+                    }}
+                    className="rounded border-[1.5px] border-accent bg-accent px-3 py-2 text-sm font-bold text-sheet"
+                  >
+                    Next {view.mode === 'sets' ? 'sheet' : 'page'}
+                  </button>
+                )}
+              </div>
+            </div>
+          </>
+        )}
+      </section>
+
+      <div className="flex flex-wrap items-center justify-between gap-2.5 text-sm text-muted">
+        <label htmlFor="shuffle" className="flex cursor-pointer items-center gap-1.5">
+          <input
+            id="shuffle"
+            type="checkbox"
+            checked={view.shuffle}
+            onChange={(event) => updateView({ shuffle: event.target.checked })}
+          />
+          Shuffle statement order in each sheet
+        </label>
+
+        {confirmReset ? (
+          <div className="flex flex-wrap items-center gap-2">
+            <span>Erase this bank?</span>
+            <button
+              type="button"
+              onClick={() => {
+                setConfirmReset(false)
+                void resetBank('pass')
+              }}
+              className="rounded border-[1.5px] border-accent bg-sheet px-3 py-2 text-sm font-bold text-accent"
+            >
+              Just start a fresh pass
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setConfirmReset(false)
+                void resetBank('all')
+              }}
+              className="rounded border-[1.5px] border-no bg-sheet px-3 py-2 text-sm font-bold text-no"
+            >
+              Erase everything, score included
+            </button>
+            <button
+              type="button"
+              onClick={() => setConfirmReset(false)}
+              className="rounded border-[1.5px] border-accent bg-sheet px-3 py-2 text-sm font-bold text-accent"
+            >
+              Keep
+            </button>
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={() => setConfirmReset(true)}
+            className="rounded border-[1.5px] border-no bg-sheet px-3 py-2 text-sm font-bold text-no"
+          >
+            Reset this bank
+          </button>
+        )}
+      </div>
+
+      <p className="m-0 text-[13px] text-muted">
+        <SyncBadge state={sync.state} pending={sync.pending} /> · Your score counts the first
+        answer to each question, so redoing mistakes or flags never changes it. Set {setIndex + 1}{' '}
+        across all attempts: {setReview.pct === null ? '–' : `${setReview.pct}%`} over{' '}
+        {setReview.attempts}.{error ? ` · ${error}` : ''}
+      </p>
+    </div>
+  )
+}

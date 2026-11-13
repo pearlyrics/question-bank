@@ -1,0 +1,179 @@
+@import "tailwindcss";
+
+/* Ported verbatim from muscle-bank-2.html: a printed exam sheet on a quiet desk. */
+:root {
+  --bg: #eef1f5;
+  --sheet: #ffffff;
+  --ink: #1b2433;
+  --muted: #5b6678;
+  --rule: #cfd8e6;
+  --rule-strong: #9fb0c9;
+  --accent: #2a4fa0;
+  --accent-soft: #e3eaf8;
+  --yes: #1d7347;
+  --yes-soft: #e2f3ea;
+  --no: #b3261e;
+  --no-soft: #fbe7e5;
+  --flag: #a8670f;
+  --flag-soft: #fbf0dc;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f131a;
+    --sheet: #171d27;
+    --ink: #e5e9f1;
+    --muted: #97a3b8;
+    --rule: #2a3344;
+    --rule-strong: #44526b;
+    --accent: #93b1ff;
+    --accent-soft: #1f2a42;
+    --yes: #62cf95;
+    --yes-soft: #16302a;
+    --no: #ff8f86;
+    --no-soft: #3a1d1d;
+    --flag: #f2b75a;
+    --flag-soft: #3a2c14;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #0f131a;
+  --sheet: #171d27;
+  --ink: #e5e9f1;
+  --muted: #97a3b8;
+  --rule: #2a3344;
+  --rule-strong: #44526b;
+  --accent: #93b1ff;
+  --accent-soft: #1f2a42;
+  --yes: #62cf95;
+  --yes-soft: #16302a;
+  --no: #ff8f86;
+  --no-soft: #3a1d1d;
+  --flag: #f2b75a;
+  --flag-soft: #3a2c14;
+  color-scheme: dark;
+}
+
+/* `inline` keeps the utilities pointing at the live custom properties, so the
+   media query and [data-theme] overrides above flow through every class. */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-sheet: var(--sheet);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-rule: var(--rule);
+  --color-rule-strong: var(--rule-strong);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-yes: var(--yes);
+  --color-yes-soft: var(--yes-soft);
+  --color-no: var(--no);
+  --color-no-soft: var(--no-soft);
+  --color-flag: var(--flag);
+  --color-flag-soft: var(--flag-soft);
+
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "Atkinson Hyperlegible", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+@layer base {
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  /* The sheet: a ruled table with a hairline shadow, as in the original. */
+  .sheet-card {
+    background: var(--sheet);
+    border: 1px solid var(--rule-strong);
+    border-radius: 2px;
+    box-shadow: 0 1px 0 var(--rule), 0 8px 24px -16px rgb(20 30 50 / 0.35);
+  }
+
+  .stat-chip {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    padding: 6px 10px;
+    border: 1px solid var(--rule-strong);
+    border-radius: 4px;
+    background: var(--sheet);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  /* No. | Statement | Yes/No — collapses to two columns on narrow screens. */
+  .exam-grid {
+    display: grid;
+    grid-template-columns: 44px 1fr 132px;
+  }
+
+  /* 639px, not 620px, so this lines up exactly with Tailwind's sm: breakpoint
+     and the row never mixes the two layouts. */
+  @media (max-width: 639px) {
+    .exam-grid {
+      grid-template-columns: 34px 1fr;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .feedback-in {
+    animation: feedback-in 0.18s ease-out;
+  }
+  @keyframes feedback-in {
+    from {
+      opacity: 0.4;
+      transform: translateY(-3px);
+    }
+  }
+}
+
+/* The slider: a ruled measuring stick rather than a stock range input. */
+input[type="range"].set-slider {
+  appearance: none;
+  width: 100%;
+  height: 28px;
+  background: transparent;
+  cursor: pointer;
+}
+input[type="range"].set-slider::-webkit-slider-runnable-track {
+  height: 6px;
+  background: var(--accent-soft);
+  border: 1px solid var(--rule-strong);
+  border-radius: 2px;
+}
+input[type="range"].set-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 14px;
+  height: 22px;
+  margin-top: -9px;
+  background: var(--accent);
+  border: 0;
+  border-radius: 2px;
+}
+input[type="range"].set-slider::-moz-range-track {
+  height: 6px;
+  background: var(--accent-soft);
+  border: 1px solid var(--rule-strong);
+  border-radius: 2px;
+}
+input[type="range"].set-slider::-moz-range-thumb {
+  width: 14px;
+  height: 22px;
+  background: var(--accent);
+  border: 0;
+  border-radius: 2px;
+}
