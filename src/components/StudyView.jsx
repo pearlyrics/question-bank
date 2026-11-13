@@ -15,10 +15,10 @@ import SetSizeSlider from './SetSizeSlider.jsx'
 import SyncBadge from './SyncBadge.jsx'
 
 const TABS = [
-  { mode: 'sets', label: 'Exam sheets' },
-  { mode: 'topic', label: 'By topic' },
-  { mode: 'mistakes', label: 'Mistakes', tone: 'mis' },
-  { mode: 'flagged', label: 'Flagged', tone: 'flg' },
+  { mode: 'sets', label: 'Exam sheets', short: 'Sheets' },
+  { mode: 'topic', label: 'By topic', short: 'Topic' },
+  { mode: 'mistakes', label: 'Mistakes', short: 'Mistakes', tone: 'mis' },
+  { mode: 'flagged', label: 'Flagged', short: 'Flagged', tone: 'flg' },
 ]
 
 export default function StudyView() {
@@ -114,7 +114,7 @@ export default function StudyView() {
   const topicCode = view.topicCode ?? topics[0]?.code ?? null
 
   return (
-    <div className="mx-auto flex w-full max-w-[960px] flex-col gap-[18px] px-4 pt-6 pb-16">
+    <div className="gutter mx-auto flex w-full max-w-[960px] flex-col gap-4 pt-5 pb-16 sm:gap-[18px] sm:pt-6">
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="m-0 font-display text-[clamp(26px,4vw,36px)] leading-tight font-semibold text-balance">
@@ -130,7 +130,7 @@ export default function StudyView() {
             {bankMistakes.length === 1 ? '' : 's'} · {bankFlags.length} flagged
           </p>
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-1.5 sm:gap-2">
           <span className="stat-chip">
             Set {setIndex + 1} · Seen{' '}
             <b className="font-medium text-accent">{setScore.answered}</b>/{setIds.length}
@@ -159,7 +159,7 @@ export default function StudyView() {
             id="bank"
             value={bank?.id ?? ''}
             onChange={(event) => changeBank(event.target.value)}
-            className="max-w-full rounded border border-rule-strong bg-sheet px-2.5 py-1.5 text-ink"
+            className="touch max-w-full rounded border border-rule-strong bg-sheet px-2.5 py-1.5 text-ink"
           >
             {banks.map((entry) => (
               <option key={entry.id} value={entry.id}>
@@ -172,7 +172,10 @@ export default function StudyView() {
 
       <div className="sheet-card flex flex-col gap-3 px-4 py-3">
         <SetSizeSlider total={questions.length} setSize={setSize} onChange={changeSetSize} />
-        <nav aria-label="Question sets" className="grid grid-cols-3 gap-2 sm:grid-cols-4">
+        <nav
+          aria-label="Question sets"
+          className="grid grid-cols-[repeat(auto-fill,minmax(124px,1fr))] gap-2"
+        >
           {sets.map((entry) => (
             <button
               key={entry.index}
@@ -213,11 +216,12 @@ export default function StudyView() {
               type="button"
               aria-selected={selected}
               onClick={() => updateView({ mode: tab.mode, listPage: 0 })}
-              className={`-mb-0.5 border-b-[3px] px-3.5 py-2.5 text-[15px] font-bold ${
+              className={`touch -mb-0.5 border-b-[3px] px-2.5 py-2.5 text-[15px] font-bold sm:px-3.5 ${
                 selected ? 'border-accent text-ink' : 'border-transparent text-muted'
               }`}
             >
-              {tab.label}
+              <span className="hidden sm:inline">{tab.label}</span>
+              <span className="sm:hidden">{tab.short}</span>
               {count !== null && (
                 <span
                   className={`ml-1.5 rounded-[10px] px-1.5 py-px font-mono text-xs font-medium ${
@@ -247,7 +251,7 @@ export default function StudyView() {
                   updateView({ sheetIndex: index })
                   window.scrollTo({ top: 0 })
                 }}
-                className={`min-w-10 rounded border px-2 py-1.5 font-mono text-[13px] tabular-nums ${
+                className={`touch min-w-11 rounded border px-2 py-1.5 font-mono text-[13px] tabular-nums ${
                   index === built.sheetIndex
                     ? 'border-accent bg-accent text-sheet'
                     : 'border-rule-strong bg-sheet text-ink'
@@ -273,7 +277,7 @@ export default function StudyView() {
               id="topic"
               value={topicCode ?? ''}
               onChange={(event) => updateView({ topicCode: event.target.value, listPage: 0 })}
-              className="max-w-full rounded border border-rule-strong bg-sheet px-2.5 py-1.5 text-ink"
+              className="touch max-w-full rounded border border-rule-strong bg-sheet px-2.5 py-1.5 text-ink"
             >
               {topics.map((topic) => {
                 const count = questions.filter((question) => question.topic_id === topic.id).length
@@ -295,7 +299,7 @@ export default function StudyView() {
               type="button"
               aria-pressed={index === built.pageIndex}
               onClick={() => updateView({ listPage: index })}
-              className={`min-w-10 rounded border px-2 py-1.5 font-mono text-[13px] tabular-nums ${
+              className={`touch min-w-11 rounded border px-2 py-1.5 font-mono text-[13px] tabular-nums ${
                 index === built.pageIndex
                   ? 'border-accent bg-accent text-sheet'
                   : 'border-rule-strong bg-sheet text-ink'
@@ -320,7 +324,7 @@ export default function StudyView() {
           </div>
         ) : (
           <>
-            <div className="flex flex-wrap items-baseline justify-between gap-2 border-b-2 border-rule-strong px-4 py-3.5">
+            <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1.5 border-b-2 border-rule-strong px-3 py-3 sm:px-4 sm:py-3.5">
               <span className="font-display text-xl font-semibold">
                 {built.title}
                 {view.mode === 'mistakes' || view.mode === 'flagged' ? (
@@ -371,7 +375,7 @@ export default function StudyView() {
               )
             })}
 
-            <div className="flex flex-wrap items-center justify-between gap-2.5 border-t-2 border-rule-strong px-4 py-3">
+            <div className="flex flex-wrap items-center justify-between gap-2.5 border-t-2 border-rule-strong px-3 py-3 sm:px-4">
               <span className="font-mono text-sm tabular-nums">
                 {/* The score is the first run. The pass tally moves; the score doesn't. */}
                 First run {sheetScore.correct}/{sheetScore.answered}
@@ -382,11 +386,11 @@ export default function StudyView() {
                   {pass < built.ids.length ? ` · ${built.ids.length - pass} left` : ''}
                 </span>
               </span>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex w-full flex-wrap gap-2 sm:w-auto">
                 <button
                   type="button"
                   onClick={() => redo(built.ids)}
-                  className="rounded border-[1.5px] border-accent bg-sheet px-3 py-2 text-sm font-bold text-accent"
+                  className="touch flex-1 rounded border-[1.5px] border-accent bg-sheet px-3 py-2 text-sm font-bold text-accent sm:flex-none"
                 >
                   Redo these
                 </button>
@@ -397,7 +401,7 @@ export default function StudyView() {
                       setSnapshot(view.mode === 'mistakes' ? setMistakes : setFlags)
                       updateView({ listPage: 0 })
                     }}
-                    className="rounded border-[1.5px] border-accent bg-sheet px-3 py-2 text-sm font-bold text-accent"
+                    className="touch flex-1 rounded border-[1.5px] border-accent bg-sheet px-3 py-2 text-sm font-bold text-accent sm:flex-none"
                   >
                     Refresh list
                   </button>
@@ -410,7 +414,7 @@ export default function StudyView() {
                       else updateView({ listPage: built.pageIndex + 1 })
                       window.scrollTo({ top: 0 })
                     }}
-                    className="rounded border-[1.5px] border-accent bg-accent px-3 py-2 text-sm font-bold text-sheet"
+                    className="touch flex-1 rounded border-[1.5px] border-accent bg-accent px-3 py-2 text-sm font-bold text-sheet sm:flex-none"
                   >
                     Next {view.mode === 'sets' ? 'sheet' : 'page'}
                   </button>
@@ -421,19 +425,20 @@ export default function StudyView() {
         )}
       </section>
 
-      <div className="flex flex-wrap items-center justify-between gap-2.5 text-sm text-muted">
-        <label htmlFor="shuffle" className="flex cursor-pointer items-center gap-1.5">
+      <div className="flex flex-col items-start justify-between gap-3 text-sm text-muted sm:flex-row sm:items-center sm:gap-2.5">
+        <label htmlFor="shuffle" className="flex cursor-pointer items-center gap-2">
           <input
             id="shuffle"
             type="checkbox"
             checked={view.shuffle}
             onChange={(event) => updateView({ shuffle: event.target.checked })}
+            className="h-4 w-4"
           />
           Shuffle statement order in each sheet
         </label>
 
         {confirmReset ? (
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex w-full flex-col items-stretch gap-2 sm:w-auto sm:flex-row sm:items-center">
             <span>Erase this bank?</span>
             <button
               type="button"
@@ -441,7 +446,7 @@ export default function StudyView() {
                 setConfirmReset(false)
                 void resetBank('pass')
               }}
-              className="rounded border-[1.5px] border-accent bg-sheet px-3 py-2 text-sm font-bold text-accent"
+              className="rounded border-[1.5px] border-accent bg-sheet touch px-3 py-2 text-sm font-bold text-accent"
             >
               Just start a fresh pass
             </button>
@@ -451,14 +456,14 @@ export default function StudyView() {
                 setConfirmReset(false)
                 void resetBank('all')
               }}
-              className="rounded border-[1.5px] border-no bg-sheet px-3 py-2 text-sm font-bold text-no"
+              className="touch rounded border-[1.5px] border-no bg-sheet px-3 py-2 text-sm font-bold text-no"
             >
               Erase everything, score included
             </button>
             <button
               type="button"
               onClick={() => setConfirmReset(false)}
-              className="rounded border-[1.5px] border-accent bg-sheet px-3 py-2 text-sm font-bold text-accent"
+              className="rounded border-[1.5px] border-accent bg-sheet touch px-3 py-2 text-sm font-bold text-accent"
             >
               Keep
             </button>
@@ -467,7 +472,7 @@ export default function StudyView() {
           <button
             type="button"
             onClick={() => setConfirmReset(true)}
-            className="rounded border-[1.5px] border-no bg-sheet px-3 py-2 text-sm font-bold text-no"
+            className="touch rounded border-[1.5px] border-no bg-sheet px-3 py-2 text-sm font-bold text-no"
           >
             Reset this bank
           </button>

@@ -2,7 +2,13 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- viewport-fit=cover lets the layout reach into the notch area on
+         iPhones; the safe-area padding in index.css keeps content clear of it.
+         No maximum-scale: pinch-zoom stays available. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#eef1f5" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f131a" media="(prefers-color-scheme: dark)" />
     <title>Question Bank</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -10,6 +16,16 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Fraunces:opsz,wght@9..144,600&family=IBM+Plex+Mono:wght@500&display=swap"
     />
+    <script>
+      // Runs before first paint so a pinned theme never flashes the other one.
+      // Must stay in sync with THEME_KEY in src/lib/theme.js.
+      try {
+        var saved = localStorage.getItem('qbank:v1:theme')
+        if (saved === 'light' || saved === 'dark') {
+          document.documentElement.setAttribute('data-theme', saved)
+        }
+      } catch (e) {}
+    </script>
   </head>
   <body>
     <div id="root"></div>

@@ -64,7 +64,7 @@ export default function QuestionRow({ question, row, number, topicLabel, onAnswe
             disabled={answered}
             onClick={() => onAnswer(question.id, true)}
             aria-label={`True: ${question.statement}`}
-            className={`rounded border-[1.5px] bg-sheet px-1.5 py-2 text-sm font-bold text-ink disabled:cursor-default ${buttonTone(true)}`}
+            className={`touch rounded border-[1.5px] bg-sheet px-1.5 py-2 text-sm font-bold text-ink disabled:cursor-default ${buttonTone(true)}`}
           >
             YES
           </button>
@@ -73,7 +73,7 @@ export default function QuestionRow({ question, row, number, topicLabel, onAnswe
             disabled={answered}
             onClick={() => onAnswer(question.id, false)}
             aria-label={`False: ${question.statement}`}
-            className={`rounded border-[1.5px] bg-sheet px-1.5 py-2 text-sm font-bold text-ink disabled:cursor-default ${buttonTone(false)}`}
+            className={`touch rounded border-[1.5px] bg-sheet px-1.5 py-2 text-sm font-bold text-ink disabled:cursor-default ${buttonTone(false)}`}
           >
             NO
           </button>
@@ -82,7 +82,7 @@ export default function QuestionRow({ question, row, number, topicLabel, onAnswe
           type="button"
           aria-pressed={flagged}
           onClick={() => onFlag(question.id)}
-          className={`flex items-center justify-center gap-1.5 rounded border px-1.5 py-1 text-[13px] ${
+          className={`touch flex items-center justify-center gap-1.5 rounded border px-3 py-1 text-[13px] sm:px-1.5 ${
             flagged
               ? 'border-flag bg-flag-soft text-flag [&_svg]:fill-current'
               : 'border-transparent text-muted hover:border-rule'

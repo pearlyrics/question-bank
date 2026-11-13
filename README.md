@@ -122,6 +122,27 @@ replays on next load, and `record_answer()` is idempotent per attempt, so a
 replayed write can't inflate your counts. Other tabs update through `storage`
 events; other devices refresh when the tab regains focus.
 
+## Theme and screen sizes
+
+The **Auto / Light / Dark** control sits in the top bar (and on the login
+screen). Auto follows the device; Light and Dark pin it and are remembered per
+browser. A small script in `index.html` applies a pinned theme before first
+paint, so there's no flash of the wrong one on load — it reads the same key as
+`src/lib/theme.js`, so keep those in sync.
+
+The layout is built for three shapes:
+
+- **Phone** — the statement takes the full width with YES / NO / Flag on their
+  own row beneath it, tab labels shorten (Sheets, Topic), buttons stretch to
+  full width, and every control is at least a 44px touch target. Layout reaches
+  into the safe area on notched iPhones without putting content under the notch.
+- **iPad** — the full three-column ruled sheet (No. | Statement | Yes / No) with
+  complete tab labels, at any orientation.
+- **Desktop** — as above, capped at 960px.
+
+The set buttons use auto-fitting columns rather than fixed breakpoints, so
+dropping the slider to 10 per set (30 sets) stays readable at every width.
+
 ## Tests
 
 ```

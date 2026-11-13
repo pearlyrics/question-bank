@@ -73,7 +73,7 @@ export default function AdminImport({ onImported }) {
   }
 
   return (
-    <div className="mx-auto flex w-full max-w-[960px] flex-col gap-4 px-4 pt-6 pb-16">
+    <div className="gutter mx-auto flex w-full max-w-[960px] flex-col gap-4 pt-6 pb-16">
       <header>
         <h1 className="m-0 font-display text-[clamp(24px,4vw,32px)] leading-tight font-semibold">
           Import questions
@@ -100,7 +100,7 @@ export default function AdminImport({ onImported }) {
                 setBankFields(next)
                 if (text.trim()) check(text, next)
               }}
-              className="rounded border border-rule-strong bg-sheet px-2.5 py-2 font-mono text-sm text-ink"
+              className="touch rounded border border-rule-strong bg-sheet px-2.5 py-2 font-mono text-[16px] text-ink"
             />
           </label>
         ))}
@@ -145,7 +145,7 @@ export default function AdminImport({ onImported }) {
             type="button"
             onClick={() => check(text, bankFields)}
             disabled={!text.trim()}
-            className="rounded border-[1.5px] border-accent bg-sheet px-3 py-2 text-sm font-bold text-accent disabled:opacity-50"
+            className="touch flex-1 rounded border-[1.5px] border-accent bg-sheet px-3 py-2 text-sm font-bold text-accent disabled:opacity-50 sm:flex-none"
           >
             Check this batch
           </button>
@@ -153,7 +153,7 @@ export default function AdminImport({ onImported }) {
             type="button"
             onClick={() => void commit()}
             disabled={!checked?.ok || committing}
-            className="rounded border-[1.5px] border-accent bg-accent px-3 py-2 text-sm font-bold text-sheet disabled:opacity-50"
+            className="touch flex-1 rounded border-[1.5px] border-accent bg-accent px-3 py-2 text-sm font-bold text-sheet disabled:opacity-50 sm:flex-none"
           >
             {committing ? 'Importing…' : 'Import to the bank'}
           </button>
@@ -209,7 +209,8 @@ export default function AdminImport({ onImported }) {
                 </span>
               </div>
 
-              <table className="w-full border-collapse text-left font-mono text-[13px] tabular-nums">
+              <div className="-mx-1 overflow-x-auto px-1">
+                <table className="w-full min-w-[260px] border-collapse text-left font-mono text-[13px] tabular-nums">
                 <thead className="text-muted">
                   <tr className="border-b border-rule">
                     <th className="py-1.5 pr-3 font-bold">Topic</th>
@@ -225,8 +226,9 @@ export default function AdminImport({ onImported }) {
                       <td className="py-1.5 pr-3 text-no">{topic.false}</td>
                     </tr>
                   ))}
-                </tbody>
-              </table>
+                  </tbody>
+                </table>
+              </div>
             </>
           )}
         </div>
