@@ -25,7 +25,7 @@ VITE_SUPABASE_ANON_KEY=your-anon-key`}
 
 function Shell() {
   const { profile, signOut } = useAuth()
-  const { reload } = useStudy()
+  const { afterImport } = useStudy()
   const [tab, setTab] = useState('study')
   const isAdmin = profile?.is_admin === true
 
@@ -68,9 +68,9 @@ function Shell() {
 
       {tab === 'import' && isAdmin ? (
         <AdminImport
-          onImported={() => {
+          onImported={(importedBankId) => {
             setTab('study')
-            void reload()
+            void afterImport(importedBankId)
           }}
         />
       ) : (

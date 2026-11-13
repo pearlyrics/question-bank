@@ -213,6 +213,15 @@ export function StudyProvider({ children }) {
     }
   }, [userId, bankId, loadBank])
 
+  // The bank list is otherwise only fetched at login, so a chapter imported
+  // mid-session would stay invisible until a page reload.
+  const refreshBanks = useCallback(async () => {
+    const bankList = await fetchBanks()
+    setBanks(bankList)
+    cacheSet(cacheKey('banks'), bankList)
+    return bankList
+  }, [])
+
   // ------------------------------------------------------------- mutations
   const commitRows = useCallback(
     (updater) => {
@@ -382,6 +391,24 @@ export function StudyProvider({ children }) {
     [bankId, loadBank, queuePrefs],
   )
 
+  // Called when an import finishes: pick up the new chapter and switch to it.
+  const afterImport = useCallback(
+    async (importedBankId) => {
+      const bankList = await refreshBanks()
+      const target = bankList.some((entry) => entry.id === importedBankId)
+        ? importedBankId
+        : bankId
+      if (!target) return
+      if (target !== bankId) {
+        setBankId(target)
+        latest.current = { ...latest.current, bankId: target }
+        queuePrefs()
+      }
+      await loadBank(target, { showLoading: true })
+    },
+    [bankId, refreshBanks, loadBank, queuePrefs],
+  )
+
   const resetBank = useCallback(
     async (mode) => {
       if (!bankId) return
@@ -413,11 +440,14 @@ export function StudyProvider({ children }) {
       changeSetSize,
       changeBank,
       resetBank,
+      refreshBanks,
+      afterImport,
       reload: () => loadBank(bankId, { showLoading: true }),
     }),
     [
       status, error, banks, bankId, questions, topics, rows, setSize, view, sync, profile,
-      answer, toggleFlag, redo, updateView, changeSetSize, changeBank, resetBank, loadBank,
+      answer, toggleFlag, redo, updateView, changeSetSize, changeBank, resetBank,
+      refreshBanks, afterImport, loadBank,
     ],
   )
 

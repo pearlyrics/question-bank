@@ -152,14 +152,14 @@ export default function StudyView() {
 
       {banks.length > 1 && (
         <div className="flex flex-wrap items-center gap-2">
-          <label htmlFor="bank" className="text-[13px] text-muted">
-            Bank
+          <label htmlFor="bank" className="font-mono text-[13px] text-muted">
+            Chapter
           </label>
           <select
             id="bank"
             value={bank?.id ?? ''}
             onChange={(event) => changeBank(event.target.value)}
-            className="touch max-w-full rounded border border-rule-strong bg-sheet px-2.5 py-1.5 text-ink"
+            className="touch max-w-full flex-1 rounded border border-rule-strong bg-sheet px-2.5 py-1.5 text-ink sm:flex-none"
           >
             {banks.map((entry) => (
               <option key={entry.id} value={entry.id}>
@@ -167,6 +167,9 @@ export default function StudyView() {
               </option>
             ))}
           </select>
+          <span className="font-mono text-[12px] text-muted tabular-nums">
+            {banks.length} chapters · each keeps its own score, mistakes and flags
+          </span>
         </div>
       )}
 

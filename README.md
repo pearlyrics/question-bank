@@ -43,6 +43,23 @@ npm run convert-legacy -- muscle-bank-2.html data/muscle-tissue-ii.json
 Then open **Import**, drop `data/muscle-tissue-ii.json` in, check the batch, and
 import it.
 
+## Switching chapters
+
+Each import with a new `slug` creates a separate chapter. Once there's more
+than one, a **Chapter** menu appears above the set buttons. Switching is
+instant and each chapter keeps its own score, mistakes, flags, set size and
+even which tab and sheet you were last on.
+
+A freshly imported chapter appears in that menu straight away and the app
+switches to it — no page reload needed.
+
+To remove a chapter entirely (questions and everyone's progress for it, via
+cascade), run in the SQL editor:
+
+```sql
+delete from banks where slug = 'the-slug';
+```
+
 ## Adding ~400 questions each week
 
 Generate a file in this shape and import it the same way:

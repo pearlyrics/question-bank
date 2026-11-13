@@ -64,7 +64,7 @@ export default function AdminImport({ onImported }) {
       setResult(report)
       setChecked(null)
       setText('')
-      onImported?.()
+      onImported?.(report.bank_id)
     } catch (error) {
       setFailure(error.message)
     } finally {
@@ -243,6 +243,9 @@ export default function AdminImport({ onImported }) {
           <h2 className="m-0 font-display text-lg font-semibold">
             Imported into {result.bank_title}
           </h2>
+          <p className="m-0 text-[13px] text-muted">
+            Now showing in Study — pick it any time from the Chapter menu.
+          </p>
           <div className="flex flex-wrap gap-2">
             <span className="stat-chip">
               Added <b className="font-medium text-yes">{result.added}</b>
