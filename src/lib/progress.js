@@ -6,7 +6,7 @@
 //      and only ever by Exam sheets — working through By topic, Mistakes or
 //      Flagged must not establish a first run or move the score.
 //   2. attempt_count / wrong_count advance only for a new attemptId.
-//   3. active[view] and last_correct always track the newest answer. `active`
+//   3. active[view] tracks the newest answer in that section. `active`
 //      is keyed by section, so Exam sheets and Mistakes keep separate passes
 //      of the same question.
 
@@ -18,7 +18,7 @@ export function emptyRow(questionId, bankId) {
     first_correct: null,
     first_at: null,
     active: {},
-    last_correct: null,
+    is_mistake: false,
     attempt_count: 0,
     wrong_count: 0,
     flagged: false,
@@ -42,7 +42,9 @@ export function applyAnswer(row, { questionId, bankId, choice, correct, attemptI
     first_at: isFirst ? at : base.first_at,
     // Rule 3 — only this section's entry.
     active: { ...base.active, [view]: choice },
-    last_correct: correct,
+    // Wrong anywhere makes it a mistake; only the Mistakes tab clears it, so
+    // redoing a question in Exam sheets can't empty the Mistakes list.
+    is_mistake: !correct ? true : view === 'mistakes' ? false : base.is_mistake,
     // Rule 2.
     attempt_count: base.attempt_count + (isReplay ? 0 : 1),
     wrong_count: base.wrong_count + (!isReplay && !correct ? 1 : 0),

@@ -82,9 +82,9 @@ describe('firstRunScore', () => {
 describe('lists', () => {
   const ids = ['q1', 'q2', 'q3']
   const rows = rowsFrom([
-    { question_id: 'q1', first_at: 'x', first_correct: false, last_correct: false, flagged: false, attempt_count: 1, wrong_count: 1, active: { sets: true } },
-    { question_id: 'q2', first_at: 'x', first_correct: true, last_correct: true, flagged: true, attempt_count: 1, wrong_count: 0, active: {} },
-    { question_id: 'q3', first_at: null, first_correct: null, last_correct: null, flagged: true, attempt_count: 0, wrong_count: 0, active: { mistakes: false } },
+    { question_id: 'q1', first_at: 'x', first_correct: false, is_mistake: true, flagged: false, attempt_count: 1, wrong_count: 1, active: { sets: true } },
+    { question_id: 'q2', first_at: 'x', first_correct: true, is_mistake: false, flagged: true, attempt_count: 1, wrong_count: 0, active: {} },
+    { question_id: 'q3', first_at: null, first_correct: null, is_mistake: false, flagged: true, attempt_count: 0, wrong_count: 0, active: { mistakes: false } },
   ])
 
   it('lists mistakes until they are answered correctly', () => {

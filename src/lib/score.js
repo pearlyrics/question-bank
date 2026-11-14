@@ -40,9 +40,9 @@ export function reviewAccuracy(questionIds, rowsById) {
   }
 }
 
-// A question sits in Mistakes until it is answered correctly.
+// A question sits in Mistakes until it is answered correctly *there*.
 export function mistakeIds(questionIds, rowsById) {
-  return questionIds.filter((id) => rowsById.get(id)?.last_correct === false)
+  return questionIds.filter((id) => rowsById.get(id)?.is_mistake === true)
 }
 
 export function flaggedIds(questionIds, rowsById) {

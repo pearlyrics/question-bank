@@ -97,10 +97,10 @@ describe('topic mode', () => {
 describe('mistakes and flagged modes', () => {
   // q0..q19 are set 0 at size 20; q20+ belong to later sets.
   const rows = new Map([
-    ['q1', { question_id: 'q1', last_correct: false, flagged: false }],
-    ['q2', { question_id: 'q2', last_correct: true, flagged: true }],
-    ['q3', { question_id: 'q3', last_correct: false, flagged: false }],
-    ['q25', { question_id: 'q25', last_correct: false, flagged: true }],
+    ['q1', { question_id: 'q1', is_mistake: true, flagged: false }],
+    ['q2', { question_id: 'q2', is_mistake: false, flagged: true }],
+    ['q3', { question_id: 'q3', is_mistake: true, flagged: false }],
+    ['q25', { question_id: 'q25', is_mistake: true, flagged: true }],
   ])
 
   it('lists only mistakes from the set in view', () => {
@@ -149,7 +149,7 @@ describe('mistakes and flagged modes', () => {
   // Without a snapshot, answering a mistake correctly would drop the row from
   // the list mid-sheet and renumber everything below it.
   it('keeps a frozen snapshot even after the mistakes are fixed', () => {
-    const fixed = new Map(rows).set('q1', { question_id: 'q1', last_correct: true })
+    const fixed = new Map(rows).set('q1', { question_id: 'q1', is_mistake: false })
     const built = buildView({
       questions,
       rows: fixed,
@@ -176,7 +176,7 @@ describe('mistakes and flagged modes', () => {
 
   it('pages long lists and clamps an out-of-range page', () => {
     const many = new Map(
-      questions.map((question) => [question.id, { question_id: question.id, last_correct: false }]),
+      questions.map((question) => [question.id, { question_id: question.id, is_mistake: true }]),
     )
     const built = buildView({
       questions,

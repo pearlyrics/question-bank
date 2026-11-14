@@ -69,7 +69,7 @@ export async function fetchResponses(bankId) {
       .from('responses')
       .select(
         'question_id, bank_id, first_choice, first_correct, first_at, active, ' +
-          'last_correct, attempt_count, wrong_count, flagged, last_attempt_id',
+          'is_mistake, attempt_count, wrong_count, flagged, last_attempt_id',
       )
       .eq('bank_id', bankId),
   )

@@ -159,10 +159,14 @@ did is still there.
 **Only Exam sheets scores.** `first_choice`/`first_correct`/`first_at` are
 written once *and* only when the answer comes from Exam sheets, so working
 through By topic, Mistakes or Flagged can never establish a first run or move
-your score — not even for a question you had never answered before. Everything
-else does update from any section: `last_correct`, so a question leaves
-Mistakes as soon as you get it right, and the attempt and wrong counts, so
-"missed 3×" stays honest.
+your score — not even for a question you had never answered before. The attempt and wrong counts do still update from any section, so "missed 3×"
+stays honest.
+
+**Mistakes owns its own list.** A question becomes a mistake when it is
+answered wrong anywhere, and stops being one only when it is answered
+correctly *in the Mistakes tab*. Redoing it in Exam sheets — right or wrong —
+leaves the Mistakes list alone. Flagged already worked this way, a flag being
+set and cleared by hand.
 
 Answers you give stay on screen when you switch tabs or sets and come back — a
 pass in progress is never thrown away. To take a list again, press **Redo these**

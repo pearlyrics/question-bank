@@ -42,7 +42,8 @@ describe('first-attempt record', () => {
     expect(row.first_at).toBe(firstRun.first_at)
     // The live state still tracks the newest answer.
     expect(row.active.sets).toBe(true)
-    expect(row.last_correct).toBe(true)
+    // ...and redoing it in Exam sheets leaves it in the Mistakes list.
+    expect(row.is_mistake).toBe(true)
     expect(row.attempt_count).toBe(26)
   })
 
@@ -69,7 +70,7 @@ describe('only Exam sheets establishes a first run', () => {
       // the attempt itself is still history, and the pass is still shown
       expect(row.attempt_count).toBe(1)
       expect(row.active[view]).toBe(true)
-      expect(row.last_correct).toBe(true)
+      expect(row.is_mistake).toBe(false)
     }
   })
 
@@ -86,8 +87,43 @@ describe('only Exam sheets establishes a first run', () => {
     }
     expect(row.first_correct).toBe(false)
     expect(row.first_at).toBe('2026-01-01T00:00:00.000Z')
-    // a mistake answered correctly elsewhere still leaves the Mistakes list
-    expect(row.last_correct).toBe(true)
+    // (the loop answers correctly in the Mistakes tab, which does clear the
+    // mistake — that rule has its own tests below)
+  })
+})
+
+describe('Mistakes owns its own list', () => {
+  // The bug: redoing a question in Exam sheets and getting it right emptied
+  // the Mistakes tab, because one shared flag tracked the latest answer
+  // anywhere.
+  it('stays a mistake when it is answered correctly in Exam sheets', () => {
+    let row = answer(undefined, { choice: true, correct: false, attemptId: 'a1', view: 'sets' })
+    expect(row.is_mistake).toBe(true)
+
+    row = applyClearActive(row, 'sets')
+    row = answer(row, { choice: false, correct: true, attemptId: 'a2', view: 'sets' })
+    expect(row.is_mistake).toBe(true)
+  })
+
+  it('stops being a mistake only when answered correctly in Mistakes', () => {
+    let row = answer(undefined, { choice: true, correct: false, attemptId: 'a1', view: 'sets' })
+    row = answer(row, { choice: false, correct: true, attemptId: 'a2', view: 'mistakes' })
+    expect(row.is_mistake).toBe(false)
+  })
+
+  it('goes back to being a mistake if it is got wrong again there', () => {
+    let row = answer(undefined, { choice: true, correct: false, attemptId: 'a1', view: 'sets' })
+    row = answer(row, { choice: false, correct: true, attemptId: 'a2', view: 'mistakes' })
+    row = answer(row, { choice: true, correct: false, attemptId: 'a3', view: 'mistakes' })
+    expect(row.is_mistake).toBe(true)
+  })
+
+  it('is not cleared by getting it right under By topic or Flagged', () => {
+    for (const view of ['topic', 'flagged']) {
+      let row = answer(undefined, { choice: true, correct: false, attemptId: 'a1', view: 'sets' })
+      row = answer(row, { choice: false, correct: true, attemptId: 'a2', view })
+      expect(row.is_mistake).toBe(true)
+    }
   })
 })
 
