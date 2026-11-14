@@ -148,12 +148,6 @@ export default function StudyView() {
               {setScore.pct === null ? '–' : `${setScore.pct}%`}
             </b>
           </span>
-          <span className="stat-chip">
-            Mistakes <b className="font-medium text-no">{setMistakes.length}</b>
-          </span>
-          <span className="stat-chip">
-            Flagged <b className="font-medium text-flag">{setFlags.length}</b>
-          </span>
         </div>
       </header>
 
@@ -228,7 +222,7 @@ export default function StudyView() {
       </nav>
 
       {/* Picker: sheets within the set, a topic, or list pages. */}
-      <div className="flex flex-wrap items-center gap-1.5">
+      <div className="flex flex-wrap items-center gap-1.5 py-2.5">
         {view.mode === 'sets' &&
           chunk(setIds, SHEET_SIZE).map((ids, index) => {
             const done = ids.filter((id) => rows.get(id)?.first_at).length
