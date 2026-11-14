@@ -222,7 +222,7 @@ export default function StudyView() {
       </nav>
 
       {/* Picker: sheets within the set, a topic, or list pages. */}
-      <div className="flex flex-wrap items-center gap-1.5 py-2.5">
+      <div className="chip-rail flex flex-wrap items-center gap-1.5 py-2.5">
         {view.mode === 'sets' &&
           chunk(setIds, SHEET_SIZE).map((ids, index) => {
             const done = ids.filter((id) => rows.get(id)?.first_at).length
@@ -296,28 +296,29 @@ export default function StudyView() {
       </div>
 
         {built.ids.length > 0 && (
-          <div className="sheet-card flex flex-wrap items-center justify-between gap-x-3 gap-y-2 px-3 py-3 sm:px-4 sm:py-3.5">
-              <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                <span className="font-display text-xl font-semibold">
-                  {built.title}
-                  {view.mode === 'mistakes' || view.mode === 'flagged' ? (
-                    <span className="ml-2 font-body text-sm font-normal text-muted">
-                      Set {setIndex + 1}
-                    </span>
-                  ) : null}
-                </span>
-                <span className="font-mono text-[13px] tabular-nums">
-                  First run {sheetScore.correct}/{sheetScore.answered}
-                  {sheetScore.pct === null ? '' : ` · ${sheetScore.pct}%`}
-                  <span className="text-muted">
-                    {' '}
-                    · this pass {passCorrect}/{pass}
-                    {pass < built.ids.length ? ` · ${built.ids.length - pass} left` : ''}
+          <div className="sheet-card flex flex-wrap items-center gap-x-3 gap-y-1 px-3 py-2.5 sm:px-4 sm:py-3.5">
+              <span className="order-1 font-display text-xl font-semibold">
+                {built.title}
+                {view.mode === 'mistakes' || view.mode === 'flagged' ? (
+                  <span className="ml-2 font-body text-sm font-normal text-muted">
+                    Set {setIndex + 1}
                   </span>
-                </span>
-              </div>
+                ) : null}
+              </span>
 
-              <div className="flex flex-wrap gap-2">
+              {/* Narrow: its own full-width row, under the buttons.
+                  Wide: inline, between the title and the buttons. */}
+              <span className="order-3 basis-full font-mono text-[13px] tabular-nums sm:order-2 sm:basis-auto">
+                1st run {sheetScore.correct}/{sheetScore.answered}
+                {sheetScore.pct === null ? '' : ` · ${sheetScore.pct}%`}
+                <span className="text-muted">
+                  {' '}
+                  · this pass {passCorrect}/{pass}
+                  {pass < built.ids.length ? ` · ${built.ids.length - pass} left` : ''}
+                </span>
+              </span>
+
+              <div className="order-2 ml-auto flex gap-2 sm:order-3">
                 <button
                   type="button"
                   onClick={() => handleRedo(built.ids)}
@@ -351,7 +352,7 @@ export default function StudyView() {
                   </button>
                 )}
               </div>
-            </div>
+          </div>
         )}
       </div>
 

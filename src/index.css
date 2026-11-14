@@ -155,6 +155,27 @@
   }
 }
 
+/* Sheet numbers on a phone: one scrolling rail rather than four wrapped rows.
+   The mask fades the right edge so it reads as "there is more that way". */
+@media (max-width: 639px) {
+  .chip-rail {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent 100%);
+  }
+
+  .chip-rail::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Chips keep their size instead of being squeezed to fit. */
+  .chip-rail > * {
+    flex: 0 0 auto;
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .feedback-in {
     animation: feedback-in 0.18s ease-out;
