@@ -53,10 +53,10 @@ export function seenCount(questionIds, rowsById) {
   return questionIds.filter((id) => rowsById.get(id)?.first_at).length
 }
 
-// Answers revealed in the current pass.
-export function activeCount(questionIds, rowsById) {
+// Answers revealed in this section's current pass.
+export function activeCount(questionIds, rowsById, view) {
   return questionIds.filter((id) => {
-    const choice = rowsById.get(id)?.active_choice
+    const choice = rowsById.get(id)?.active?.[view]
     return choice === true || choice === false
   }).length
 }

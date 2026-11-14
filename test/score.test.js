@@ -17,6 +17,7 @@ function answerQuestion(rows, id, { choice, correct, attemptId }) {
       correct,
       attemptId,
       now: '2026-01-01T00:00:00.000Z',
+      view: 'sets',
     }),
   )
   return next
@@ -46,7 +47,7 @@ describe('firstRunScore', () => {
 
     // Redo both, getting everything right this time.
     for (const id of ['q1', 'q2']) {
-      const cleared = applyClearActive(rows.get(id))
+      const cleared = applyClearActive(rows.get(id), 'sets')
       rows = new Map(rows).set(id, cleared)
       rows = answerQuestion(rows, id, { choice: true, correct: true, attemptId: `redo-${id}` })
     }
@@ -60,9 +61,9 @@ describe('firstRunScore', () => {
 describe('lists', () => {
   const ids = ['q1', 'q2', 'q3']
   const rows = rowsFrom([
-    { question_id: 'q1', first_at: 'x', first_correct: false, last_correct: false, flagged: false, attempt_count: 1, wrong_count: 1, active_choice: true },
-    { question_id: 'q2', first_at: 'x', first_correct: true, last_correct: true, flagged: true, attempt_count: 1, wrong_count: 0, active_choice: null },
-    { question_id: 'q3', first_at: null, first_correct: null, last_correct: null, flagged: true, attempt_count: 0, wrong_count: 0, active_choice: null },
+    { question_id: 'q1', first_at: 'x', first_correct: false, last_correct: false, flagged: false, attempt_count: 1, wrong_count: 1, active: { sets: true } },
+    { question_id: 'q2', first_at: 'x', first_correct: true, last_correct: true, flagged: true, attempt_count: 1, wrong_count: 0, active: {} },
+    { question_id: 'q3', first_at: null, first_correct: null, last_correct: null, flagged: true, attempt_count: 0, wrong_count: 0, active: { mistakes: false } },
   ])
 
   it('lists mistakes until they are answered correctly', () => {
@@ -75,6 +76,9 @@ describe('lists', () => {
 
   it('counts seen and revealed separately', () => {
     expect(seenCount(ids, rows)).toBe(2)
-    expect(activeCount(ids, rows)).toBe(1)
+    expect(activeCount(ids, rows, 'sets')).toBe(1)
+    // q3's revealed answer belongs to Mistakes, not Exam sheets.
+    expect(activeCount(ids, rows, 'mistakes')).toBe(1)
+    expect(activeCount(ids, rows, 'flagged')).toBe(0)
   })
 })

@@ -226,7 +226,7 @@ export function StudyProvider({ children }) {
   )
 
   const answer = useCallback(
-    (questionId, choice) => {
+    (questionId, choice, viewMode) => {
       const question = questions.find((entry) => entry.id === questionId)
       if (!question) return
       const correct = choice === question.answer
@@ -244,6 +244,7 @@ export function StudyProvider({ children }) {
             correct,
             attemptId,
             now: at,
+            view: viewMode,
           }),
         )
         return next
@@ -257,6 +258,7 @@ export function StudyProvider({ children }) {
         correct,
         attempt_id: attemptId,
         at,
+        view: viewMode,
       })
     },
     [questions, commitRows, enqueue],
@@ -282,18 +284,19 @@ export function StudyProvider({ children }) {
     [questions, rows, commitRows, enqueue],
   )
 
+  // Scoped to one section: redoing Mistakes leaves the Exam sheets pass alone.
   const redo = useCallback(
-    (questionIds) => {
+    (questionIds, viewMode) => {
       if (questionIds.length === 0) return
       commitRows((current) => {
         const next = new Map(current)
         for (const id of questionIds) {
-          const cleared = applyClearActive(current.get(id))
+          const cleared = applyClearActive(current.get(id), viewMode)
           if (cleared) next.set(id, cleared)
         }
         return next
       })
-      enqueue({ kind: 'clear', question_ids: questionIds })
+      enqueue({ kind: 'clear', question_ids: questionIds, view: viewMode })
     },
     [commitRows, enqueue],
   )

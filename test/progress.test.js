@@ -4,8 +4,8 @@ import { applyAnswer, applyClearActive, applyFlag, emptyRow, replayOps } from '.
 const Q = 'q1'
 const BANK = 'b1'
 
-function answer(row, { choice, correct, attemptId, now = '2026-01-01T00:00:00.000Z' }) {
-  return applyAnswer(row, { questionId: Q, bankId: BANK, choice, correct, attemptId, now })
+function answer(row, { choice, correct, attemptId, now = '2026-01-01T00:00:00.000Z', view = 'sets' }) {
+  return applyAnswer(row, { questionId: Q, bankId: BANK, choice, correct, attemptId, now, view })
 }
 
 describe('first-attempt record', () => {
@@ -28,7 +28,7 @@ describe('first-attempt record', () => {
     }
 
     for (let i = 0; i < 25; i++) {
-      row = applyClearActive(row)
+      row = applyClearActive(row, 'sets')
       row = answer(row, {
         choice: true,
         correct: true,
@@ -41,7 +41,7 @@ describe('first-attempt record', () => {
     expect(row.first_correct).toBe(false)
     expect(row.first_at).toBe(firstRun.first_at)
     // The live state still tracks the newest answer.
-    expect(row.active_choice).toBe(true)
+    expect(row.active.sets).toBe(true)
     expect(row.last_correct).toBe(true)
     expect(row.attempt_count).toBe(26)
   })
@@ -74,7 +74,7 @@ describe('replay safety', () => {
 
   it('is idempotent when a whole queue is replayed over a server snapshot', () => {
     const ops = [
-      { kind: 'answer', question_id: Q, bank_id: BANK, choice: true, correct: true, attempt_id: 'a1', at: '2026-01-01T00:00:00.000Z' },
+      { kind: 'answer', question_id: Q, bank_id: BANK, choice: true, correct: true, attempt_id: 'a1', at: '2026-01-01T00:00:00.000Z', view: 'sets' },
       { kind: 'flag', question_id: Q, bank_id: BANK, flagged: true },
     ]
     const once = replayOps(new Map(), ops)
@@ -86,14 +86,33 @@ describe('replay safety', () => {
 describe('clearing the current pass', () => {
   it('hides the revealed answer without touching history', () => {
     const answered = answer(undefined, { choice: true, correct: true, attemptId: 'a1' })
-    const cleared = applyClearActive(answered)
-    expect(cleared.active_choice).toBeNull()
+    const cleared = applyClearActive(answered, 'sets')
+    expect(cleared.active).toEqual({})
     expect(cleared.first_correct).toBe(true)
     expect(cleared.attempt_count).toBe(1)
   })
 
   it('leaves an untouched row alone', () => {
     const row = emptyRow(Q, BANK)
-    expect(applyClearActive(row)).toBe(row)
+    expect(applyClearActive(row, 'sets')).toBe(row)
+  })
+
+  // The bug this replaced: one shared value meant redoing Mistakes wiped the
+  // answer you were looking at under Exam sheets.
+  it('clears only the section asked for', () => {
+    let row = answer(undefined, { choice: true, correct: true, attemptId: 'a1', view: 'sets' })
+    row = answer(row, { choice: false, correct: false, attemptId: 'a2', view: 'mistakes' })
+    expect(row.active).toEqual({ sets: true, mistakes: false })
+
+    const afterRedo = applyClearActive(row, 'mistakes')
+    expect(afterRedo.active).toEqual({ sets: true })
+    expect(afterRedo.first_correct).toBe(true)
+  })
+
+  it('keeps each section’s answer to the same question apart', () => {
+    let row = answer(undefined, { choice: true, correct: true, attemptId: 'a1', view: 'sets' })
+    row = answer(row, { choice: false, correct: false, attemptId: 'a2', view: 'flagged' })
+    expect(row.active.sets).toBe(true)
+    expect(row.active.flagged).toBe(false)
   })
 })

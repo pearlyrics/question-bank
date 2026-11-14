@@ -139,6 +139,11 @@ tabs, the sheet numbers and the sheet's control bar pin to the top of the
 window and the questions scroll beneath them — so the score and the Redo /
 Next buttons stay in reach however far down the sheet you are.
 
+Each tab keeps its own pass. A question can appear under Exam sheets, By topic
+and Mistakes at once, and answering or pressing Redo in one of them leaves the
+others untouched — `responses.active` is a small map keyed by section rather
+than a single value.
+
 Answers you give stay on screen when you switch tabs or sets and come back — a
 pass in progress is never thrown away. To take a list again, press **Redo these**
 (it appears at the top of the sheet once every row is answered, and always in the

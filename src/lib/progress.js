@@ -4,7 +4,9 @@
 // implemented identically in both places:
 //   1. first_choice / first_correct / first_at are written once, never changed.
 //   2. attempt_count / wrong_count advance only for a new attemptId.
-//   3. active_choice and last_correct always track the newest answer.
+//   3. active[view] and last_correct always track the newest answer. `active`
+//      is keyed by section, so Exam sheets and Mistakes keep separate passes
+//      of the same question.
 
 export function emptyRow(questionId, bankId) {
   return {
@@ -13,7 +15,7 @@ export function emptyRow(questionId, bankId) {
     first_choice: null,
     first_correct: null,
     first_at: null,
-    active_choice: null,
+    active: {},
     last_correct: null,
     attempt_count: 0,
     wrong_count: 0,
@@ -22,7 +24,7 @@ export function emptyRow(questionId, bankId) {
   }
 }
 
-export function applyAnswer(row, { questionId, bankId, choice, correct, attemptId, now }) {
+export function applyAnswer(row, { questionId, bankId, choice, correct, attemptId, now, view }) {
   const base = row ?? emptyRow(questionId, bankId)
   const isReplay = base.last_attempt_id === attemptId
   const at = now ?? new Date().toISOString()
@@ -33,8 +35,8 @@ export function applyAnswer(row, { questionId, bankId, choice, correct, attemptI
     first_choice: base.first_at === null ? choice : base.first_choice,
     first_correct: base.first_at === null ? correct : base.first_correct,
     first_at: base.first_at === null ? at : base.first_at,
-    // Rule 3.
-    active_choice: choice,
+    // Rule 3 — only this section's entry.
+    active: { ...base.active, [view]: choice },
     last_correct: correct,
     // Rule 2.
     attempt_count: base.attempt_count + (isReplay ? 0 : 1),
@@ -48,9 +50,11 @@ export function applyFlag(row, { questionId, bankId, flagged }) {
   return { ...base, flagged }
 }
 
-export function applyClearActive(row) {
-  if (!row || row.active_choice === null) return row
-  return { ...row, active_choice: null }
+export function applyClearActive(row, view) {
+  if (!row || !(view in (row.active ?? {}))) return row
+  const active = { ...row.active }
+  delete active[view]
+  return { ...row, active }
 }
 
 // Replays queued ops on top of a freshly fetched server snapshot, so answers
@@ -68,6 +72,7 @@ export function replayOps(rowsById, ops) {
           correct: op.correct,
           attemptId: op.attempt_id,
           now: op.at,
+          view: op.view,
         }),
       )
     } else if (op.kind === 'flag') {
@@ -81,7 +86,7 @@ export function replayOps(rowsById, ops) {
       )
     } else if (op.kind === 'clear') {
       for (const id of op.question_ids) {
-        const cleared = applyClearActive(next.get(id))
+        const cleared = applyClearActive(next.get(id), op.view)
         if (cleared) next.set(id, cleared)
       }
     }

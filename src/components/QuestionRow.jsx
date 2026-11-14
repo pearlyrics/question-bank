@@ -4,8 +4,9 @@ const FlagIcon = () => (
   </svg>
 )
 
-export default function QuestionRow({ question, row, number, topicLabel, onAnswer, onFlag, showCleared }) {
-  const choice = row?.active_choice
+export default function QuestionRow({ question, row, number, topicLabel, view, onAnswer, onFlag, showCleared }) {
+  // Each section keeps its own pass, so read this section's entry.
+  const choice = row?.active?.[view]
   const answered = choice === true || choice === false
   const correct = answered && choice === question.answer
   const flagged = row?.flagged === true

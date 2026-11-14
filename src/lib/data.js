@@ -57,7 +57,7 @@ export async function fetchResponses(bankId) {
     supabase
       .from('responses')
       .select(
-        'question_id, bank_id, first_choice, first_correct, first_at, active_choice, ' +
+        'question_id, bank_id, first_choice, first_correct, first_at, active, ' +
           'last_correct, attempt_count, wrong_count, flagged, last_attempt_id',
       )
       .eq('bank_id', bankId),
@@ -93,6 +93,7 @@ export async function sendOp(op, userId) {
           p_question_id: op.question_id,
           p_choice: op.choice,
           p_attempt_id: op.attempt_id,
+          p_view: op.view,
         }),
       )
     case 'flag':
@@ -100,7 +101,7 @@ export async function sendOp(op, userId) {
         supabase.rpc('set_flag', { p_question_id: op.question_id, p_flagged: op.flagged }),
       )
     case 'clear':
-      return run(supabase.rpc('clear_active', { p_question_ids: op.question_ids }))
+      return run(supabase.rpc('clear_active', { p_question_ids: op.question_ids, p_view: op.view }))
     case 'prefs':
       return run(
         supabase.from('user_prefs').upsert(

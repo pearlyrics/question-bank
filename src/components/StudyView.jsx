@@ -53,7 +53,7 @@ export default function StudyView() {
   }
 
   function handleRedo(ids) {
-    redo(ids)
+    redo(ids, view.mode)
     scrollToSheetTop()
   }
 
@@ -100,13 +100,15 @@ export default function StudyView() {
   const setFlags = flaggedIds(setIds, rows)
 
   const sheetScore = firstRunScore(built.ids, rows)
-  const pass = activeCount(built.ids, rows)
+  const pass = activeCount(built.ids, rows, view.mode)
   const passCorrect = built.ids.filter((id) => {
     const row = rows.get(id)
-    return row?.active_choice !== null && row?.active_choice === questionById.get(id)?.answer
+    return row?.active?.[view.mode] === questionById.get(id)?.answer
   }).length
 
   const isList = view.mode === 'mistakes' || view.mode === 'flagged'
+  // A first run only means something for a fixed sheet of questions.
+  const showFirstRun = view.mode === 'sets'
 
   const sets = useMemo(() => {
     const total = setCount(questions.length, setSize)
@@ -321,14 +323,14 @@ export default function StudyView() {
               <span className="order-3 basis-full border-t border-rule pt-2 font-mono text-[13px] tabular-nums sm:order-2 sm:basis-auto sm:border-t-0 sm:pt-0">
                 {/* Mistakes and Flagged are lists you are retaking, so a first
                     run for the list as a whole says nothing useful. */}
-                {isList ? null : (
+                {showFirstRun ? (
                   <>
                     1st run {sheetScore.correct}/{sheetScore.answered}
                     {sheetScore.pct === null ? '' : ` · ${sheetScore.pct}%`}
                     {' · '}
                   </>
-                )}
-                <span className={isList ? '' : 'text-muted'}>
+                ) : null}
+                <span className={showFirstRun ? 'text-muted' : ''}>
                   this pass {passCorrect}/{pass}
                   {pass < built.ids.length ? ` · ${built.ids.length - pass} left` : ''}
                 </span>
@@ -405,7 +407,8 @@ export default function StudyView() {
                   row={rows.get(id)}
                   number={built.firstNumber + index}
                   topicLabel={topicById.get(question.topic_id)?.label ?? ''}
-                  onAnswer={answer}
+                  view={view.mode}
+                  onAnswer={(id, choice) => answer(id, choice, view.mode)}
                   onFlag={toggleFlag}
                   showCleared={view.mode === 'mistakes'}
                 />
