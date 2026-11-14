@@ -132,14 +132,12 @@ export default function StudyView() {
         ← All chapters
       </Link>
 
-      <header className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 className="m-0 font-display text-[clamp(26px,4vw,36px)] leading-tight font-semibold text-balance">
-            {bank?.title ?? 'Question Bank'}
-          </h1>
-          {bank?.source && <p className="mt-1 text-sm text-muted">{bank.source}</p>}
-        </div>
-        <div className="flex flex-wrap gap-1.5 sm:gap-2">
+      <header>
+        <h1 className="m-0 font-display text-[clamp(26px,4vw,36px)] leading-tight font-semibold text-balance">
+          {bank?.title ?? 'Question Bank'}
+        </h1>
+        {bank?.source && <p className="mt-1 text-sm text-muted">{bank.source}</p>}
+        <div className="mt-3 flex flex-wrap gap-1.5 sm:gap-2">
           <span className="stat-chip">
             Set {setIndex + 1} · Seen{' '}
             <b className="font-medium text-accent">{setScore.answered}</b>/{setIds.length}
