@@ -160,6 +160,25 @@
   }
 }
 
+/* Tabs on a phone: a bigger Mistakes or Flagged count used to push "By topic"
+   onto a second line. Keep them on one line and let the row scroll instead. */
+@media (max-width: 639px) {
+  .tab-rail {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .tab-rail::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tab-rail > * {
+    flex: 0 0 auto;
+  }
+}
+
 /* Sheet numbers on a phone: one scrolling rail rather than four wrapped rows.
    The mask fades the right edge so it reads as "there is more that way". */
 @media (max-width: 639px) {

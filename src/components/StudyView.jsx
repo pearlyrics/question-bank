@@ -76,7 +76,7 @@ export default function StudyView() {
   //
   // It deliberately does NOT clear the answers already showing: leaving for
   // another tab and coming back must not throw away a pass in progress.
-  // Clearing happens only when "Redo these" is pressed.
+  // Clearing happens only when "Redo" is pressed.
   useEffect(() => {
     if (view.mode !== 'mistakes' && view.mode !== 'flagged') {
       setSnapshot(null)
@@ -105,6 +105,8 @@ export default function StudyView() {
     const row = rows.get(id)
     return row?.active_choice !== null && row?.active_choice === questionById.get(id)?.answer
   }).length
+
+  const isList = view.mode === 'mistakes' || view.mode === 'flagged'
 
   const sets = useMemo(() => {
     const total = setCount(questions.length, setSize)
@@ -193,7 +195,7 @@ export default function StudyView() {
           the questions scroll under a bar that keeps the score and the
           controls in reach. */}
       <div ref={stickyRef} className="sticky top-0 z-10 -mx-1 -mb-3 bg-bg px-1 pt-2 sm:-mb-4">
-      <nav role="tablist" className="flex flex-wrap gap-1.5 border-b-2 border-rule-strong">
+      <nav role="tablist" className="tab-rail flex flex-wrap gap-0.5 border-b-2 border-rule-strong sm:gap-1.5">
         {TABS.map((tab) => {
           const selected = view.mode === tab.mode
           const count =
@@ -212,7 +214,7 @@ export default function StudyView() {
                 updateView({ mode: tab.mode, listPage: 0 })
                 scrollToSheetTop()
               }}
-              className={`touch -mb-0.5 border-b-[3px] px-2.5 py-2.5 text-[15px] font-bold sm:px-3.5 ${
+              className={`touch -mb-0.5 whitespace-nowrap border-b-[3px] px-2 py-2.5 text-[15px] font-bold sm:px-3.5 ${
                 selected ? 'border-accent text-ink' : 'border-transparent text-muted'
               }`}
             >
@@ -220,7 +222,7 @@ export default function StudyView() {
               <span className="sm:hidden">{tab.short}</span>
               {count !== null && (
                 <span
-                  className={`ml-1.5 rounded-[10px] px-1.5 py-px font-mono text-xs font-medium ${
+                  className={`ml-1 rounded-[10px] px-1 py-px font-mono text-xs font-medium ${
                     tab.tone === 'mis' ? 'bg-no-soft text-no' : 'bg-flag-soft text-flag'
                   }`}
                 >
@@ -312,11 +314,17 @@ export default function StudyView() {
               {/* Narrow: its own full-width row, under the buttons.
                   Wide: inline, between the title and the buttons. */}
               <span className="order-3 basis-full border-t border-rule pt-2 font-mono text-[13px] tabular-nums sm:order-2 sm:basis-auto sm:border-t-0 sm:pt-0">
-                1st run {sheetScore.correct}/{sheetScore.answered}
-                {sheetScore.pct === null ? '' : ` · ${sheetScore.pct}%`}
-                <span className="text-muted">
-                  {' '}
-                  · this pass {passCorrect}/{pass}
+                {/* Mistakes and Flagged are lists you are retaking, so a first
+                    run for the list as a whole says nothing useful. */}
+                {isList ? null : (
+                  <>
+                    1st run {sheetScore.correct}/{sheetScore.answered}
+                    {sheetScore.pct === null ? '' : ` · ${sheetScore.pct}%`}
+                    {' · '}
+                  </>
+                )}
+                <span className={isList ? '' : 'text-muted'}>
+                  this pass {passCorrect}/{pass}
                   {pass < built.ids.length ? ` · ${built.ids.length - pass} left` : ''}
                 </span>
               </span>
@@ -327,7 +335,7 @@ export default function StudyView() {
                   onClick={() => handleRedo(built.ids)}
                   className="rounded border-[1.5px] border-accent bg-sheet px-2.5 py-1 text-[13px] font-bold text-accent"
                 >
-                  Redo these
+                  Redo
                 </button>
                 {(view.mode === 'mistakes' || view.mode === 'flagged') && (
                   <button
