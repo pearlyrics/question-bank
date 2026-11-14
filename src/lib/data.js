@@ -66,7 +66,7 @@ export async function fetchResponses(bankId) {
 
 export async function fetchPrefs() {
   const rows = await run(
-    supabase.from('user_prefs').select('current_bank_id, prefs').limit(1),
+    supabase.from('user_prefs').select('prefs').limit(1),
   )
   return rows?.[0] ?? null
 }
@@ -106,7 +106,6 @@ export async function sendOp(op, userId) {
         supabase.from('user_prefs').upsert(
           {
             user_id: userId,
-            current_bank_id: op.current_bank_id,
             prefs: op.prefs,
             updated_at: new Date().toISOString(),
           },

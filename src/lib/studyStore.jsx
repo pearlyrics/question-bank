@@ -8,7 +8,14 @@ import {
   useState,
 } from 'react'
 import { useAuth } from './auth.jsx'
-import { cacheGet, cacheKey, cacheSet, rowsFromArray, rowsToArray } from './cache.js'
+import {
+  cacheGet,
+  cacheKey,
+  cacheSet,
+  pruneOtherUsers,
+  rowsFromArray,
+  rowsToArray,
+} from './cache.js'
 import {
   fetchBanks,
   fetchPrefs,
@@ -143,6 +150,7 @@ export function StudyProvider({ children }) {
     }
 
     let active = true
+    pruneOtherUsers(userId, localStorage)
     const prefsKey = cacheKey('prefs', userId)
     const cachedPrefs = cacheGet(prefsKey)
     if (cachedPrefs) setViews(cachedPrefs.prefs ?? {})
@@ -296,17 +304,8 @@ export function StudyProvider({ children }) {
     prefsTimer.current = setTimeout(() => {
       prefsTimer.current = null
       const snapshot = latest.current
-      const payload = {
-        kind: 'prefs',
-        current_bank_id: snapshot.bankId,
-        prefs: snapshot.views,
-      }
-      if (userId) {
-        cacheSet(cacheKey('prefs', userId), {
-          current_bank_id: payload.current_bank_id,
-          prefs: payload.prefs,
-        })
-      }
+      const payload = { kind: 'prefs', prefs: snapshot.views }
+      if (userId) cacheSet(cacheKey('prefs', userId), { prefs: payload.prefs })
       enqueue(payload)
     }, PREFS_DEBOUNCE)
   }, [enqueue, userId])

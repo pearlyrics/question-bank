@@ -6,8 +6,8 @@ weekly bulk uploads. React + Vite + Tailwind v4 + Supabase.
 ## Setup
 
 **1. Create the schema.** Open your Supabase project → SQL Editor → New query,
-paste all of `supabase/migrations/0001_init.sql`, run it, then do the same with
-`supabase/migrations/0002_chapter_progress.sql`. Run them in order. This is the
+paste each file in `supabase/migrations/` in order (`0001_init.sql`,
+`0002_chapter_progress.sql`, `0003_drop_current_bank.sql`) and run it. This is the
 only step that can't be done from the app.
 
 **2. Turn off email confirmation.** Authentication → Sign In / Providers →
@@ -175,6 +175,22 @@ The layout is built for three shapes:
 
 The set buttons use auto-fitting columns rather than fixed breakpoints, so
 dropping the slider to 10 per set (30 sets) stays readable at every width.
+
+## Results are per user
+
+One row per `(user_id, question_id)`, and four things keep them apart:
+
+- row-level security restricts every read and write to `user_id = auth.uid()`
+- `record_answer()` takes the user from `auth.uid()`; there is no argument for
+  it, so you cannot write an answer for anyone else
+- `chapter_progress()` joins responses on `auth.uid()`
+- local caches are keyed by user id, so two accounts on one browser never read
+  each other's
+
+Signing in also clears cached rows and preferences belonging to other accounts
+on that browser. A *queue* belonging to another account is the exception: it can
+hold answers that never reached the server, so a non-empty one is left for its
+owner to come back to.
 
 ## Tests
 
