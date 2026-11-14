@@ -97,10 +97,13 @@
     outline-offset: 2px;
   }
 
-  /* Phones: stop a long statement or a wide table forcing the page sideways. */
+  /* Phones: stop a long statement or a wide table forcing the page sideways.
+     `clip` rather than `hidden`: hidden makes overflow-y compute to auto,
+     which turns <body> into the scroll container and leaves window.scrollTo
+     doing nothing. */
   html,
   body {
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 }
 

@@ -47,7 +47,7 @@ function TopBar({ isAdmin }) {
   const links = isAdmin ? [[IMPORT_PATH, 'Import']] : []
 
   return (
-    <div className="shrink-0 border-b border-rule bg-sheet">
+    <div className="border-b border-rule bg-sheet">
       <div className="gutter mx-auto flex w-full max-w-[960px] flex-wrap items-center justify-between gap-x-3 gap-y-2 py-2">
         <nav className="flex items-center gap-1">
           {links.map(([href, label]) => {
@@ -127,9 +127,8 @@ function Routes() {
   if (isHome) return null
 
   return (
-    <div className="flex h-dvh flex-col">
+    <>
       <TopBar isAdmin={isAdmin} />
-      <div className="min-h-0 flex-1">
       {route.name === 'chapters' && <ChaptersPage isAdmin={isAdmin} />}
       {route.name === 'chapter' && <ChapterRoute slug={route.slug} />}
       {route.name === 'import' &&
@@ -141,8 +140,7 @@ function Routes() {
       {route.name === 'notFound' && (
         <NotFound title="Page not found" detail="That address doesn’t match anything here." />
       )}
-      </div>
-    </div>
+    </>
   )
 }
 

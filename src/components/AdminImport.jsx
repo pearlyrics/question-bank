@@ -75,7 +75,7 @@ export default function AdminImport({ onImported }) {
   }
 
   return (
-    <div className="gutter mx-auto flex h-full w-full max-w-[960px] flex-col gap-4 overflow-y-auto pt-6 pb-16">
+    <div className="gutter mx-auto flex w-full max-w-[960px] flex-col gap-4 pt-6 pb-16">
       <Link href={CHAPTERS_PATH} className="font-mono text-[13px] font-bold text-accent">
         ← All chapters
       </Link>

@@ -49,7 +49,7 @@ export function buildView({ questions, rows, view, setSize, topics, snapshot }) 
       ...context,
       ids,
       view,
-      title: view.mode === 'mistakes' ? 'Mistakes to redo' : 'Flagged statements',
+      title: view.mode === 'mistakes' ? 'Mistakes' : 'Flagged',
       meta: '',
       scopeIds: ids,
     })

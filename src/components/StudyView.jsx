@@ -5,7 +5,6 @@ import {
   firstRunScore,
   flaggedIds,
   mistakeIds,
-  reviewAccuracy,
   seenCount,
 } from '../lib/score.js'
 import { SHEET_SIZE, chunk, clampSetIndex, questionsInSet, setCount } from '../lib/sets.js'
@@ -14,18 +13,17 @@ import { Link } from '../lib/router.jsx'
 import { CHAPTERS_PATH } from '../lib/routes.js'
 import QuestionRow from './QuestionRow.jsx'
 import SetSizeSlider from './SetSizeSlider.jsx'
-import SyncBadge from './SyncBadge.jsx'
 
 const TABS = [
   { mode: 'sets', label: 'Exam sheets', short: 'Sheets' },
-  { mode: 'topic', label: 'By topic', short: 'Topic' },
   { mode: 'mistakes', label: 'Mistakes', short: 'Mistakes', tone: 'mis' },
   { mode: 'flagged', label: 'Flagged', short: 'Flagged', tone: 'flg' },
+  { mode: 'topic', label: 'By topic', short: 'Topic' },
 ]
 
 export default function StudyView() {
   const {
-    bank, questions, topics, rows, setSize, view, sync, status, error,
+    bank, questions, topics, rows, setSize, view, status, error,
     answer, toggleFlag, redo, updateView, changeSetSize, resetBank,
   } = useStudy()
 
@@ -33,6 +31,7 @@ export default function StudyView() {
   const [confirmReset, setConfirmReset] = useState(false)
   const rowsRef = useRef(rows)
   const sheetRef = useRef(null)
+  const stickyRef = useRef(null)
   rowsRef.current = rows
 
   // Clearing the answers removes every feedback block — around 500px on a full
@@ -41,11 +40,21 @@ export default function StudyView() {
   // position to the shorter page: the whole view lurches. Since a redo means
   // starting this sheet over, put the first question at the top deliberately
   // rather than leaving the browser to pick.
+  // Puts the first row just under the pinned bar, rather than at the very top
+  // of the window where the bar would cover it.
+  function scrollToSheetTop() {
+    requestAnimationFrame(() => {
+      const sheet = sheetRef.current
+      if (!sheet) return
+      const barHeight = stickyRef.current?.getBoundingClientRect().height ?? 0
+      const top = window.scrollY + sheet.getBoundingClientRect().top - barHeight
+      window.scrollTo({ top: Math.max(0, top) })
+    })
+  }
+
   function handleRedo(ids) {
     redo(ids)
-    requestAnimationFrame(() => {
-      sheetRef.current?.scrollIntoView({ block: 'start' })
-    })
+    scrollToSheetTop()
   }
 
   const topicById = useMemo(() => new Map(topics.map((topic) => [topic.id, topic])), [topics])
@@ -89,7 +98,6 @@ export default function StudyView() {
   const setScore = firstRunScore(setIds, rows)
   const setMistakes = mistakeIds(setIds, rows)
   const setFlags = flaggedIds(setIds, rows)
-  const setReview = reviewAccuracy(setIds, rows)
 
   const sheetScore = firstRunScore(built.ids, rows)
   const pass = activeCount(built.ids, rows)
@@ -184,7 +192,7 @@ export default function StudyView() {
       {/* Everything from the tabs down pins to the top once you reach it, so
           the questions scroll under a bar that keeps the score and the
           controls in reach. */}
-      <div className="sticky top-0 z-10 -mx-1 -mb-3 bg-bg px-1 pt-2 sm:-mb-4">
+      <div ref={stickyRef} className="sticky top-0 z-10 -mx-1 -mb-3 bg-bg px-1 pt-2 sm:-mb-4">
       <nav role="tablist" className="flex flex-wrap gap-1.5 border-b-2 border-rule-strong">
         {TABS.map((tab) => {
           const selected = view.mode === tab.mode
@@ -200,7 +208,10 @@ export default function StudyView() {
               role="tab"
               type="button"
               aria-selected={selected}
-              onClick={() => updateView({ mode: tab.mode, listPage: 0 })}
+              onClick={() => {
+                updateView({ mode: tab.mode, listPage: 0 })
+                scrollToSheetTop()
+              }}
               className={`touch -mb-0.5 border-b-[3px] px-2.5 py-2.5 text-[15px] font-bold sm:px-3.5 ${
                 selected ? 'border-accent text-ink' : 'border-transparent text-muted'
               }`}
@@ -277,7 +288,6 @@ export default function StudyView() {
         )}
 
         {(view.mode === 'mistakes' || view.mode === 'flagged') &&
-          built.pageCount > 1 &&
           Array.from({ length: built.pageCount }, (_, index) => (
             <button
               key={index}
@@ -297,14 +307,7 @@ export default function StudyView() {
 
         {built.ids.length > 0 && (
           <div className="sheet-card flex flex-wrap items-center gap-x-3 gap-y-2.5 px-3 py-2.5 sm:px-4 sm:py-3.5">
-              <span className="order-1 font-display text-xl font-semibold">
-                {built.title}
-                {view.mode === 'mistakes' || view.mode === 'flagged' ? (
-                  <span className="ml-2 font-body text-sm font-normal text-muted">
-                    Set {setIndex + 1}
-                  </span>
-                ) : null}
-              </span>
+              <span className="order-1 font-display text-xl font-semibold">{built.title}</span>
 
               {/* Narrow: its own full-width row, under the buttons.
                   Wide: inline, between the title and the buttons. */}
@@ -344,7 +347,7 @@ export default function StudyView() {
                     onClick={() => {
                       if (view.mode === 'sets') updateView({ sheetIndex: built.sheetIndex + 1 })
                       else updateView({ listPage: built.pageIndex + 1 })
-                      sheetRef.current?.scrollIntoView({ block: 'start' })
+                      scrollToSheetTop()
                     }}
                     className="rounded border-[1.5px] border-accent bg-accent px-2.5 py-1 text-[13px] font-bold text-sheet"
                   >
@@ -442,12 +445,6 @@ export default function StudyView() {
         )}
       </div>
 
-      <p className="m-0 text-[13px] text-muted">
-        <SyncBadge state={sync.state} pending={sync.pending} /> · Your score counts the first
-        answer to each question, so redoing mistakes or flags never changes it. Set {setIndex + 1}{' '}
-        across all attempts: {setReview.pct === null ? '–' : `${setReview.pct}%`} over{' '}
-        {setReview.attempts}.{error ? ` · ${error}` : ''}
-      </p>
     </div>
   )
 }
