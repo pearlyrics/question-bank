@@ -184,7 +184,7 @@ export default function StudyView() {
       {/* Everything from the tabs down pins to the top once you reach it, so
           the questions scroll under a bar that keeps the score and the
           controls in reach. */}
-      <div className="sticky top-0 z-10 -mx-1 bg-bg px-1 pt-2">
+      <div className="sticky top-0 z-10 -mx-1 -mb-3 bg-bg px-1 pt-2 sm:-mb-4">
       <nav role="tablist" className="flex flex-wrap gap-1.5 border-b-2 border-rule-strong">
         {TABS.map((tab) => {
           const selected = view.mode === tab.mode
