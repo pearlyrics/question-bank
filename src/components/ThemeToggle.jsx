@@ -19,7 +19,7 @@ export default function ThemeToggle() {
     <div
       role="group"
       aria-label="Colour theme"
-      className="flex overflow-hidden rounded border border-rule-strong"
+      className="flex h-8 items-stretch overflow-hidden rounded border border-rule-strong"
     >
       {OPTIONS.map((option) => {
         const selected = theme === option.value
@@ -30,7 +30,7 @@ export default function ThemeToggle() {
             title={option.hint}
             aria-pressed={selected}
             onClick={() => setTheme(option.value)}
-            className={`px-2 py-1 font-mono text-[12px] leading-5 ${
+            className={`flex items-center px-2 font-mono text-[12px] ${
               selected ? 'bg-accent text-sheet' : 'bg-sheet text-muted hover:text-ink'
             }`}
           >

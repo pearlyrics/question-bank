@@ -72,7 +72,7 @@ function TopBar({ isAdmin }) {
           <button
             type="button"
             onClick={() => void signOut()}
-            className="touch rounded border border-rule-strong px-2 py-1 font-bold text-ink"
+            className="flex h-8 items-center rounded border border-rule-strong px-2.5 font-bold text-ink"
           >
             Log out
           </button>
