@@ -65,9 +65,23 @@ New chapters start at **100 questions per set**. Change it for one chapter and
 the others are untouched: muscle at 40 and nerve at 100 is a normal state.
 
 Because the app uses real URLs, a static host needs a rewrite so every path
-serves `index.html`. `public/_redirects` covers Netlify; on Vercel add a
-`vercel.json` rewrite of `/(.*)` to `/index.html`. The Vite dev server already
-does this.
+serves `index.html`, or refreshing `/chapters` 404s. `vercel.json` covers
+Vercel and `public/_redirects` covers Netlify; both are in the repo. The Vite
+dev server already does this.
+
+## Deploying
+
+Supabase credentials are read when the app is **built**, not when it runs —
+Vite replaces `import.meta.env.VITE_*` with literal strings and they end up
+inside the JS bundle. Two consequences:
+
+- Adding environment variables to a hosting dashboard does nothing to a build
+  that already happened. **Redeploy** after adding them.
+- The variables must apply to the **Production** environment, not only Preview
+  or Development, and must keep the `VITE_` prefix — Vite exposes no others.
+
+If a deployed copy shows the "Almost there" screen, that is this and nothing
+else: the bundle was built without the values.
 
 To remove a chapter entirely (questions and everyone's progress for it, via
 cascade), run in the SQL editor:

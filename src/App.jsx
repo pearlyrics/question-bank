@@ -15,13 +15,25 @@ function Setup() {
     <main className="gutter mx-auto max-w-[620px] py-16">
       <h1 className="m-0 font-display text-3xl font-semibold">Almost there</h1>
       <p className="mt-2 text-sm text-muted">
-        Add your Supabase project URL and anon key to <code className="font-mono">.env</code>, then
-        restart the dev server:
+        This build has no Supabase credentials in it. They are read when the app is{' '}
+        <em>built</em>, not when it runs, so adding them means building again.
       </p>
-      <pre className="sheet-card mt-3 overflow-x-auto p-3 font-mono text-[13px]">
+
+      <h2 className="mt-5 mb-1 font-display text-lg font-semibold">Running locally</h2>
+      <p className="m-0 text-sm text-muted">
+        Put them in <code className="font-mono">.env</code> and restart the dev server:
+      </p>
+      <pre className="sheet-card mt-2 overflow-x-auto p-3 font-mono text-[13px]">
 {`VITE_SUPABASE_URL=https://your-project.supabase.co
 VITE_SUPABASE_ANON_KEY=your-anon-key`}
       </pre>
+
+      <h2 className="mt-5 mb-1 font-display text-lg font-semibold">Deployed (Vercel, Netlify…)</h2>
+      <p className="m-0 text-sm text-muted">
+        Add both names in the project&rsquo;s environment variables, make sure they apply to{' '}
+        <b>Production</b>, then <b>redeploy</b>. Variables added after a build are not in that
+        build.
+      </p>
     </main>
   )
 }
