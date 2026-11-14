@@ -309,7 +309,12 @@ export default function StudyView() {
 
         {built.ids.length > 0 && (
           <div className="sheet-card flex flex-wrap items-center gap-x-3 gap-y-2.5 px-3 py-2.5 sm:px-4 sm:py-3.5">
-              <span className="order-1 font-display text-xl font-semibold">{built.title}</span>
+              <span
+                title={built.title}
+                className="order-1 min-w-0 flex-1 basis-0 truncate font-display text-xl font-semibold sm:flex-none sm:basis-auto"
+              >
+                {built.title}
+              </span>
 
               {/* Narrow: its own full-width row, under the buttons.
                   Wide: inline, between the title and the buttons. */}
@@ -329,7 +334,7 @@ export default function StudyView() {
                 </span>
               </span>
 
-              <div className="order-2 ml-auto flex gap-2 sm:order-3">
+              <div className="order-2 ml-auto flex shrink-0 gap-2 sm:order-3">
                 <button
                   type="button"
                   onClick={() => handleRedo(built.ids)}
