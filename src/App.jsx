@@ -3,11 +3,12 @@ import { AuthProvider, useAuth } from './lib/auth.jsx'
 import { StudyProvider, useStudy } from './lib/studyStore.jsx'
 import { isConfigured } from './lib/supabase.js'
 import { Link, RouterProvider, useRouter } from './lib/router.jsx'
-import { CHAPTERS_PATH, IMPORT_PATH, chapterPath } from './lib/routes.js'
+import { CHAPTERS_PATH, IMPORT_PATH, USERS_PATH, chapterPath } from './lib/routes.js'
 import LoginView from './components/LoginView.jsx'
 import StudyView from './components/StudyView.jsx'
 import ChaptersPage from './components/ChaptersPage.jsx'
 import AdminImport from './components/AdminImport.jsx'
+import UsersPage from './components/UsersPage.jsx'
 import ThemeToggle from './components/ThemeToggle.jsx'
 
 function Setup() {
@@ -44,14 +45,16 @@ function TopBar({ isAdmin }) {
   const { route } = useRouter()
 
   // Chapters is reached by the "All chapters" link on each page, not from here.
-  const links = isAdmin ? [[IMPORT_PATH, 'Import']] : []
+  const links = isAdmin ? [[IMPORT_PATH, 'Import'], [USERS_PATH, 'Users']] : []
 
   return (
     <div className="border-b border-rule bg-sheet">
       <div className="gutter mx-auto flex w-full max-w-[960px] flex-wrap items-center justify-between gap-x-3 gap-y-2 py-2">
         <nav className="flex items-center gap-1">
           {links.map(([href, label]) => {
-            const current = href === IMPORT_PATH && route.name === 'import'
+            const current =
+              (href === IMPORT_PATH && route.name === 'import') ||
+              (href === USERS_PATH && route.name === 'users')
             return (
               <Link
                 key={href}
@@ -136,6 +139,12 @@ function Routes() {
           <ImportRoute />
         ) : (
           <NotFound title="Admins only" detail="Importing questions needs an admin account." />
+        ))}
+      {route.name === 'users' &&
+        (isAdmin ? (
+          <UsersPage />
+        ) : (
+          <NotFound title="Admins only" detail="Viewing accounts needs an admin account." />
         ))}
       {route.name === 'notFound' && (
         <NotFound title="Page not found" detail="That address doesn’t match anything here." />

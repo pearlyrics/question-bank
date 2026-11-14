@@ -1,7 +1,7 @@
 // Chapters live at /<slug>, so a handful of words can never be slugs.
 // import_questions() would happily accept "import" as a bank slug, and the
 // chapter would then be unreachable.
-export const RESERVED_SLUGS = ['chapters', 'import', 'login', 'logout', 'api', 'assets', 'static']
+export const RESERVED_SLUGS = ['chapters', 'import', 'users', 'login', 'logout', 'api', 'assets', 'static']
 
 const SLUG_PATTERN = /^[a-z0-9-]{2,60}$/
 
@@ -15,6 +15,7 @@ export function parseRoute(pathname) {
   const [segment] = segments
   if (segment === 'chapters') return { name: 'chapters' }
   if (segment === 'import') return { name: 'import' }
+  if (segment === 'users') return { name: 'users' }
   // Reserved words are held back for future pages. Refusing them here and in
   // the importer keeps one rule: if it can't be a chapter URL, it can't be a
   // chapter slug.
@@ -29,3 +30,4 @@ export function chapterPath(slug) {
 
 export const CHAPTERS_PATH = '/chapters'
 export const IMPORT_PATH = '/import'
+export const USERS_PATH = '/users'

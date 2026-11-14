@@ -38,6 +38,16 @@ export async function fetchBanks() {
   )
 }
 
+// Admin-only: everyone with an account, and how far along they are.
+export async function adminListUsers() {
+  return run(supabase.rpc('admin_list_users'))
+}
+
+// Admin-only: one person's progress, chapter by chapter.
+export async function adminUserProgress(userId) {
+  return run(supabase.rpc('admin_user_progress', { p_user_id: userId }))
+}
+
 // Admin-only. Takes the chapter ids in the order they should appear.
 export async function setBankOrder(bankIds) {
   return run(supabase.rpc('set_bank_order', { p_bank_ids: bankIds }))

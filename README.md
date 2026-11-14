@@ -51,10 +51,11 @@ import it.
 | `/chapters` | Every chapter with your results for it — bank-wide |
 | `/<chapter-slug>` | The questions for that chapter, e.g. `/nerve-tissue-bank` |
 | `/import` | Bulk upload (admins only) |
+| `/users` | Everyone with an account, and their progress per chapter (admins only) |
 | `/` | Redirects to `/chapters` |
 
 Chapter slugs are the URL, so a few words are reserved (`chapters`, `import`,
-`login`, `logout`, `api`, `assets`, `static`). The importer refuses them — a
+`users`, `login`, `logout`, `api`, `assets`, `static`). The importer refuses them — a
 chapter at `/import` could never be opened.
 
 Each chapter keeps its own score, mistakes, flags, questions-per-set, and even
@@ -250,6 +251,18 @@ That is only the visible half. The database is the half that matters:
   this in 0002 did nothing) and granted to `authenticated`
 - `chapter_progress()` also checks `auth.uid()` itself rather than trusting
   grants alone
+
+## Seeing how the class is doing
+
+**Users** in the top bar (admins only) lists everyone with an account with
+their totals. Open a name to see that person's progress chapter by chapter —
+seen, score, mistakes and flags.
+
+Row-level security still stops anyone reading another person's profile or
+responses; it is unchanged. `admin_list_users()` and `admin_user_progress()`
+are `security definer` and check `is_admin` themselves, so ordinary accounts
+are as sealed as they were — a non-admin calling either is refused by the
+database, not merely hidden in the interface.
 
 ## Results are per user
 

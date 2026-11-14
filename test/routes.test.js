@@ -7,9 +7,10 @@ describe('parseRoute', () => {
     expect(parseRoute('')).toEqual({ name: 'home' })
   })
 
-  it('knows the two fixed pages', () => {
+  it('knows the fixed pages', () => {
     expect(parseRoute('/chapters')).toEqual({ name: 'chapters' })
     expect(parseRoute('/import')).toEqual({ name: 'import' })
+    expect(parseRoute('/users')).toEqual({ name: 'users' })
   })
 
   it('treats any other single segment as a chapter slug', () => {
