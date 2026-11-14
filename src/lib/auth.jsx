@@ -54,37 +54,60 @@ export function AuthProvider({ children }) {
   }, [session])
 
   const value = useMemo(() => {
-    // One field, one button: sign in, and create the account on first use.
-    async function enter(rawUsername) {
+    // One field for most people: the password is derived from the username and
+    // the account is created on first use.
+    //
+    // An account can also have a password of its own — set outside the app, for
+    // an admin. Then the derived password fails, the sign-up that follows
+    // reports the address as taken, and we ask for the real one. Nothing here
+    // reveals which accounts those are: the prompt appears only after a
+    // password that should have worked didn't.
+    async function enter(rawUsername, typedPassword) {
       const username = normalizeUsername(rawUsername)
       const problem = usernameError(username)
       if (problem) throw new Error(problem)
 
-      const credentials = {
-        email: emailFor(username, authEmailDomain),
-        password: passwordFor(username),
-      }
+      const email = emailFor(username, authEmailDomain)
+      const password = typedPassword || passwordFor(username)
 
-      const { error } = await supabase.auth.signInWithPassword(credentials)
-      if (!error) return { created: false }
+      const { error } = await supabase.auth.signInWithPassword({ email, password })
+      if (!error) return { signedIn: true }
 
       if (!/invalid login credentials/i.test(error.message)) {
         throw new Error(error.message)
       }
+      if (typedPassword) {
+        throw new Error('That password doesn’t match.')
+      }
 
-      // No account yet, so make one.
+      // The derived password didn't work: either there is no such account yet,
+      // or it has a password of its own.
       const { data, error: signUpError } = await supabase.auth.signUp({
-        ...credentials,
+        email,
+        password,
         options: { data: { username } },
       })
-      if (signUpError) throw new Error(signUpError.message)
+
+      if (signUpError) {
+        if (/already registered|already exists/i.test(signUpError.message)) {
+          return { needsPassword: true }
+        }
+        throw new Error(signUpError.message)
+      }
+
       if (!data.session) {
+        // Supabase can answer a sign-up for an existing address with a user
+        // carrying no identities, rather than an error.
+        if (data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
+          return { needsPassword: true }
+        }
         throw new Error(
           'Account created, but it needs email confirmation turned off in Supabase ' +
             '(Authentication → Sign In / Providers → Confirm email).',
         )
       }
-      return { created: true }
+
+      return { signedIn: true }
     }
 
     async function signOut() {

@@ -1,19 +1,31 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useAuth } from '../lib/auth.jsx'
 import ThemeToggle from './ThemeToggle.jsx'
 
 export default function LoginView() {
   const { enter } = useAuth()
   const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [needsPassword, setNeedsPassword] = useState(false)
   const [busy, setBusy] = useState(false)
   const [message, setMessage] = useState(null)
+  const passwordRef = useRef(null)
+
+  // When the prompt appears, put the cursor in it.
+  useEffect(() => {
+    if (needsPassword) passwordRef.current?.focus()
+  }, [needsPassword])
 
   async function submit(event) {
     event.preventDefault()
     setBusy(true)
     setMessage(null)
     try {
-      await enter(username)
+      const result = await enter(username, needsPassword ? password : undefined)
+      if (result?.needsPassword) {
+        setNeedsPassword(true)
+        setMessage(null)
+      }
     } catch (error) {
       setMessage(error.message)
     } finally {
@@ -47,10 +59,43 @@ export default function LoginView() {
           autoCapitalize="none"
           autoFocus
           spellCheck={false}
-          onChange={(event) => setUsername(event.target.value)}
+          onChange={(event) => {
+            setUsername(event.target.value)
+            // A different name may not need a password at all.
+            if (needsPassword) {
+              setNeedsPassword(false)
+              setPassword('')
+            }
+          }}
           placeholder="e.g. hamza"
           className="touch rounded border border-rule-strong bg-sheet px-2.5 py-2 font-mono text-[16px] text-ink"
         />
+
+        {needsPassword ? (
+          <>
+            <label htmlFor="password" className="font-mono text-[13px] text-muted">
+              Password
+            </label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              ref={passwordRef}
+              value={password}
+              autoComplete="current-password"
+              onChange={(event) => setPassword(event.target.value)}
+              className="touch rounded border border-rule-strong bg-sheet px-2.5 py-2 font-mono text-[16px] text-ink"
+            />
+            <p className="m-0 text-[13px] text-muted">
+              This account has a password of its own.
+            </p>
+          </>
+        ) : (
+          <p className="m-0 text-[13px] text-muted">
+            That’s the whole login. First time with a name creates it.
+          </p>
+        )}
+
         {message && (
           <p className="m-0 rounded-r border-l-4 border-no bg-no-soft px-3 py-2 text-sm">
             {message}
@@ -59,7 +104,7 @@ export default function LoginView() {
 
         <button
           type="submit"
-          disabled={busy || !username.trim()}
+          disabled={busy || !username.trim() || (needsPassword && !password)}
           className="touch rounded border-[1.5px] border-accent bg-accent px-3 py-2 text-sm font-bold text-sheet disabled:opacity-60"
         >
           {busy ? 'Opening…' : 'Start studying'}
