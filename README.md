@@ -124,7 +124,8 @@ immutable in the database.
 Answers you give stay on screen when you switch tabs or sets and come back — a
 pass in progress is never thrown away. To take a list again, press **Redo these**
 (it appears at the top of the sheet once every row is answered, and always in the
-footer). That hides the revealed answers without touching your score.
+footer). That hides the revealed answers without touching your score, and scrolls
+the sheet back to its first question so you can start straight away.
 
 `Reset this bank` offers two things:
 

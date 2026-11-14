@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { buildImport, parseUpload } from '../lib/importQuestions.js'
 import { importQuestions } from '../lib/data.js'
+import { Link } from '../lib/router.jsx'
+import { CHAPTERS_PATH } from '../lib/routes.js'
 
 const EXAMPLE = `{
   "bank": {
@@ -74,6 +76,10 @@ export default function AdminImport({ onImported }) {
 
   return (
     <div className="gutter mx-auto flex w-full max-w-[960px] flex-col gap-4 pt-6 pb-16">
+      <Link href={CHAPTERS_PATH} className="font-mono text-[13px] font-bold text-accent">
+        ← All chapters
+      </Link>
+
       <header>
         <h1 className="m-0 font-display text-[clamp(24px,4vw,32px)] leading-tight font-semibold">
           Import questions

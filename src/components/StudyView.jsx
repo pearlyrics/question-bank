@@ -32,7 +32,21 @@ export default function StudyView() {
   const [snapshot, setSnapshot] = useState(null)
   const [confirmReset, setConfirmReset] = useState(false)
   const rowsRef = useRef(rows)
+  const sheetRef = useRef(null)
   rowsRef.current = rows
+
+  // Clearing the answers removes every feedback block — around 500px on a full
+  // sheet. The Redo button sits at the bottom, so you are scrolled to the
+  // bottom when you press it, and the browser has to clamp your scroll
+  // position to the shorter page: the whole view lurches. Since a redo means
+  // starting this sheet over, put the first question at the top deliberately
+  // rather than leaving the browser to pick.
+  function handleRedo(ids) {
+    redo(ids)
+    requestAnimationFrame(() => {
+      sheetRef.current?.scrollIntoView({ block: 'start' })
+    })
+  }
 
   const bankIds = useMemo(() => questions.map((question) => question.id), [questions])
   const topicById = useMemo(() => new Map(topics.map((topic) => [topic.id, topic])), [topics])
@@ -299,7 +313,7 @@ export default function StudyView() {
           ))}
       </div>
 
-      <section className="sheet-card" aria-live="polite">
+      <section className="sheet-card scroll-mt-3" ref={sheetRef} aria-live="polite">
         {built.ids.length === 0 ? (
           <div className="px-5 py-10 text-center text-muted">
             <strong className="mb-1.5 block text-lg text-ink">
@@ -329,8 +343,8 @@ export default function StudyView() {
                 {pass === built.ids.length && (
                   <button
                     type="button"
-                    onClick={() => redo(built.ids)}
-                    className="rounded border-[1.5px] border-accent bg-sheet px-2.5 py-1 text-[13px] font-bold text-accent"
+                    onClick={() => handleRedo(built.ids)}
+                    className="touch rounded border-[1.5px] border-accent bg-sheet px-2.5 py-1 text-[13px] font-bold text-accent"
                   >
                     Redo these
                   </button>
@@ -378,7 +392,7 @@ export default function StudyView() {
               <div className="flex w-full flex-wrap gap-2 sm:w-auto">
                 <button
                   type="button"
-                  onClick={() => redo(built.ids)}
+                  onClick={() => handleRedo(built.ids)}
                   className="touch flex-1 rounded border-[1.5px] border-accent bg-sheet px-3 py-2 text-sm font-bold text-accent sm:flex-none"
                 >
                   Redo these

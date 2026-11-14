@@ -31,17 +31,15 @@ function TopBar({ isAdmin }) {
   const { profile } = useStudy()
   const { route } = useRouter()
 
-  const links = [[CHAPTERS_PATH, 'Chapters']]
-  if (isAdmin) links.push([IMPORT_PATH, 'Import'])
+  // Chapters is reached by the "All chapters" link on each page, not from here.
+  const links = isAdmin ? [[IMPORT_PATH, 'Import']] : []
 
   return (
     <div className="border-b border-rule bg-sheet">
       <div className="gutter mx-auto flex w-full max-w-[960px] flex-wrap items-center justify-between gap-x-3 gap-y-2 py-2">
         <nav className="flex items-center gap-1">
           {links.map(([href, label]) => {
-            const current =
-              (href === CHAPTERS_PATH && (route.name === 'chapters' || route.name === 'chapter')) ||
-              (href === IMPORT_PATH && route.name === 'import')
+            const current = href === IMPORT_PATH && route.name === 'import'
             return (
               <Link
                 key={href}
