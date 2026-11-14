@@ -47,7 +47,8 @@ describe('clamping after a resize', () => {
 
   it('offers a slider range that can always cover the bank', () => {
     expect(sliderMax(400)).toBe(400)
-    expect(sliderMax(302)).toBe(305)
+    // Rounds up to a whole step so the top of the range can still cover the bank.
+    expect(sliderMax(302)).toBe(310)
     expect(sliderMax(4)).toBe(10)
   })
 })

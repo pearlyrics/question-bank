@@ -3,7 +3,7 @@
 
 export const SHEET_SIZE = 10
 export const SET_SIZE_MIN = 10
-export const SET_SIZE_STEP = 5
+export const SET_SIZE_STEP = 10
 export const DEFAULT_SET_SIZE = 100
 
 export function clamp(n, min, max) {
