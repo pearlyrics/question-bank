@@ -148,9 +148,11 @@
 
   /* 639px, not 620px, so this lines up exactly with Tailwind's sm: breakpoint
      and the row never mixes the two layouts. */
+  /* One column on a phone: the number moves onto the topic line inside the
+     body cell, so the statement and the explanation start at its left edge. */
   @media (max-width: 639px) {
     .exam-grid {
-      grid-template-columns: 34px 1fr;
+      grid-template-columns: 1fr;
     }
   }
 }
