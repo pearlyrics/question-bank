@@ -308,7 +308,7 @@ export default function StudyView() {
 
               {/* Narrow: its own full-width row, under the buttons.
                   Wide: inline, between the title and the buttons. */}
-              <span className="order-3 basis-full font-mono text-[13px] tabular-nums sm:order-2 sm:basis-auto">
+              <span className="order-3 basis-full border-t border-rule pt-2 font-mono text-[13px] tabular-nums sm:order-2 sm:basis-auto sm:border-t-0 sm:pt-0">
                 1st run {sheetScore.correct}/{sheetScore.answered}
                 {sheetScore.pct === null ? '' : ` · ${sheetScore.pct}%`}
                 <span className="text-muted">
