@@ -195,7 +195,7 @@ export default function StudyView() {
           the questions scroll under a bar that keeps the score and the
           controls in reach. */}
       <div ref={stickyRef} className="sticky top-0 z-10 -mx-1 -mb-3 bg-bg px-1 pt-2 sm:-mb-4">
-      <nav role="tablist" className="tab-rail flex flex-wrap gap-0.5 border-b-2 border-rule-strong sm:gap-1.5">
+      <nav role="tablist" className="flex gap-1 border-b-2 border-rule-strong sm:gap-1.5">
         {TABS.map((tab) => {
           const selected = view.mode === tab.mode
           const count =
@@ -214,7 +214,7 @@ export default function StudyView() {
                 updateView({ mode: tab.mode, listPage: 0 })
                 scrollToSheetTop()
               }}
-              className={`touch -mb-0.5 whitespace-nowrap border-b-[3px] px-2 py-2.5 text-[15px] font-bold sm:px-3.5 ${
+              className={`touch -mb-0.5 shrink-0 whitespace-nowrap border-b-[3px] px-1.5 py-2.5 text-[14px] font-bold sm:px-3.5 sm:text-[15px] ${
                 selected ? 'border-accent text-ink' : 'border-transparent text-muted'
               }`}
             >
