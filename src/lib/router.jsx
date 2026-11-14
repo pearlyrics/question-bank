@@ -10,6 +10,14 @@ export function RouterProvider({ children }) {
   const [path, setPath] = useState(() => globalThis.location?.pathname ?? '/')
 
   useEffect(() => {
+    // Browsers restore the previous scroll position on reload. The top bar
+    // isn't sticky, so a restored offset left it above the viewport with no
+    // obvious way back to it. Every page here starts at the top instead.
+    if ('scrollRestoration' in globalThis.history) {
+      globalThis.history.scrollRestoration = 'manual'
+    }
+    globalThis.scrollTo?.({ top: 0 })
+
     const onPopState = () => setPath(globalThis.location.pathname)
     window.addEventListener('popstate', onPopState)
     return () => window.removeEventListener('popstate', onPopState)
