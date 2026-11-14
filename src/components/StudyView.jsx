@@ -249,7 +249,7 @@ export default function StudyView() {
                 title={`Sheet ${index + 1}: ${done}/${ids.length} seen`}
                 onClick={() => {
                   updateView({ sheetIndex: index })
-                  window.scrollTo({ top: 0 })
+                  scrollToSheetTop()
                 }}
                 className={`touch min-w-11 rounded border px-2 py-1.5 font-mono text-[13px] tabular-nums ${
                   index === built.sheetIndex
@@ -276,7 +276,10 @@ export default function StudyView() {
             <select
               id="topic"
               value={topicCode ?? ''}
-              onChange={(event) => updateView({ topicCode: event.target.value, listPage: 0 })}
+              onChange={(event) => {
+                updateView({ topicCode: event.target.value, listPage: 0 })
+                scrollToSheetTop()
+              }}
               className="touch max-w-full rounded border border-rule-strong bg-sheet px-2.5 py-1.5 text-ink"
             >
               {topics.map((topic) => {
@@ -297,7 +300,10 @@ export default function StudyView() {
               key={index}
               type="button"
               aria-pressed={index === built.pageIndex}
-              onClick={() => updateView({ listPage: index })}
+              onClick={() => {
+                updateView({ listPage: index })
+                scrollToSheetTop()
+              }}
               className={`touch min-w-11 rounded border px-2 py-1.5 font-mono text-[13px] tabular-nums ${
                 index === built.pageIndex
                   ? 'border-accent bg-accent text-sheet'
