@@ -40,7 +40,7 @@ export default function ChaptersPage({ isAdmin }) {
         {isAdmin && (
           <Link
             href={IMPORT_PATH}
-            className="touch rounded border-[1.5px] border-accent bg-sheet px-3 py-2 text-sm font-bold text-accent"
+            className="touch inline-flex items-center justify-center rounded border-[1.5px] border-accent bg-sheet px-3 py-2 text-sm font-bold text-accent"
           >
             Import questions
           </Link>
