@@ -191,8 +191,10 @@ work Set 1's mistakes, then Set 2's, without leaving the tab.
 ## Sets and the slider
 
 Each question has a stable `position` in its bank, assigned at import by a
-round-robin interleave across topics alternating true/false — so any slice stays
-balanced. A set is just a slice of that order, which is why the slider can
+deterministic shuffle (md5 of its id). The order has no relation to topic,
+answer or import sequence, so a sheet is a genuine mix with no true/false
+pattern to spot — but it is the same order every time, so re-importing a bank
+doesn't reshuffle what people are working through. A set is just a slice of that order, which is why the slider can
 re-cut 400 questions into sets of any size instantly, and why your progress is
 unaffected by the size you pick. Sheets of 10 page within a set.
 
