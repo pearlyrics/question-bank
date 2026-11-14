@@ -57,7 +57,7 @@ function TopBar({ isAdmin }) {
                 key={href}
                 href={href}
                 aria-current={current ? 'page' : undefined}
-                className={`touch flex items-center rounded px-2.5 py-1.5 text-sm font-bold ${
+                className={`flex h-8 items-center rounded px-2.5 text-sm font-bold ${
                   current ? 'bg-accent-soft text-accent' : 'text-muted'
                 }`}
               >
