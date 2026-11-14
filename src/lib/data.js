@@ -48,6 +48,11 @@ export async function adminUserProgress(userId) {
   return run(supabase.rpc('admin_user_progress', { p_user_id: userId }))
 }
 
+// Admin-only, and irreversible: the account and every answer with it.
+export async function adminDeleteUser(userId) {
+  return run(supabase.rpc('admin_delete_user', { p_user_id: userId }))
+}
+
 // Admin-only. Takes the chapter ids in the order they should appear.
 export async function setBankOrder(bankIds) {
   return run(supabase.rpc('set_bank_order', { p_bank_ids: bankIds }))

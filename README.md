@@ -258,6 +258,13 @@ That is only the visible half. The database is the half that matters:
 their totals. Open a name to see that person's progress chapter by chapter —
 seen, score, mistakes and flags.
 
+Each row also has a **Delete** button, behind a confirmation that names the
+account and what goes with it. Deleting an account is irreversible — it
+cascades to that person's answers, score, mistakes and flags. Question banks
+are untouched. You cannot delete your own account: that would sign you out
+mid-action, and if you were the only admin it would leave nobody able to
+import or manage accounts. The database refuses it as well as the interface.
+
 Row-level security still stops anyone reading another person's profile or
 responses; it is unchanged. `admin_list_users()` and `admin_user_progress()`
 are `security definer` and check `is_admin` themselves, so ordinary accounts
