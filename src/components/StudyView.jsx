@@ -48,7 +48,6 @@ export default function StudyView() {
     })
   }
 
-  const bankIds = useMemo(() => questions.map((question) => question.id), [questions])
   const topicById = useMemo(() => new Map(topics.map((topic) => [topic.id, topic])), [topics])
   const questionById = useMemo(
     () => new Map(questions.map((question) => [question.id, question])),
@@ -91,11 +90,6 @@ export default function StudyView() {
   const setMistakes = mistakeIds(setIds, rows)
   const setFlags = flaggedIds(setIds, rows)
   const setReview = reviewAccuracy(setIds, rows)
-
-  // Bank-wide totals, shown alongside so the set never hides the whole picture.
-  const bankScore = firstRunScore(bankIds, rows)
-  const bankMistakes = mistakeIds(bankIds, rows)
-  const bankFlags = flaggedIds(bankIds, rows)
 
   const sheetScore = firstRunScore(built.ids, rows)
   const pass = activeCount(built.ids, rows)
@@ -143,15 +137,7 @@ export default function StudyView() {
           <h1 className="m-0 font-display text-[clamp(26px,4vw,36px)] leading-tight font-semibold text-balance">
             {bank?.title ?? 'Question Bank'}
           </h1>
-          <p className="mt-1 text-sm text-muted">
-            {bank?.source ? `${bank.source} · ` : ''}
-            {questions.length} statements · {setCount(questions.length, setSize)} sets of {setSize}
-          </p>
-          <p className="mt-0.5 font-mono text-[12px] text-muted tabular-nums">
-            Bank · seen {bankScore.answered}/{questions.length} · score{' '}
-            {bankScore.pct === null ? '–' : `${bankScore.pct}%`} · {bankMistakes.length} mistake
-            {bankMistakes.length === 1 ? '' : 's'} · {bankFlags.length} flagged
-          </p>
+          {bank?.source && <p className="mt-1 text-sm text-muted">{bank.source}</p>}
         </div>
         <div className="flex flex-wrap gap-1.5 sm:gap-2">
           <span className="stat-chip">

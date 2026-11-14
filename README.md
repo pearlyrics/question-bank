@@ -150,7 +150,8 @@ the sheet back to its first question so you can start straight away.
 ## Sets, mistakes and flags
 
 Mistakes and Flagged are scoped to the set you have selected, so they line up
-with the set stats above them. Switching sets keeps the tab you're on — you can
+with the set stats above them. Chapter-wide totals live on `/chapters`, not on
+the chapter page. Switching sets keeps the tab you're on — you can
 work Set 1's mistakes, then Set 2's, without leaving the tab.
 
 ## Sets and the slider
