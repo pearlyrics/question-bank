@@ -192,9 +192,15 @@ dropping the slider to 10 per set (30 sets) stays readable at every width.
 
 ## Who can see what
 
-Signed out, every URL shows the login form and nothing else — `/chapters`,
+Signed out, every URL redirects to `/` and shows the login form — `/chapters`,
 `/<slug>` and `/import` all mount behind the session check, so no page
-component ever renders without one. Verified by visiting each while signed out.
+component ever renders without one, and the address bar never sits on a page
+you can't see. The redirect replaces the history entry, so Back doesn't return
+to the protected URL. Verified by visiting each while signed out.
+
+A deep link still works once you're signed in: the redirect waits for the
+session check to finish, so `/nerve-tissue-bank` in a fresh tab opens that
+chapter rather than bouncing you to the chapter list.
 
 That is only the visible half. The database is the half that matters:
 

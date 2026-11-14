@@ -159,13 +159,21 @@ function ImportRoute() {
 
 function Gate() {
   const { session, loading } = useAuth()
+  const { path, navigate } = useRouter()
+  const signedOut = !loading && !session
+
+  // Signed out, the address bar shouldn't keep showing a page you can't see.
+  // Send it back to the root, replacing the entry so Back doesn't return to
+  // the protected URL.
+  useEffect(() => {
+    if (signedOut && path !== '/') navigate('/', { replace: true })
+  }, [signedOut, path, navigate])
+
   if (loading) return <p className="px-4 py-16 text-center text-muted">Loading…</p>
   if (!session) return <LoginView />
   return (
     <StudyProvider>
-      <RouterProvider>
-        <Routes />
-      </RouterProvider>
+      <Routes />
     </StudyProvider>
   )
 }
@@ -174,7 +182,9 @@ export default function App() {
   if (!isConfigured) return <Setup />
   return (
     <AuthProvider>
-      <Gate />
+      <RouterProvider>
+        <Gate />
+      </RouterProvider>
     </AuthProvider>
   )
 }
