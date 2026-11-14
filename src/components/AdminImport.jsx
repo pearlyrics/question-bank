@@ -91,6 +91,10 @@ export default function AdminImport({ onImported, onReordered }) {
         </p>
       </header>
 
+      <ChapterOrder onReordered={onReordered} />
+
+      <h2 className="mt-2 font-display text-lg font-semibold">Add questions</h2>
+
       <div className="sheet-card grid gap-3 p-4 sm:grid-cols-3">
         {[
           ['slug', 'Bank slug', 'w05-nerve-tissue'],
@@ -244,8 +248,6 @@ export default function AdminImport({ onImported, onReordered }) {
       {failure && (
         <p className="m-0 rounded-r border-l-4 border-no bg-no-soft px-3 py-2 text-sm">{failure}</p>
       )}
-
-      <ChapterOrder onReordered={onReordered} />
 
       {result && (
         <div className="sheet-card flex flex-col gap-2 p-4">
