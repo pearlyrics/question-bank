@@ -134,6 +134,11 @@ and the separate **all attempts** accuracy. It cannot move the score — not
 because the UI avoids recalculating it, but because the first-attempt data is
 immutable in the database.
 
+Scrolling a chapter takes the title, slider and set buttons away, then the
+tabs, the sheet numbers and the sheet's control bar pin to the top of the
+window and the questions scroll beneath them — so the score and the Redo /
+Next buttons stay in reach however far down the sheet you are.
+
 Answers you give stay on screen when you switch tabs or sets and come back — a
 pass in progress is never thrown away. To take a list again, press **Redo these**
 (it appears at the top of the sheet once every row is answered, and always in the

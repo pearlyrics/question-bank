@@ -124,7 +124,7 @@ export default function StudyView() {
   const topicCode = view.topicCode ?? topics[0]?.code ?? null
 
   return (
-    <div className="gutter mx-auto flex w-full max-w-[960px] flex-col gap-4 pt-5 pb-16 sm:gap-[18px] sm:pt-6">
+    <div className="gutter mx-auto flex w-full max-w-[960px] flex-col gap-3 pt-4 pb-16 sm:gap-4 sm:pt-5">
       <Link
         href={CHAPTERS_PATH}
         className="font-mono text-[13px] font-bold text-accent"
@@ -132,7 +132,7 @@ export default function StudyView() {
         ← All chapters
       </Link>
 
-      <header>
+      <header className="shrink-0">
         <h1 className="m-0 font-display text-[clamp(26px,4vw,36px)] leading-tight font-semibold text-balance">
           {bank?.title ?? 'Question Bank'}
         </h1>
@@ -157,7 +157,7 @@ export default function StudyView() {
         </div>
       </header>
 
-      <div className="sheet-card flex flex-col gap-3 px-4 py-3">
+      <div className="shrink-0 sheet-card flex flex-col gap-3 px-4 py-3">
         <SetSizeSlider total={questions.length} setSize={setSize} onChange={changeSetSize} />
         <nav
           aria-label="Question sets"
@@ -187,6 +187,10 @@ export default function StudyView() {
         </nav>
       </div>
 
+      {/* Everything from the tabs down pins to the top once you reach it, so
+          the questions scroll under a bar that keeps the score and the
+          controls in reach. */}
+      <div className="sticky top-0 z-10 -mx-1 bg-bg px-1 pt-2">
       <nav role="tablist" className="flex flex-wrap gap-1.5 border-b-2 border-rule-strong">
         {TABS.map((tab) => {
           const selected = view.mode === tab.mode
@@ -297,7 +301,67 @@ export default function StudyView() {
           ))}
       </div>
 
-      <section className="sheet-card scroll-mt-3" ref={sheetRef} aria-live="polite">
+        {built.ids.length > 0 && (
+          <div className="sheet-card flex flex-wrap items-center justify-between gap-x-3 gap-y-2 px-3 py-3 sm:px-4 sm:py-3.5">
+              <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                <span className="font-display text-xl font-semibold">
+                  {built.title}
+                  {view.mode === 'mistakes' || view.mode === 'flagged' ? (
+                    <span className="ml-2 font-body text-sm font-normal text-muted">
+                      Set {setIndex + 1}
+                    </span>
+                  ) : null}
+                </span>
+                <span className="font-mono text-[13px] tabular-nums">
+                  First run {sheetScore.correct}/{sheetScore.answered}
+                  {sheetScore.pct === null ? '' : ` · ${sheetScore.pct}%`}
+                  <span className="text-muted">
+                    {' '}
+                    · this pass {passCorrect}/{pass}
+                    {pass < built.ids.length ? ` · ${built.ids.length - pass} left` : ''}
+                  </span>
+                </span>
+              </div>
+
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => handleRedo(built.ids)}
+                  className="rounded border-[1.5px] border-accent bg-sheet px-2.5 py-1 text-[13px] font-bold text-accent"
+                >
+                  Redo these
+                </button>
+                {(view.mode === 'mistakes' || view.mode === 'flagged') && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSnapshot(view.mode === 'mistakes' ? setMistakes : setFlags)
+                      updateView({ listPage: 0 })
+                    }}
+                    className="rounded border-[1.5px] border-accent bg-sheet px-2.5 py-1 text-[13px] font-bold text-accent"
+                  >
+                    Refresh list
+                  </button>
+                )}
+                {built.hasNext && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (view.mode === 'sets') updateView({ sheetIndex: built.sheetIndex + 1 })
+                      else updateView({ listPage: built.pageIndex + 1 })
+                      sheetRef.current?.scrollIntoView({ block: 'start' })
+                    }}
+                    className="rounded border-[1.5px] border-accent bg-accent px-2.5 py-1 text-[13px] font-bold text-sheet"
+                  >
+                    Next {view.mode === 'sets' ? 'sheet' : 'page'}
+                  </button>
+                )}
+              </div>
+            </div>
+        )}
+      </div>
+
+      <section className="sheet-card" ref={sheetRef} aria-live="polite">
         {built.ids.length === 0 ? (
           <div className="px-5 py-10 text-center text-muted">
             <strong className="mb-1.5 block text-lg text-ink">
@@ -311,31 +375,6 @@ export default function StudyView() {
           </div>
         ) : (
           <>
-            <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1.5 border-b-2 border-rule-strong px-3 py-3 sm:px-4 sm:py-3.5">
-              <span className="font-display text-xl font-semibold">
-                {built.title}
-                {view.mode === 'mistakes' || view.mode === 'flagged' ? (
-                  <span className="ml-2 font-body text-sm font-normal text-muted">
-                    Set {setIndex + 1}
-                  </span>
-                ) : null}
-              </span>
-              <div className="flex items-baseline gap-3">
-                <span className="font-mono text-[13px] text-muted">{built.meta}</span>
-                {/* With nothing left to answer, redoing is the only move — so
-                    the button is here too, rather than ten rows further down. */}
-                {pass === built.ids.length && (
-                  <button
-                    type="button"
-                    onClick={() => handleRedo(built.ids)}
-                    className="touch rounded border-[1.5px] border-accent bg-sheet px-2.5 py-1 text-[13px] font-bold text-accent"
-                  >
-                    Redo these
-                  </button>
-                )}
-              </div>
-            </div>
-
             <div
               aria-hidden="true"
               className="exam-grid hidden border-b border-rule text-[13px] font-bold uppercase tracking-[0.06em] text-muted sm:grid"
@@ -361,53 +400,6 @@ export default function StudyView() {
                 />
               )
             })}
-
-            <div className="flex flex-wrap items-center justify-between gap-2.5 border-t-2 border-rule-strong px-3 py-3 sm:px-4">
-              <span className="font-mono text-sm tabular-nums">
-                {/* The score is the first run. The pass tally moves; the score doesn't. */}
-                First run {sheetScore.correct}/{sheetScore.answered}
-                {sheetScore.pct === null ? '' : ` · ${sheetScore.pct}%`}
-                <span className="text-muted">
-                  {' '}
-                  · this pass {passCorrect}/{pass}
-                  {pass < built.ids.length ? ` · ${built.ids.length - pass} left` : ''}
-                </span>
-              </span>
-              <div className="flex w-full flex-wrap gap-2 sm:w-auto">
-                <button
-                  type="button"
-                  onClick={() => handleRedo(built.ids)}
-                  className="touch flex-1 rounded border-[1.5px] border-accent bg-sheet px-3 py-2 text-sm font-bold text-accent sm:flex-none"
-                >
-                  Redo these
-                </button>
-                {(view.mode === 'mistakes' || view.mode === 'flagged') && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSnapshot(view.mode === 'mistakes' ? setMistakes : setFlags)
-                      updateView({ listPage: 0 })
-                    }}
-                    className="touch flex-1 rounded border-[1.5px] border-accent bg-sheet px-3 py-2 text-sm font-bold text-accent sm:flex-none"
-                  >
-                    Refresh list
-                  </button>
-                )}
-                {built.hasNext && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (view.mode === 'sets') updateView({ sheetIndex: built.sheetIndex + 1 })
-                      else updateView({ listPage: built.pageIndex + 1 })
-                      window.scrollTo({ top: 0 })
-                    }}
-                    className="touch flex-1 rounded border-[1.5px] border-accent bg-accent px-3 py-2 text-sm font-bold text-sheet sm:flex-none"
-                  >
-                    Next {view.mode === 'sets' ? 'sheet' : 'page'}
-                  </button>
-                )}
-              </div>
-            </div>
           </>
         )}
       </section>

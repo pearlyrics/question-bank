@@ -26,7 +26,7 @@ export default function ChaptersPage({ isAdmin }) {
   }, [])
 
   return (
-    <div className="gutter mx-auto flex w-full max-w-[960px] flex-col gap-4 pt-6 pb-16">
+    <div className="gutter mx-auto flex h-full w-full max-w-[960px] flex-col gap-4 overflow-y-auto pt-6 pb-16">
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="m-0 font-display text-[clamp(26px,4vw,36px)] leading-tight font-semibold">
