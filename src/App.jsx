@@ -55,8 +55,8 @@ function TopBar({ isAdmin }) {
           })}
         </nav>
         <div className="flex flex-wrap items-center gap-2 text-[13px] text-muted sm:gap-3">
-          <ThemeToggle />
           <span className="font-mono">{profile?.username ?? '…'}</span>
+          <ThemeToggle />
           <button
             type="button"
             onClick={() => void signOut()}
