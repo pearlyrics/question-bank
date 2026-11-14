@@ -145,10 +145,11 @@ function Routes() {
 }
 
 function ImportRoute() {
-  const { afterImport } = useStudy()
+  const { afterImport, refreshBanks } = useStudy()
   const { navigate } = useRouter()
   return (
     <AdminImport
+      onReordered={() => void refreshBanks()}
       onImported={async (importedBankId) => {
         const slug = await afterImport(importedBankId)
         navigate(slug ? chapterPath(slug) : CHAPTERS_PATH)

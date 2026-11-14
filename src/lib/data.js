@@ -29,7 +29,18 @@ export async function fetchProfile(userId) {
 }
 
 export async function fetchBanks() {
-  return run(supabase.from('banks').select('id, slug, title, source').order('created_at'))
+  return run(
+    supabase
+      .from('banks')
+      .select('id, slug, title, source, sort_order')
+      .order('sort_order')
+      .order('created_at'),
+  )
+}
+
+// Admin-only. Takes the chapter ids in the order they should appear.
+export async function setBankOrder(bankIds) {
+  return run(supabase.rpc('set_bank_order', { p_bank_ids: bankIds }))
 }
 
 export async function fetchQuestions(bankId) {

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { buildImport, parseUpload } from '../lib/importQuestions.js'
 import { importQuestions } from '../lib/data.js'
 import { Link } from '../lib/router.jsx'
+import ChapterOrder from './ChapterOrder.jsx'
 import { CHAPTERS_PATH } from '../lib/routes.js'
 
 const EXAMPLE = `{
@@ -24,7 +25,7 @@ const EXAMPLE = `{
   ]
 }`
 
-export default function AdminImport({ onImported }) {
+export default function AdminImport({ onImported, onReordered }) {
   const [text, setText] = useState('')
   const [bankFields, setBankFields] = useState({ slug: '', title: '', source: '' })
   const [checked, setChecked] = useState(null)
@@ -243,6 +244,8 @@ export default function AdminImport({ onImported }) {
       {failure && (
         <p className="m-0 rounded-r border-l-4 border-no bg-no-soft px-3 py-2 text-sm">{failure}</p>
       )}
+
+      <ChapterOrder onReordered={onReordered} />
 
       {result && (
         <div className="sheet-card flex flex-col gap-2 p-4">

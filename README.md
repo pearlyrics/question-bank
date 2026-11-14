@@ -6,7 +6,8 @@ weekly bulk uploads. React + Vite + Tailwind v4 + Supabase.
 ## Setup
 
 **1. Create the schema.** Open your Supabase project → SQL Editor → New query,
-paste each file in `supabase/migrations/` in order and run it. This is the
+paste each file in `supabase/migrations/` in order and run it. Re-running one
+is safe; they are written to be idempotent. This is the
 only step that can't be done from the app.
 
 **2. Turn off email confirmation.** Authentication → Sign In / Providers →
@@ -88,6 +89,15 @@ cascade), run in the SQL editor:
 ```sql
 delete from banks where slug = 'the-slug';
 ```
+
+## Reordering chapters
+
+The Import page lists every chapter with up and down arrows. Moving one saves
+immediately — there is no separate save button — and the new order is what
+everyone sees on `/chapters`.
+
+Order is `banks.sort_order`. A newly imported chapter goes to the end, set by a
+trigger so the importer itself didn't need to change.
 
 ## Adding ~400 questions each week
 
