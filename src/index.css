@@ -106,13 +106,17 @@
     overflow-x: clip;
   }
 
-  /* Turns off the browser's own pull-to-refresh. On iOS that gesture left the
-     page at scroll 0 with the visible area offset, so the top bar sat
-     off-screen with nothing to scroll back to — scrolling down and up again
-     was the only way to resync it. The reload button was never affected.
-     Reload with the button, or remove this line to get the gesture back. */
-  html {
-    overscroll-behavior-y: contain;
+  /* Turns off the browser's own pull-to-refresh. On iOS the gesture could
+     hang: the page stayed held down with the refresh spinner showing and a
+     band of empty background above the top bar.
+     `none` rather than `contain`, and on body as well as html — WebKit
+     scrolls the body here, so setting it on html alone did nothing, which is
+     why the spinner still appeared after the first attempt at this.
+     The reload button was never affected. Delete this rule to get the
+     gesture back. */
+  html,
+  body {
+    overscroll-behavior-y: none;
   }
 }
 
