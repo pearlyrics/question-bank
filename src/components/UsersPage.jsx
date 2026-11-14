@@ -151,17 +151,6 @@ export default function UsersPage() {
                         admin
                       </span>
                     )}
-                    <span className="ml-auto flex flex-wrap gap-1.5">
-                      <span className="stat-chip">
-                        Answered <b className="font-medium text-accent">{user.answered}</b>
-                      </span>
-                      <span className="stat-chip">
-                        Mistakes <b className="font-medium text-no">{user.mistakes}</b>
-                      </span>
-                      <span className="stat-chip">
-                        Flagged <b className="font-medium text-flag">{user.flagged}</b>
-                      </span>
-                    </span>
                   </button>
 
                   {/* Deleting yourself is refused by the database too. */}
