@@ -296,7 +296,7 @@ export default function StudyView() {
       </div>
 
         {built.ids.length > 0 && (
-          <div className="sheet-card flex flex-wrap items-center gap-x-3 gap-y-1 px-3 py-2.5 sm:px-4 sm:py-3.5">
+          <div className="sheet-card flex flex-wrap items-center gap-x-3 gap-y-2.5 px-3 py-2.5 sm:px-4 sm:py-3.5">
               <span className="order-1 font-display text-xl font-semibold">
                 {built.title}
                 {view.mode === 'mistakes' || view.mode === 'flagged' ? (
