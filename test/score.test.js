@@ -56,6 +56,27 @@ describe('firstRunScore', () => {
     // All-attempts accuracy is free to improve.
     expect(reviewAccuracy(ids, rows).pct).toBe(75)
   })
+
+  it('is untouched by work done under By topic, Mistakes or Flagged', () => {
+    let rows = new Map()
+    rows = answerQuestion(rows, 'q1', { choice: true, correct: true, attemptId: 'a1' })
+    const before = firstRunScore(ids, rows)
+
+    for (const [id, view] of [['q2', 'topic'], ['q3', 'flagged'], ['q4', 'mistakes']]) {
+      const next = new Map(rows)
+      next.set(
+        id,
+        applyAnswer(rows.get(id), {
+          questionId: id, bankId: 'b1', choice: true, correct: true,
+          attemptId: `x-${id}`, now: '2026-03-03T00:00:00.000Z', view,
+        }),
+      )
+      rows = next
+    }
+
+    expect(firstRunScore(ids, rows)).toEqual(before)
+    expect(firstRunScore(ids, rows).answered).toBe(1)
+  })
 })
 
 describe('lists', () => {

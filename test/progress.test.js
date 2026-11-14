@@ -57,6 +57,40 @@ describe('first-attempt record', () => {
   })
 })
 
+describe('only Exam sheets establishes a first run', () => {
+  // By topic and Flagged both contain questions that have never been answered,
+  // so answering one there must not create a score for it.
+  it('records nothing for a first answer given outside Exam sheets', () => {
+    for (const view of ['topic', 'mistakes', 'flagged']) {
+      const row = answer(undefined, { choice: true, correct: true, attemptId: 'a1', view })
+      expect(row.first_at).toBeNull()
+      expect(row.first_choice).toBeNull()
+      expect(row.first_correct).toBeNull()
+      // the attempt itself is still history, and the pass is still shown
+      expect(row.attempt_count).toBe(1)
+      expect(row.active[view]).toBe(true)
+      expect(row.last_correct).toBe(true)
+    }
+  })
+
+  it('still records the first run when the answer comes from Exam sheets', () => {
+    const row = answer(undefined, { choice: true, correct: true, attemptId: 'a1', view: 'sets' })
+    expect(row.first_at).not.toBeNull()
+    expect(row.first_correct).toBe(true)
+  })
+
+  it('leaves an existing first run alone when other sections answer it', () => {
+    let row = answer(undefined, { choice: false, correct: false, attemptId: 'a1', view: 'sets' })
+    for (const view of ['topic', 'mistakes', 'flagged']) {
+      row = answer(row, { choice: true, correct: true, attemptId: `x-${view}`, view })
+    }
+    expect(row.first_correct).toBe(false)
+    expect(row.first_at).toBe('2026-01-01T00:00:00.000Z')
+    // a mistake answered correctly elsewhere still leaves the Mistakes list
+    expect(row.last_correct).toBe(true)
+  })
+})
+
 describe('replay safety', () => {
   it('does not double-count when the same attempt is applied twice', () => {
     const once = answer(undefined, { choice: false, correct: false, attemptId: 'a1' })

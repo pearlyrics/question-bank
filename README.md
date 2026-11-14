@@ -142,7 +142,17 @@ Next buttons stay in reach however far down the sheet you are.
 Each tab keeps its own pass. A question can appear under Exam sheets, By topic
 and Mistakes at once, and answering or pressing Redo in one of them leaves the
 others untouched — `responses.active` is a small map keyed by section rather
-than a single value.
+than a single value. Opening Mistakes or Flagged for the first time shows every
+row unanswered; work through half, go elsewhere and come back, and the half you
+did is still there.
+
+**Only Exam sheets scores.** `first_choice`/`first_correct`/`first_at` are
+written once *and* only when the answer comes from Exam sheets, so working
+through By topic, Mistakes or Flagged can never establish a first run or move
+your score — not even for a question you had never answered before. Everything
+else does update from any section: `last_correct`, so a question leaves
+Mistakes as soon as you get it right, and the attempt and wrong counts, so
+"missed 3×" stays honest.
 
 Answers you give stay on screen when you switch tabs or sets and come back — a
 pass in progress is never thrown away. To take a list again, press **Redo these**

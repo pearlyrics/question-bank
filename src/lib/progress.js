@@ -2,7 +2,9 @@
 //
 // Optimistic UI and the server must agree exactly, so these three rules are
 // implemented identically in both places:
-//   1. first_choice / first_correct / first_at are written once, never changed.
+//   1. first_choice / first_correct / first_at are written once, never changed,
+//      and only ever by Exam sheets — working through By topic, Mistakes or
+//      Flagged must not establish a first run or move the score.
 //   2. attempt_count / wrong_count advance only for a new attemptId.
 //   3. active[view] and last_correct always track the newest answer. `active`
 //      is keyed by section, so Exam sheets and Mistakes keep separate passes
@@ -29,12 +31,15 @@ export function applyAnswer(row, { questionId, bankId, choice, correct, attemptI
   const isReplay = base.last_attempt_id === attemptId
   const at = now ?? new Date().toISOString()
 
+  const scores = view === 'sets'
+  const isFirst = scores && base.first_at === null
+
   return {
     ...base,
-    // Rule 1: only ever set when there is no first attempt on record.
-    first_choice: base.first_at === null ? choice : base.first_choice,
-    first_correct: base.first_at === null ? correct : base.first_correct,
-    first_at: base.first_at === null ? at : base.first_at,
+    // Rule 1: set once, and only from Exam sheets.
+    first_choice: isFirst ? choice : base.first_choice,
+    first_correct: isFirst ? correct : base.first_correct,
+    first_at: isFirst ? at : base.first_at,
     // Rule 3 — only this section's entry.
     active: { ...base.active, [view]: choice },
     last_correct: correct,
