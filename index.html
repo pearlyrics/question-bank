@@ -25,6 +25,14 @@
           document.documentElement.setAttribute('data-theme', saved)
         }
       } catch (e) {}
+
+      // Set before anything else runs. Doing this from React is too late for
+      // the restore that iOS performs on a pull-to-refresh reload, which is
+      // why that gesture left the top bar above the viewport while the
+      // reload button did not.
+      try {
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual'
+      } catch (e) {}
     </script>
   </head>
   <body>

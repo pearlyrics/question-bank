@@ -12,15 +12,30 @@ export function RouterProvider({ children }) {
   useEffect(() => {
     // Browsers restore the previous scroll position on reload. The top bar
     // isn't sticky, so a restored offset left it above the viewport with no
-    // obvious way back to it. Every page here starts at the top instead.
+    // obvious way back to it. index.html turns restoration off before first
+    // paint; this is the belt to that braces.
     if ('scrollRestoration' in globalThis.history) {
       globalThis.history.scrollRestoration = 'manual'
     }
-    globalThis.scrollTo?.({ top: 0 })
+
+    const toTop = () => globalThis.scrollTo?.({ top: 0 })
+    toTop()
+    // iOS finishes a pull-to-refresh reload a frame or two after the app
+    // mounts and can restore an offset in between, so ask again once the
+    // page has actually settled. No timers: nothing here can fight a scroll
+    // the reader makes themselves.
+    const frame = requestAnimationFrame(toTop)
+    window.addEventListener('load', toTop)
+    window.addEventListener('pageshow', toTop)
 
     const onPopState = () => setPath(globalThis.location.pathname)
     window.addEventListener('popstate', onPopState)
-    return () => window.removeEventListener('popstate', onPopState)
+    return () => {
+      cancelAnimationFrame(frame)
+      window.removeEventListener('load', toTop)
+      window.removeEventListener('pageshow', toTop)
+      window.removeEventListener('popstate', onPopState)
+    }
   }, [])
 
   const navigate = useCallback((to, { replace = false } = {}) => {
