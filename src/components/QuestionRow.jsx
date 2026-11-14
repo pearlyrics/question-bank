@@ -41,11 +41,11 @@ export default function QuestionRow({ question, row, number, topicLabel, onAnswe
         {misses > 0 && (
           <span className="ml-1.5 font-mono text-[11px] text-no">missed {misses}×</span>
         )}
-        <p className="m-0 text-[16.5px]">{question.statement}</p>
+        <p className="m-0 px-2 text-[16.5px] sm:px-0">{question.statement}</p>
 
         {answered && (
           <div
-            className={`feedback-in mt-2.5 rounded-r border-l-4 px-2.5 py-2.5 text-[15px] ${
+            className={`feedback-in mt-2.5 mx-2 rounded-r border-l-4 px-2.5 py-2.5 text-[15px] sm:mx-0 ${
               correct ? 'border-yes bg-yes-soft' : 'border-no bg-no-soft'
             }`}
           >
