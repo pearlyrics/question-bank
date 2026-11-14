@@ -346,7 +346,7 @@ export default function StudyView() {
                     }}
                     className="rounded border-[1.5px] border-accent bg-sheet px-2.5 py-1 text-[13px] font-bold text-accent"
                   >
-                    Refresh list
+                    Refresh
                   </button>
                 )}
                 {built.hasNext && (
@@ -359,7 +359,7 @@ export default function StudyView() {
                     }}
                     className="rounded border-[1.5px] border-accent bg-accent px-2.5 py-1 text-[13px] font-bold text-sheet"
                   >
-                    Next {view.mode === 'sets' ? 'sheet' : 'page'}
+                    Next
                   </button>
                 )}
               </div>
