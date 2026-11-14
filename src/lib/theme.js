@@ -5,7 +5,7 @@
 // prefers-color-scheme block guarded by `:root:not([data-theme="light"])`
 // mean "system" is simply the absence of the attribute.
 
-export const THEMES = ['system', 'light', 'dark']
+const THEMES = ['system', 'light', 'dark']
 export const THEME_KEY = 'qbank:v1:theme'
 
 export function normalizeTheme(value) {

@@ -21,25 +21,6 @@ export function firstRunScore(questionIds, rowsById) {
   }
 }
 
-// Shown separately from the score: how you are doing across all attempts,
-// including redos. Free to move.
-export function reviewAccuracy(questionIds, rowsById) {
-  let attempts = 0
-  let wrong = 0
-  for (const id of questionIds) {
-    const row = rowsById.get(id)
-    if (row) {
-      attempts += row.attempt_count
-      wrong += row.wrong_count
-    }
-  }
-  return {
-    attempts,
-    correct: attempts - wrong,
-    pct: attempts > 0 ? Math.round(((attempts - wrong) / attempts) * 100) : null,
-  }
-}
-
 // A question sits in Mistakes until it is answered correctly *there*.
 export function mistakeIds(questionIds, rowsById) {
   return questionIds.filter((id) => rowsById.get(id)?.is_mistake === true)

@@ -24,14 +24,6 @@ export function cacheSet(key, value) {
   }
 }
 
-export function cacheRemove(key) {
-  try {
-    localStorage.removeItem(key)
-  } catch {
-    /* ignore */
-  }
-}
-
 // Keys shaped qbank:v1:<kind>:<userId>[:<bankId>]. Shared content
 // (questions, banks) has no user segment and is never pruned.
 const USER_SCOPED = new Set(['rows', 'prefs', 'queue'])

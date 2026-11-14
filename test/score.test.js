@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { activeCount, firstRunScore, flaggedIds, mistakeIds, reviewAccuracy, seenCount } from '../src/lib/score.js'
+import { activeCount, firstRunScore, flaggedIds, mistakeIds, seenCount } from '../src/lib/score.js'
 import { applyAnswer, applyClearActive } from '../src/lib/progress.js'
 
 function rowsFrom(entries) {
@@ -53,8 +53,9 @@ describe('firstRunScore', () => {
     }
 
     expect(firstRunScore(ids, rows)).toEqual(before)
-    // All-attempts accuracy is free to improve.
-    expect(reviewAccuracy(ids, rows).pct).toBe(75)
+    // The attempts themselves are still recorded; only the score is frozen.
+    expect(rows.get('q2').attempt_count).toBe(2)
+    expect(rows.get('q2').wrong_count).toBe(1)
   })
 
   it('is untouched by work done under By topic, Mistakes or Flagged', () => {

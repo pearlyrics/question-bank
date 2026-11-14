@@ -52,6 +52,10 @@ export function StudyProvider({ children }) {
   const [questions, setQuestions] = useState([])
   const [topics, setTopics] = useState([])
   const [rows, setRows] = useState(() => new Map())
+  const questionById = useMemo(
+    () => new Map(questions.map((question) => [question.id, question])),
+    [questions],
+  )
   const [views, setViews] = useState({})
   const [sync, setSync] = useState({ state: 'idle', pending: 0 })
 
@@ -227,7 +231,7 @@ export function StudyProvider({ children }) {
 
   const answer = useCallback(
     (questionId, choice, viewMode) => {
-      const question = questions.find((entry) => entry.id === questionId)
+      const question = questionById.get(questionId)
       if (!question) return
       const correct = choice === question.answer
       const attemptId = newAttemptId()
@@ -261,12 +265,12 @@ export function StudyProvider({ children }) {
         view: viewMode,
       })
     },
-    [questions, commitRows, enqueue],
+    [questionById, commitRows, enqueue],
   )
 
   const toggleFlag = useCallback(
     (questionId) => {
-      const question = questions.find((entry) => entry.id === questionId)
+      const question = questionById.get(questionId)
       if (!question) return
       const flagged = !rows.get(questionId)?.flagged
 
@@ -281,7 +285,7 @@ export function StudyProvider({ children }) {
 
       enqueue({ kind: 'flag', question_id: questionId, bank_id: question.bank_id, flagged })
     },
-    [questions, rows, commitRows, enqueue],
+    [questionById, rows, commitRows, enqueue],
   )
 
   // Scoped to one section: redoing Mistakes leaves the Exam sheets pass alone.

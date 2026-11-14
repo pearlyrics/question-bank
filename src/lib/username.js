@@ -4,7 +4,7 @@
 // Trade-off, accepted deliberately: anyone who knows a username can sign in as
 // that user. Nothing sensitive belongs in this app.
 
-export const USERNAME_PATTERN = /^[a-z0-9._-]{3,32}$/
+const USERNAME_PATTERN = /^[a-z0-9._-]{3,32}$/
 const PASSWORD_PAD = 'qbank1'
 const MIN_PASSWORD = 6 // Supabase's floor
 

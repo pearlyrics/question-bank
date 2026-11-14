@@ -1,8 +1,6 @@
 import { DEFAULT_SET_SIZE, SHEET_SIZE, chunk, clampSetIndex, questionsInSet } from './sets.js'
 import { flaggedIds, mistakeIds } from './score.js'
 
-export const MODES = ['sets', 'topic', 'mistakes', 'flagged']
-
 export const DEFAULT_VIEW = {
   mode: 'sets',
   // Per chapter, not per account: 40 per set can suit one chapter and 100 another.

@@ -3,7 +3,7 @@
 // chapter would then be unreachable.
 export const RESERVED_SLUGS = ['chapters', 'import', 'login', 'logout', 'api', 'assets', 'static']
 
-export const SLUG_PATTERN = /^[a-z0-9-]{2,60}$/
+const SLUG_PATTERN = /^[a-z0-9-]{2,60}$/
 
 export function parseRoute(pathname) {
   const trimmed = String(pathname ?? '/').replace(/\/+$/, '')
