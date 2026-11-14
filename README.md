@@ -190,6 +190,24 @@ The layout is built for three shapes:
 The set buttons use auto-fitting columns rather than fixed breakpoints, so
 dropping the slider to 10 per set (30 sets) stays readable at every width.
 
+## Who can see what
+
+Signed out, every URL shows the login form and nothing else — `/chapters`,
+`/<slug>` and `/import` all mount behind the session check, so no page
+component ever renders without one. Verified by visiting each while signed out.
+
+That is only the visible half. The database is the half that matters:
+
+- every table policy is `to authenticated`, so a signed-out request returns
+  nothing even when made directly against the API
+- `import_questions()` checks `is_admin` itself, so a signed-in non-admin
+  calling it directly is refused
+- the `security definer` functions have EXECUTE revoked from `public` (not just
+  `anon` — `anon` inherits from `public`, which is why the first attempt at
+  this in 0002 did nothing) and granted to `authenticated`
+- `chapter_progress()` also checks `auth.uid()` itself rather than trusting
+  grants alone
+
 ## Results are per user
 
 One row per `(user_id, question_id)`, and four things keep them apart:
