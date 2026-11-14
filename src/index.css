@@ -105,6 +105,15 @@
   body {
     overflow-x: clip;
   }
+
+  /* Turns off the browser's own pull-to-refresh. On iOS that gesture left the
+     page at scroll 0 with the visible area offset, so the top bar sat
+     off-screen with nothing to scroll back to — scrolling down and up again
+     was the only way to resync it. The reload button was never affected.
+     Reload with the button, or remove this line to get the gesture back. */
+  html {
+    overscroll-behavior-y: contain;
+  }
 }
 
 @layer components {
