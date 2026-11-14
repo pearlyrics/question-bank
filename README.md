@@ -206,6 +206,26 @@ on that browser. A *queue* belonging to another account is the exception: it can
 hold answers that never reached the server, so a non-empty one is left for its
 owner to come back to.
 
+## Starting everyone over
+
+`supabase/maintenance/reset-all-users.sql` deletes every account and all
+progress while keeping the question banks. It is deliberately **not** a
+migration — paste it into the SQL editor by hand.
+
+It relies on the cascade from `auth.users` to `profiles` to `responses` and
+`user_prefs`. Content tables reference `banks`, never a user, so questions are
+untouched.
+
+Afterwards no accounts exist, including the admin one. Sign up again and
+re-grant admin, or importing is impossible:
+
+```sql
+update profiles set is_admin = true where username = 'your-username';
+```
+
+To clear just one chapter's progress for yourself instead, use **Reset this
+bank** in the app.
+
 ## Tests
 
 ```
