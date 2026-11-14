@@ -6,8 +6,7 @@ weekly bulk uploads. React + Vite + Tailwind v4 + Supabase.
 ## Setup
 
 **1. Create the schema.** Open your Supabase project → SQL Editor → New query,
-paste each file in `supabase/migrations/` in order (`0001_init.sql`,
-`0002_chapter_progress.sql`, `0003_drop_current_bank.sql`) and run it. This is the
+paste each file in `supabase/migrations/` in order and run it. This is the
 only step that can't be done from the app.
 
 **2. Turn off email confirmation.** Authentication → Sign In / Providers →

@@ -428,18 +428,7 @@ export default function StudyView() {
         )}
       </section>
 
-      <div className="flex flex-col items-start justify-between gap-3 text-sm text-muted sm:flex-row sm:items-center sm:gap-2.5">
-        <label htmlFor="shuffle" className="flex cursor-pointer items-center gap-2">
-          <input
-            id="shuffle"
-            type="checkbox"
-            checked={view.shuffle}
-            onChange={(event) => updateView({ shuffle: event.target.checked })}
-            className="h-4 w-4"
-          />
-          Shuffle statement order in each sheet
-        </label>
-
+      <div className="flex flex-col items-start justify-end gap-3 text-sm text-muted sm:flex-row sm:items-center sm:gap-2.5">
         {confirmReset ? (
           <div className="flex w-full flex-col items-stretch gap-2 sm:w-auto sm:flex-row sm:items-center">
             <span>Erase this bank?</span>

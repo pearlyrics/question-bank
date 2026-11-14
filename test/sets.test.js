@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { chunk, clampSetIndex, questionsInSet, seededShuffle, setBounds, setCount, sliderMax } from '../src/lib/sets.js'
+import { chunk, clampSetIndex, questionsInSet, setBounds, setCount, sliderMax } from '../src/lib/sets.js'
 
 const bank = Array.from({ length: 400 }, (_, index) => ({ id: `q${index}`, position: index }))
 
@@ -61,20 +61,5 @@ describe('sheets', () => {
 
   it('leaves a short final sheet', () => {
     expect(chunk(['a', 'b', 'c'], 2)).toEqual([['a', 'b'], ['c']])
-  })
-})
-
-describe('seededShuffle', () => {
-  it('is stable for the same seed', () => {
-    const ids = ['a', 'b', 'c', 'd', 'e']
-    expect(seededShuffle(ids, 'sheet-1')).toEqual(seededShuffle(ids, 'sheet-1'))
-  })
-
-  it('differs between seeds and keeps every id', () => {
-    const ids = Array.from({ length: 20 }, (_, i) => `q${i}`)
-    const a = seededShuffle(ids, 'sheet-1')
-    const b = seededShuffle(ids, 'sheet-2')
-    expect(a).not.toEqual(b)
-    expect([...a].sort()).toEqual([...ids].sort())
   })
 })

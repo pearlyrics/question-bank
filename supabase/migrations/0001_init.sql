@@ -104,7 +104,7 @@ create table if not exists user_prefs (
   user_id         uuid primary key references profiles (id) on delete cascade,
   current_bank_id uuid references banks (id) on delete set null,
   set_size        int not null default 100 check (set_size between 5 and 1000),
-  -- Pure display state (mode, sheet, topic, page, shuffle) per bank.
+  -- Pure display state (mode, set size, sheet, topic, page) per bank.
   prefs           jsonb not null default '{}'::jsonb,
   updated_at      timestamptz not null default now()
 );

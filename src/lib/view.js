@@ -1,11 +1,4 @@
-import {
-  DEFAULT_SET_SIZE,
-  SHEET_SIZE,
-  chunk,
-  clampSetIndex,
-  questionsInSet,
-  seededShuffle,
-} from './sets.js'
+import { DEFAULT_SET_SIZE, SHEET_SIZE, chunk, clampSetIndex, questionsInSet } from './sets.js'
 import { flaggedIds, mistakeIds } from './score.js'
 
 export const MODES = ['sets', 'topic', 'mistakes', 'flagged']
@@ -18,7 +11,6 @@ export const DEFAULT_VIEW = {
   sheetIndex: 0,
   topicCode: null,
   listPage: 0,
-  shuffle: false,
 }
 
 // Builds exactly what the sheet should render. Pure, so the paging and slicing
@@ -46,7 +38,6 @@ export function buildView({ questions, rows, view, setSize, topics, snapshot }) 
       title: topic?.label ?? 'Topic',
       meta: `${ids.length} statement${ids.length === 1 ? '' : 's'} across the bank`,
       scopeIds: ids,
-      pageKey: `topic:${code}`,
     })
   }
 
@@ -61,7 +52,6 @@ export function buildView({ questions, rows, view, setSize, topics, snapshot }) 
       title: view.mode === 'mistakes' ? 'Mistakes to redo' : 'Flagged statements',
       meta: '',
       scopeIds: ids,
-      pageKey: `${view.mode}:${setIndex}`,
     })
   }
 
@@ -74,7 +64,7 @@ export function buildView({ questions, rows, view, setSize, topics, snapshot }) 
     kind: 'sets',
     title: `Sheet ${sheetIndex + 1}`,
     meta: `Mixed topics · ${ids.length} statement${ids.length === 1 ? '' : 's'}`,
-    ids: order(ids, view, `set:${setIndex}:${sheetIndex}`),
+    ids,
     firstNumber: setIndex * setSize + sheetIndex * SHEET_SIZE + 1,
     scopeIds: setIds,
     sheetIndex,
@@ -86,7 +76,7 @@ export function buildView({ questions, rows, view, setSize, topics, snapshot }) 
   }
 }
 
-function paged({ ids, view, title, meta, scopeIds, pageKey, setIndex, setIds }) {
+function paged({ ids, view, title, meta, scopeIds, setIndex, setIds }) {
   const pageCount = Math.max(1, Math.ceil(ids.length / SHEET_SIZE))
   const pageIndex = Math.min(Math.max(view.listPage, 0), pageCount - 1)
   const slice = ids.slice(pageIndex * SHEET_SIZE, pageIndex * SHEET_SIZE + SHEET_SIZE)
@@ -97,7 +87,7 @@ function paged({ ids, view, title, meta, scopeIds, pageKey, setIndex, setIds }) 
     title,
     meta:
       meta || (ids.length ? `Page ${pageIndex + 1} of ${pageCount} · ${ids.length} total` : ''),
-    ids: order(slice, view, `${pageKey}:${pageIndex}`),
+    ids: slice,
     firstNumber: pageIndex * SHEET_SIZE + 1,
     scopeIds,
     pageCount,
@@ -106,8 +96,4 @@ function paged({ ids, view, title, meta, scopeIds, pageKey, setIndex, setIds }) 
     sheetIndex: pageIndex,
     hasNext: pageIndex < pageCount - 1,
   }
-}
-
-function order(ids, view, seed) {
-  return view.shuffle ? seededShuffle(ids, seed) : ids
 }
